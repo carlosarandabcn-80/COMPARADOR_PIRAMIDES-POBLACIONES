@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<rect width="1200" height="630" fill="#0b1220"/>
+<circle cx="160" cy="120" r="220" fill="#66e3d4" opacity=".11"/>
+<circle cx="1010" cy="500" r="260" fill="#8fb3ff" opacity=".10"/>
+<text x="80" y="130" fill="#66e3d4" font-size="28" font-family="Arial" font-weight="700">ESTRUCTURA SOCIAL - GRADO DE EDUCACION SOCIAL - UNIR</text>
+<text x="80" y="210" fill="#ffffff" font-size="58" font-family="Arial" font-weight="900">Pirámides poblacionales</text>
+<text x="80" y="280" fill="#dfe8ff" font-size="34" font-family="Arial">diagnóstico metodológico y comparación</text>
+<g transform="translate(760,160)">
+<path d="M0 260h160M20 210h120M45 160h70M70 110h20" stroke="#56a3d9" stroke-width="22" stroke-linecap="round"/>
+<path d="M180 260h160M200 210h120M225 160h70M250 110h20" stroke="#d8739a" stroke-width="22" stroke-linecap="round"/>
+<line x1="170" y1="80" x2="170" y2="300" stroke="#e8eefc" stroke-width="4" opacity=".75"/>
+</g>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "Pirámides poblacionales: diagnóstico metodológico y comparación",
+  "short_name": "Pirámides poblacionales",
+  "description": "Comparador visual e interactivo de pirámides poblacionales para análisis sociológico y aplicación socioeducativa.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "icons": [
+    {
+      "src": "./assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
