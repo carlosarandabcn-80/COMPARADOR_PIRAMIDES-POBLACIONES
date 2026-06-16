@@ -43,3 +43,8 @@ No requiere instalación, servidor, base de datos ni dependencias externas.
 Las pirámides internas son modelos didácticos sintéticos para reconocimiento visual y comparación metodológica. Para análisis con datos reales se recomienda contrastar con fuentes estadísticas oficiales o bases demográficas verificables.
 
 Aplicación desarrollada por Aranda Tools® · marca registrada · 2026.
+
+
+## Accesibilidad
+
+La aplicación incluye un botón flotante con el icono universal de accesibilidad. Permite activar alto contraste, texto grande, mayor espaciado, foco lector, reducción de movimiento y lectura en voz alta del comentario.
