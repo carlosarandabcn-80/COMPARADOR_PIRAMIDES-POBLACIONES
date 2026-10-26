@@ -12,6 +12,13 @@ const {chromium}=require("playwright"),assert=require("node:assert/strict"),path
   assert.equal(await page.locator("#chartB .pyramid-row").count(),18);
   assert.equal(await page.locator("#metricsBody tr").count(),11);
   assert.equal(await page.locator("#datasetA option").count(),3);
+  await page.addScriptTag({path:require.resolve("axe-core/axe.min.js")});
+  const axeResult=await page.evaluate(async()=>{
+    const result=await window.axe.run(document,{runOnly:{type:"tag",values:["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"]}});
+    return result.violations.map(v=>({id:v.id,impact:v.impact,description:v.description,nodes:v.nodes.length,targets:v.nodes.slice(0,3).map(n=>n.target)}));
+  });
+  console.log("AXE AUDIT",JSON.stringify(axeResult));
+  assert.equal(axeResult.filter(v=>["critical","serious"].includes(v.impact)).length,0,"Axe: infracciones críticas o graves; revisar el informe anterior.");
   assert.match(await page.locator("#metaA").innerText(),/FICTICIOS/i);
   const nameBefore=await page.locator("#labelA").innerText();
   await page.locator("#swap").click();
