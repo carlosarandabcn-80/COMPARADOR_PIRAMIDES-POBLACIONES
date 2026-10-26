@@ -108,4 +108,5 @@ function init(){addOptions();restore();showCase();show();
  el("downloadReport").addEventListener("click",download);el("printReport").addEventListener("click",()=>{renderReport();window.print();});
 }
 document.addEventListener("DOMContentLoaded",init);
+if("serviceWorker" in navigator && location.protocol==="https:"){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
 })();
