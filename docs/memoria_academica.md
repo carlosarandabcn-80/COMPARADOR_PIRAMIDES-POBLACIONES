@@ -102,7 +102,7 @@ La versión disponible constituye un **prototipo digital verificable parcialment
 
 CAST. (2024). *CAST Universal Design for Learning Guidelines version 3.0*. https://udlguidelines.cast.org/
 
-Consejo General de Colegios de Educadoras y Educadores Sociales. (2026). *Código deontológico de la Educación Social*. https://www.consejoeducacionsocial.net/
+Consejo General de Colegios de Educadoras y Educadores Sociales. (2026). *Código deontológico de la Educación Social*. https://www.consejoeducacionsocial.net/nuevo-codigo-deontologico-de-la-educacion-social/
 
 Freeman, S., Eddy, S. L., McDonough, M., Smith, M. K., Okoroafor, N., Jordt, H., & Wenderoth, M. P. (2014). Active learning increases student performance in science, engineering, and mathematics. *Proceedings of the National Academy of Sciences, 111*(23), 8410–8415. https://doi.org/10.1073/pnas.1319030111
 
