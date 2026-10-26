@@ -30,7 +30,7 @@ En intervención socioeducativa, la lectura cuantitativa se plantea como entrada
 
 ## 5. Desarrollo y arquitectura
 
-La aplicación original contenía HTML comprimido y cargado dinámicamente. En la rama de desarrollo se conserva el código descomprimido en \`comparador-original.html\` y se incorpora una interfaz accesible en \`index.html\`, un módulo estadístico aislado en \`assets/demografia-core.js\` y un módulo de interacción en \`assets/laboratorio.js\`. No hay backend ni transferencia intencionada de ficheros cargados por el usuario. Los datos precargados son inventados, diseñados solo para pruebas y actividades didácticas.
+La aplicación original contenía HTML comprimido y cargado dinámicamente. En la rama de desarrollo se conserva el código descomprimido en `comparador-original.html` y se incorpora una interfaz accesible en `index.html`, un módulo estadístico aislado en `assets/demografia-core.js` y un módulo de interacción en `assets/laboratorio.js`. No hay backend ni transferencia intencionada de ficheros cargados por el usuario. Los datos precargados son inventados, diseñados solo para pruebas y actividades didácticas.
 
 La aplicación valida importaciones CSV/JSON de 36 filas por conjunto, rechaza duplicados, negativos, decimales, bandas desconocidas y sumas cero. Los informes TXT y la impresión conservan datos de entrada e indicadores derivados. Las declaraciones de procedencia las aporta el usuario; **no se autentican externamente**.
 
@@ -40,7 +40,7 @@ Se implementa la secuencia *observar → analizar/interpretar → formular hipó
 
 ## 7. Evidencias disponibles y limitaciones
 
-En el desarrollo se ejecutaron 14 aserciones del motor de cálculo en el entorno de conexión. Se añadió una suite de tests a \`tests/demografia.test.cjs\` y un workflow CI, cuya ejecución debe comprobarse separadamente. No consta pilotaje universitario, validación de contenido por expertos, auditoría de seguridad independiente ni auditoría WCAG exhaustiva. La coherencia del código **no demuestra** aprendizaje o utilidad profesional.
+En el desarrollo se ejecutaron 14 aserciones del motor de cálculo en el entorno de conexión. Se añadió una suite de tests a `tests/demografia.test.cjs` y un workflow CI, cuya ejecución debe comprobarse separadamente. No consta pilotaje universitario, validación de contenido por expertos, auditoría de seguridad independiente ni auditoría WCAG exhaustiva. La coherencia del código **no demuestra** aprendizaje o utilidad profesional.
 
 ## 8. Aplicación docente y discusión
 
