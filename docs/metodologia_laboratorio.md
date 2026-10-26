@@ -1,10 +1,10 @@
 # Metodología estadística y socioeducativa del laboratorio
 
-**Versión experimental 0.1 · 26 de octubre de 2026.** Este documento describe el código de \`assets/demografia-core.js\`, no una validación empírica. Se diferencian *dato*, *regla*, *interpretación*, *hipótesis* y *propuesta*.
+**Versión experimental 0.1 · 26 de octubre de 2026.** Este documento describe el código de `assets/demografia-core.js`, no una validación empírica. Se diferencian *dato*, *regla*, *interpretación*, *hipótesis* y *propuesta*.
 
 ## Datos y denominadores
 
-Para cada conjunto, \`N = Σ(H_i + M_i)\`, con 18 intervalos: 0–4 a 80–84 y 85+. \`J=Σ(0–14)\`, \`A=Σ(15–64)\`, \`V=Σ(65+)\`. Los porcentajes se calculan sobre N y no sobre cada sexo. Las barras representan la proporción de hombres o mujeres de una cohorte respecto del **total del territorio**; A y B usan el mismo máximo visual en porcentaje. Para dos territorios con tamaños muy diferentes, se comparan preferentemente porcentajes y no anchos de recuentos absolutos.
+Para cada conjunto, `N = Σ(H_i + M_i)`, con 18 intervalos: 0–4 a 80–84 y 85+. `J=Σ(0–14)`, `A=Σ(15–64)`, `V=Σ(65+)`. Los porcentajes se calculan sobre N y no sobre cada sexo. Las barras representan la proporción de hombres o mujeres de una cohorte respecto del **total del territorio**; A y B usan el mismo máximo visual en porcentaje. Para dos territorios con tamaños muy diferentes, se comparan preferentemente porcentajes y no anchos de recuentos absolutos.
 
 | Indicador | Fórmula implementada | Alcance |
 |---|---|---|
