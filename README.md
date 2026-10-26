@@ -4,10 +4,10 @@
 
 ## Acceder y conservar lo anterior
 
-- **\`index.html\`**: portada y laboratorio en GitHub Pages.
-- **\`laboratorio.html\`**: acceso directo al laboratorio.
-- **\`comparador-original.html\`**: copia legible íntegra del comparador anterior (funcionalidades, comentarios, pirámides y accesibilidad original).
-- **\`payload/index.html.gz.b64\`**: paquete original conservado para trazabilidad, **no se ha borrado**.
+- **`index.html`**: portada y laboratorio en GitHub Pages.
+- **`laboratorio.html`**: acceso directo al laboratorio.
+- **`comparador-original.html`**: copia legible íntegra del comparador anterior (funcionalidades, comentarios, pirámides y accesibilidad original).
+- **`payload/index.html.gz.b64`**: paquete original conservado para trazabilidad, **no se ha borrado**.
 
 El laboratorio nuevo contiene tres perfiles **sintéticos, ficticios** denominados Territorio A/B/C. No son datos de España, México, África ni otros lugares reales. No debe extraerse de ellos diagnóstico social. Los datos externos se importan desde CSV/JSON y se validan **solo estructuralmente**, nunca en su procedencia.
 
@@ -25,20 +25,20 @@ El laboratorio nuevo contiene tres perfiles **sintéticos, ficticios** denominad
 
 ## Requisitos y ejecución
 
-No se necesita backend. Se puede servir localmente mediante un servidor HTTP o desplegar en GitHub Pages. Evitar abrir los ficheros con \`file://\` si el navegador impone restricciones adicionales a recursos.
+No se necesita backend. Se puede servir localmente mediante un servidor HTTP o desplegar en GitHub Pages. Evitar abrir los ficheros con `file://` si el navegador impone restricciones adicionales a recursos.
 
 Para ejecutar tests:
 
-\`\`\`sh
+```sh
 node --version  # Node.js 20 o superior
 npm test
-\`\`\`
+```
 
-Se dispone de una suite de 12 pruebas con \`node:test\` y de un workflow CI. Es necesario comprobar el estado de ejecución de CI, realizar pruebas E2E reales con navegador y auditar accesibilidad. Ninguna comprobación automática por sí sola supone conformidad WCAG.
+Se dispone de una suite de 12 pruebas con `node:test` y de un workflow CI. Es necesario comprobar el estado de ejecución de CI, realizar pruebas E2E reales con navegador y auditar accesibilidad. Ninguna comprobación automática por sí sola supone conformidad WCAG.
 
 ## Estructura esencial
 
-\`\`\`text
+```text
 index.html
 laboratorio.html
 comparador-original.html
@@ -49,7 +49,7 @@ examples/datos-sinteticos.csv
 tests/demografia.test.cjs
 .github/workflows/validacion.yml
 docs/
-\`\`\`
+```
 
 ## Documentación académica (borradores)
 
