@@ -34,7 +34,7 @@ node --version  # Node.js 20 o superior
 npm test
 ```
 
-Se dispone de una suite de 12 pruebas con `node:test` y de un workflow CI. Es necesario comprobar el estado de ejecución de CI, realizar pruebas E2E reales con navegador y auditar accesibilidad. Ninguna comprobación automática por sí sola supone conformidad WCAG.
+Se dispone de una suite de 12 pruebas con `node:test` y de un workflow CI. Las pruebas Node y de navegador Chromium, con flujos de importación/exportación, se han ejecutado satisfactoriamente en [GitHub Actions](https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES/actions/runs/40318192555). Un análisis axe-core de la vista inicial no informó violaciones automáticas en los criterios configurados. Permanecen pendientes las pruebas manuales de accesibilidad, navegadores adicionales y auditoría completa; estos resultados no demuestran conformidad WCAG.
 
 ## Estructura esencial
 
@@ -58,6 +58,7 @@ docs/
 - [Guía docente](docs/guia_docente.md) y [protocolo de investigación](docs/protocolo_investigacion.md).
 - [Memoria universitaria preliminar](docs/memoria_academica.md).
 - [Dosier institucional](docs/dosier_institucional.md).
+- [Consultoría crítica final](docs/consultoria_final.md).
 
 ## Limitaciones abiertas
 
