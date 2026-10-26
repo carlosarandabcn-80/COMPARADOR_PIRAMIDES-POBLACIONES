@@ -1,38 +1,43 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pirámides poblacionales</title>
-<style>
-html,body{height:100%;margin:0;background:#0b1220;color:#e8eefc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{display:grid;place-items:center}.loader{max-width:620px;padding:24px;text-align:center}.loader b{display:block;font-size:20px;margin-bottom:8px;color:#66e3d4}.loader span{color:#aab7d6}.error{color:#ffd166;white-space:pre-wrap}
-</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Laboratorio de demografía aplicada a la Educación Social: comparación de estructuras, indicadores verificables y razonamiento socioeducativo.">
+<meta name="theme-color" content="#f6f7f8">
+<title>Laboratorio de demografía · Educación Social</title>
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./assets/laboratorio.css">
+<script defer src="./assets/demografia-core.js"></script>
+<script defer src="./assets/laboratorio.js"></script>
 </head>
 <body>
-<div class="loader" id="status"><b>Cargando comparador</b><span>Preparando la aplicación...</span></div>
-<script>
-(async()=>{
-  const status=document.getElementById('status');
-  try{
-    if(!('DecompressionStream' in window)){
-      throw new Error('Tu navegador no permite descomprimir el recurso de la aplicación. Actualiza el navegador o prueba con Chrome, Edge o Firefox recientes.');
-    }
-    const response=await fetch('./payload/index.html.gz.b64?v=20260616-1',{cache:'no-store'});
-    if(!response.ok){throw new Error('No se pudo cargar el paquete de la aplicación.');}
-    const b64=(await response.text()).replace(/\s/g,'');
-    const binary=atob(b64);
-    const bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++){bytes[i]=binary.charCodeAt(i);}
-    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const html=await new Response(stream).text();
-    document.open();
-    document.write(html);
-    document.close();
-  }catch(error){
-    status.innerHTML='<b>No se ha podido abrir la aplicación</b><span class="error"></span>';
-    status.querySelector('.error').textContent=error && error.message ? error.message : String(error);
-  }
-})();
-</script>
-</body>
-</html>
+<a class="skip" href="#contenido">Saltar al contenido principal</a>
+<header class="topbar"><a class="identity" href="./index.html"><span class="mark" aria-hidden="true">◩</span> DEMOGRAFÍA<span class="identity-sub">/ EDUCACIÓN SOCIAL</span></a><nav aria-label="Navegación de la plataforma"><a href="#explorar">Explorar</a><a href="#comparar">Comparar</a><a href="#razonar">Intervenir</a><a href="#casos">Aprender</a><a href="#investigar">Metodología</a><a href="#exportar">Exportar</a></nav></header>
+<main id="contenido" class="shell">
+<section class="hero" aria-labelledby="main-title"><div class="eyebrow">Laboratorio educativo · versión experimental</div><h1 id="main-title">De los datos demográficos a las <em>preguntas sociales.</em></h1><p class="lead">Explora, compara y aprende a fundamentar hipótesis e intervenciones socioeducativas sin confundir la estructura de una población con sus necesidades. El análisis es descriptivo; las decisiones exigen contraste territorial y participación comunitaria.</p><div class="hero-actions"><a class="button primary" href="#explorar">Comenzar análisis <span aria-hidden="true">↗</span></a><a class="button secondary" href="./comparador-original.html">Abrir comparador original</a></div><p class="source-alert"><strong>Importante:</strong> los tres conjuntos precargados son <strong>ficticios</strong>. No representan España ni ningún territorio real. Los datos importados no se verifican automáticamente frente a las fuentes estadísticas.</p></section>
+<div class="workflow" role="list" aria-label="Ruta de análisis"><span role="listitem">01 · Observar</span><span role="listitem">02 · Analizar</span><span role="listitem">03 · Interpretar</span><span role="listitem">04 · Cuestionar</span><span role="listitem">05 · Investigar</span><span role="listitem">06 · Intervenir</span><span role="listitem">07 · Evaluar</span></div>
+<section id="explorar" class="card" aria-labelledby="explorar-title"><div class="section-heading"><div><span class="number">01 / DATOS</span><h2 id="explorar-title">Explora dos estructuras</h2><p>Elige conjuntos completos con los mismos intervalos de edad. Se emplean los grupos 0–14, 15–64 y 65+ para los indicadores.</p></div><span class="pill">18 grupos quinquenales</span></div>
+<div class="selectors"><div><label for="datasetA">Población A</label><select id="datasetA"></select></div><div><label for="datasetB">Población B</label><select id="datasetB"></select></div><button type="button" class="button secondary swap" id="swap">Intercambiar A ↔ B</button></div>
+<div class="data-grids"><article class="subcard" aria-labelledby="labelA"><h3 id="labelA">Población A</h3><p class="metadata" id="metaA"></p><div class="pyramid" id="chartA" aria-hidden="true"></div><details><summary>Mostrar datos accesibles de A</summary><div class="table-scroll"><table><caption>Distribución por tramo de edad y sexo, población A</caption><thead><tr><th scope="col">Edad</th><th scope="col">Hombres</th><th scope="col">Mujeres</th><th scope="col">Total</th></tr></thead><tbody id="tableA"></tbody></table></div></details></article>
+<article class="subcard" aria-labelledby="labelB"><h3 id="labelB">Población B</h3><p class="metadata" id="metaB"></p><div class="pyramid" id="chartB" aria-hidden="true"></div><details><summary>Mostrar datos accesibles de B</summary><div class="table-scroll"><table><caption>Distribución por tramo de edad y sexo, población B</caption><thead><tr><th scope="col">Edad</th><th scope="col">Hombres</th><th scope="col">Mujeres</th><th scope="col">Total</th></tr></thead><tbody id="tableB"></tbody></table></div></details></article></div>
+<p class="legend"><span class="dot man"></span> Hombres (H) <span class="dot woman"></span> Mujeres (M) · Los anchos representan porcentajes de la población total de cada territorio; misma escala visual entre A y B. Las categorías son las registradas en la fuente, no una clasificación de identidades personales.</p>
+<div class="import-panel"><h3>Importar un conjunto propio (CSV o JSON)</h3><p>Es obligatorio declarar procedencia y periodo. Los archivos se procesan en este navegador y no se envían a un servidor. Formato: 36 filas con las columnas <code>grupo_edad,sexo,poblacion</code>; edades 0-4, 5-9, …, 85+ y sexos H/M. <a href="./docs/diccionario_datos.md">Diccionario y ejemplo</a>.</p><div class="import-grid"><div><label for="importFile">Archivo (máximo 3 MB)</label><input id="importFile" type="file" accept=".csv,.json,text/csv,application/json"></div><div><label for="importTerritory">Territorio / descripción</label><input id="importTerritory" type="text" maxlength="120" placeholder="Descripción sin datos personales"></div><div><label for="importPeriod">Periodo de referencia</label><input id="importPeriod" type="text" maxlength="60" placeholder="AAAA o fecha de referencia"></div><div><label for="importSource">Fuente y URL original</label><input id="importSource" type="text" maxlength="250" placeholder="Organismo, tabla, enlace o identificación"></div></div><button id="importButton" class="button secondary" type="button">Validar e importar</button><p id="importStatus" role="status" aria-live="polite"></p></div></section>
+<section id="comparar" class="card" aria-labelledby="comparar-title"><div class="section-heading"><div><span class="number">02 / COMPARACIÓN</span><h2 id="comparar-title">Indicadores trazables</h2><p>Resultados exactos antes de redondear su presentación. Los denominadores están documentados y los resultados no calculables se señalan.</p></div></div>
+<div class="table-scroll"><table id="metrics"><caption>Indicadores de las poblaciones A y B</caption><thead><tr><th scope="col">Indicador</th><th scope="col">A</th><th scope="col">B</th><th scope="col">Definición</th></tr></thead><tbody id="metricsBody"></tbody></table></div>
+<div class="evidence-grid"><div><h3>Observación cuantitativa</h3><p id="observation"></p></div><div><h3>Contraste e incertidumbre</h3><p id="contrast"></p></div></div><p class="method-note"><strong>Reglas de cálculo:</strong> <span id="rule"></span> <strong>Limitaciones:</strong> <span id="limitation"></span></p></section>
+<section id="razonar" class="card" aria-labelledby="razonar-title"><div class="section-heading"><div><span class="number">03 / RAZONAMIENTO</span><h2 id="razonar-title">Del dato a la intervención</h2><p>Completa siete pasos. El sistema no infiere pobreza, discapacidad, soledad ni necesidades sociales a partir de una pirámide. Escribe evidencias, incertidumbres y condiciones de contraste.</p></div></div>
+<div class="steps">
+<div class="step"><label for="step1"><b>1. Observar</b><span>¿Qué diferencias cuantificables identificas y con qué denominadores?</span></label><textarea id="step1" rows="3" placeholder="Describe proporciones y diferencias sin atribuir causas."></textarea></div>
+<div class="step"><label for="step2"><b>2. Analizar e interpretar</b><span>¿Qué significa estadísticamente la diferencia? ¿Es una variación en puntos porcentuales o una razón?</span></label><textarea id="step2" rows="3" placeholder="Diferencia entre descripción e interpretación."></textarea></div>
+<div class="step"><label for="step3"><b>3. Formular hipótesis alternativas</b><span>Propón al menos dos explicaciones plausibles. ¿Qué datos adicionales permitirían contrastarlas?</span></label><textarea id="step3" rows="3" placeholder="No des por probadas causas migratorias o de fecundidad."></textarea></div>
+<div class="step"><label for="step4"><b>4. Cuestionar posibles necesidades</b><span>¿Qué necesidades expresadas por la comunidad y qué indicadores de recursos deberías investigar?</span></label><textarea id="step4" rows="3" placeholder="No confundas envejecimiento demográfico y dependencia funcional."></textarea></div>
+<div class="step"><label for="step5"><b>5. Investigar con participación</b><span>¿Qué fuentes, agentes, entrevistas o técnicas de diagnóstico territorial utilizarías?</span></label><textarea id="step5" rows="3" placeholder="Explica cómo incluirás a las personas afectadas."></textarea></div>
+<div class="step"><label for="step6"><b>6. Diseñar una propuesta condicionada</b><span>Si se confirmase una necesidad, formula destinatarios, objetivos, actividades, recursos y corresponsables.</span></label><textarea id="step6" rows="4" placeholder="Propuesta supeditada al diagnóstico participativo."></textarea></div>
+<div class="step"><label for="step7"><b>7. Evaluar y revisar éticamente</b><span>Indicadores de proceso y resultados; sesgos, consecuencias imprevistas y limitaciones para atribuir efectos.</span></label><textarea id="step7" rows="4" placeholder="Predefine criterios y evita afirmaciones de impacto sin diseño adecuado."></textarea></div>
+</div><div class="actions"><button id="saveProgress" type="button" class="button secondary">Guardar localmente</button><button id="clearProgress" type="button" class="button ghost">Borrar respuestas locales</button><span id="progressStatus" role="status" aria-live="polite"></span></div><p class="footnote">La aplicación no evalúa automáticamente la calidad de las respuestas. El uso compartido de dispositivos puede exponer las anotaciones guardadas en el navegador.</p></section>
+<section id="casos" class="card" aria-labelledby="casos-title"><div class="section-heading"><div><span class="number">04 / APRENDIZAJE</span><h2 id="casos-title">Casos socioeducativos</h2><p>Situaciones de aprendizaje para trabajar de forma crítica con datos, hipótesis y propuestas de intervención.</p></div></div><label for="caseSelect">Elige un caso</label><select id="caseSelect"><option value="0">Envejecimiento y participación</option><option value="1">Infancia, adolescencia y recursos</option><option value="2">Despoblación rural y accesibilidad</option><option value="3">Transformaciones urbanas</option><option value="4">Diversidad y convivencia</option><option value="5">Diagnóstico comunitario participativo</option></select><article class="case" id="caseText" aria-live="polite"></article><p class="footnote">Los casos son situaciones didácticas, no diagnósticos realizados sobre una población concreta. <a href="./docs/guia_docente.md">Guía docente y rúbrica</a>.</p></section>
+<section id="investigar" class="card"><div class="section-heading"><div><span class="number">05 / METODOLOGÍA</span><h2>Fuentes, límites y reproducibilidad</h2></div></div><div class="resources"><a href="https://www.ine.es/aplicaciones/piramides/piramides.htm" target="_blank" rel="noopener noreferrer">INE · Pirámides de población <span aria-hidden="true">↗</span></a><a href="https://www.idescat.cat/" target="_blank" rel="noopener noreferrer">Idescat · Estadística de Cataluña <span aria-hidden="true">↗</span></a><a href="https://ec.europa.eu/eurostat/" target="_blank" rel="noopener noreferrer">Eurostat · Estadísticas europeas <span aria-hidden="true">↗</span></a><a href="./docs/metodologia_laboratorio.md">Reglas y definiciones del laboratorio <span aria-hidden="true">↗</span></a></div><p class="method-note">La importación exige datos ya armonizados por grupos quinquenales. No se comparan series de distinta base metodológica sin revisión humana. Una pirámide no mide condiciones económicas, disponibilidad de servicios ni necesidades individuales.</p></section>
+<section id="exportar" class="card"><div class="section-heading"><div><span class="number">06 / DOCUMENTACIÓN</span><h2>Informe reproducible</h2><p>Genera un borrador con selección, metodología, indicadores, respuestas propias y advertencias. Comprueba su contenido y bibliografía antes de entregarlo.</p></div></div><div class="actions"><button class="button primary" type="button" id="downloadReport">Exportar informe TXT</button><button class="button secondary" type="button" id="printReport">Imprimir / guardar como PDF</button></div><article id="report" class="report" aria-label="Informe de análisis para impresión"><h3>Informe de análisis demográfico y razonamiento socioeducativo</h3><pre id="reportText"></pre></article></section>
+</main>
+<footer class="footer"><p>Proyecto experimental de tecnología educativa · Educación Social · <a href="./comparador-original.html">Versión original</a> · <a href="./docs/estado_validacion.md">Estado de validación</a></p><p>No existe certificación académica, validación empírica de eficacia ni conformidad WCAG acreditada.</p></footer>
+</body></html>
