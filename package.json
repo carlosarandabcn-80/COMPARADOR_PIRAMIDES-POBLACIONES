@@ -1,0 +1,9 @@
+{
+  "name": "laboratorio-demografia-educacion-social",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Laboratorio demográfico estático, módulos sin dependencias externas.",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs"
+  }
+}

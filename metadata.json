@@ -1,9 +1,10 @@
 {
-  "title": "Pirámides poblacionales: diagnóstico metodológico y comparación",
-  "subtitle": "Estructura Social - Grado de Educación Social - UNIR",
+  "title": "Laboratorio interactivo de demografía aplicada a la Educación Social",
+  "subtitle": "Proyecto experimental de tecnología educativa",
   "author": "Aranda Tools®",
   "year": 2026,
-  "type": "static-interactive-dashboard",
-  "deployment": "GitHub Pages ready",
-  "dependencies": "none"
+  "type": "static-research-prototype",
+  "deployment": "GitHub Pages",
+  "dependencies": "none-runtime",
+  "status": "prototipo no validado empíricamente"
 }
