@@ -1,12 +1,12 @@
 # Consultoría crítica de la versión experimental — corte 26/10/2026
 
-**Objeto:** rama \`feature/laboratorio-socioeducativo-20261026\`. **No es una auditoría independiente** ni una certificación universitaria. Este informe distingue implementación, pruebas ejecutadas y eficacia educativa todavía sin contrastar.
+**Objeto:** rama `feature/laboratorio-socioeducativo-20261026`. **No es una auditoría independiente** ni una certificación universitaria. Este informe distingue implementación, pruebas ejecutadas y eficacia educativa todavía sin contrastar.
 
 ## Evidencia verificable de esta versión
 
-- Código original recuperado como \`comparador-original.html\`, junto al payload anterior conservado.
+- Código original recuperado como `comparador-original.html`, junto al payload anterior conservado.
 - Motor demográfico aislado; 18 bandas quinquenales × dos categorías H/M; rechazos explícitos de errores de importación y fórmulas transparentes.
-- 12 tests de \`node:test\` ejecutados satisfactoriamente en CI (la suite contiene más comprobaciones individuales).
+- 12 tests de `node:test` ejecutados satisfactoriamente en CI (la suite contiene más comprobaciones individuales).
 - Prueba Chromium ejecutada en GitHub Actions con éxito: carga, 18 bandas por pirámide, 11 filas de indicadores, comparación, intercambio A/B, seis casos, guardado y borrado, importación de CSV de ejemplo, informe TXT y apertura del comparador antiguo.
 - Análisis automático de axe-core sobre la pantalla inicial en Chromium: **sin violaciones notificadas** para el subconjunto de etiquetas WCAG A/AA escogido en esa ejecución. No se equipara a conformidad WCAG 2.2 AA; otras rutas/estados, navegación asistida y criterios manuales no se han evaluado.
 - Registro de CI ejemplar, con resultados de Node y navegador: https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES/actions/runs/40318192555 .
