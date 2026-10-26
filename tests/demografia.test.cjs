@@ -1,0 +1,20 @@
+/* Ejecutar con Node.js >= 20: node --test tests/demografia.test.cjs */
+const test=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+require("../assets/demografia-core.js");
+const C=globalThis.DemoCore;
+const B=C.BANDS;
+function rows(values={}){const out=[];for(const a of B)for(const s of ["H","M"])out.push({grupo_edad:a,sexo:s,poblacion:values[a+"|"+s]??0});return out;}
+const typical=rows({"0-4|H":2,"0-4|M":3,"15-19|H":5,"15-19|M":5,"65-69|H":4,"65-69|M":1});
+function dataset(data){return C.validate(data,{territorio:"Ejemplo controlado",fuente:"Test sintético",periodo:"control"});}
+test("18 bandas completas y suma exacta del total",()=>{const d=dataset(typical);assert.equal(d.bandas.length,18);assert.equal(d.total,20);});
+test("fórmulas con denominadores conocidos",()=>{const i=C.indicators(dataset(typical));assert.equal(i.young,5);assert.equal(i.working,10);assert.equal(i.older,5);assert.equal(i.youthShare,25);assert.equal(i.olderShare,25);assert.equal(i.youthDependency,50);assert.equal(i.oldDependency,50);assert.equal(i.totalDependency,100);assert.equal(i.ageingIndex,100);assert.ok(Math.abs(i.sexRatio-11/9*100)<1e-10);});
+test("tres modelos sintéticos estructuralmente consistentes",()=>{for(const d of C.SYNTHETIC){const i=C.indicators(d);assert.equal(i.young+i.working+i.older,i.total);assert.equal(i.totalDependency,i.youthDependency+i.oldDependency);}});
+test("diferencias por puntos porcentuales: identidad = cero, antisimetría",()=>{const [a,b]=C.SYNTHETIC;assert.equal(C.compare(a,a).oldShareDeltaPP,0);assert.ok(Math.abs(C.compare(a,b).oldShareDeltaPP+C.compare(b,a).oldShareDeltaPP)<1e-12);});
+test("división por cero: dependencia no calculable",()=>{const v=rows({"0-4|H":5,"65-69|M":5});const i=C.indicators(dataset(v));assert.equal(i.totalDependency,null);assert.equal(i.oldDependency,null);assert.equal(i.ageingIndex,100);});
+test("índice de envejecimiento no calculable sin población joven",()=>{const v=rows({"15-19|H":5,"65-69|M":5});const i=C.indicators(dataset(v));assert.equal(i.ageingIndex,null);});
+test("validación rechaza negativos y decimales",()=>{const n=rows({"0-4|H":-1});assert.throws(()=>dataset(n),/entero/);const f=rows({"0-4|H":1.2});assert.throws(()=>dataset(f),/entero/);});
+test("validación rechaza duplicados, bandas desconocidas y grupos incompletos",()=>{assert.throws(()=>dataset([...typical,typical[0]]),/Duplicado/);assert.throws(()=>dataset(typical.map((r,i)=>i===0?{...r,grupo_edad:"86+"}:r)),/grupo no admitido/);assert.throws(()=>dataset(typical.slice(1)),/Faltan/);});
+test("CSV punto y coma, coma, BOM y entrecomillado",()=>{assert.equal(C.csvRows("grupo_edad;sexo;poblacion\n0-4;H;12")[0].poblacion,"12");assert.equal(C.csvRows("\uFEFFgrupo_edad,sexo,poblacion\n0-4,M,20")[0].sexo,"M");assert.equal(C.csvRows('grupo_edad;sexo;poblacion\n"0-4";"H";"3"')[0].poblacion,"3");});
+test("importación JSON con metadatos trazables",()=>{const file=JSON.stringify({metadatos:{territorio:"X",periodo:"2024",fuente:"Fuente declarada"},registros:typical});const data=C.importText(file,"demo.json","","","");assert.equal(data.nombre,"X");assert.equal(data.verificado,false);assert.equal(data.total,20);});
+test("no acepta importación de tabla incompleta ni archivo con extensión ajena",()=>{assert.throws(()=>C.importText("grupo_edad,sexo,poblacion\n0-4,H,2","datos.csv","f","t","2024"),/Faltan/);assert.throws(()=>C.importText("{}","datos.txt","f","t","2024"),/CSV\/JSON/);});
+test("sanidad del acoplamiento HTML: referencias y controles existentes",()=>{const html=fs.readFileSync(path.resolve(__dirname,"../index.html"),"utf8"),app=fs.readFileSync(path.resolve(__dirname,"../assets/laboratorio.js"),"utf8");for(const s of ["assets/demografia-core.js","assets/laboratorio.js","assets/laboratorio.css"])assert.ok(html.includes(s),"Recurso no referenciado: "+s);const ids=[...app.matchAll(/\bel\("([a-zA-Z0-9]+)"\)/g)].map(x=>x[1]);for(const id of ids)assert.ok(html.includes('id="'+id+'"'),"Falta el control HTML: "+id);});
