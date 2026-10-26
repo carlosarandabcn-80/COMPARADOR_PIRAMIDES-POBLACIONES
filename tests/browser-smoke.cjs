@@ -30,6 +30,7 @@ const {chromium}=require("playwright"),assert=require("node:assert/strict"),path
   await page.locator("#importPeriod").fill("Ejemplo ficticio");
   await page.locator("#importSource").fill("Datos sintéticos de este repositorio");
   await page.locator("#importButton").click();
+  await page.waitForFunction(()=>document.getElementById("importStatus").textContent.trim().length>0);
   assert.match(await page.locator("#importStatus").innerText(),/Importación validada estructuralmente/);
   assert.equal(await page.locator("#datasetA option").count(),4);
   assert.match(await page.locator("#metaA").innerText(),/NO VERIFICADA/);
