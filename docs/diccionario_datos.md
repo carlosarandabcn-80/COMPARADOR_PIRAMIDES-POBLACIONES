@@ -2,7 +2,7 @@
 
 ## Esquema obligatorio
 
-Formato CSV UTF-8 (delimitador coma, punto y coma o tabulador), con cabecera **grupo_edad,sexo,poblacion**. JSON admitido: array de 36 objetos o \`{"metadatos":{...},"registros":[...]}\`. Se permiten campos adicionales, aunque no se usan en los cálculos.
+Formato CSV UTF-8 (delimitador coma, punto y coma o tabulador), con cabecera **grupo_edad,sexo,poblacion**. JSON admitido: array de 36 objetos o `{"metadatos":{...},"registros":[...]}`. Se permiten campos adicionales, aunque no se usan en los cálculos.
 
 | Variable | Tipo | Valores válidos | Observaciones |
 |---|---|---|---|
@@ -13,7 +13,7 @@ Formato CSV UTF-8 (delimitador coma, punto y coma o tabulador), con cabecera **g
 | periodo | metadato declarado | texto | Obligatorio en la interfaz. |
 | fuente | metadato declarado | texto, referencia/URL | Obligatorio en la interfaz. |
 
-El conjunto contiene **exactamente 36 registros**, uno por combinación de tramo y sexo. El formato no acepta grupos 0-15 ni edades simples sin transformación previa. No debe distribuirse artificialmente un tramo incompatible sin explicitar el supuesto. El fichero CSV de ejemplo en \`examples/datos-sinteticos.csv\` es ficticio.
+El conjunto contiene **exactamente 36 registros**, uno por combinación de tramo y sexo. El formato no acepta grupos 0-15 ni edades simples sin transformación previa. No debe distribuirse artificialmente un tramo incompatible sin explicitar el supuesto. El fichero CSV de ejemplo en `examples/datos-sinteticos.csv` es ficticio.
 
 ## Comprobaciones
 
@@ -25,10 +25,10 @@ El fichero se lee mediante la API del navegador: **no se sube** a un servidor. D
 
 ## Formato mínimo de dos filas (no importable por estar incompleto)
 
-\`\`\`csv
+```csv
 grupo_edad,sexo,poblacion
 0-4,H,25
 0-4,M,24
-\`\`\`
+```
 
 Para una importación válida, completar los otros 34 pares con recuentos no negativos. No se aceptan estimaciones de edades individuales derivadas sin justificación de grupos agregados.
