@@ -1,0 +1,103 @@
+{
+  "version": "2.0.1",
+  "scope": "Teclado real en navegador integrado. Recorridos seleccionados, sin lector de pantalla.",
+  "records": [
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "Saltar al contenido principal"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "▥ DemoLab."
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "◫Explorar"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "⇄Comparar"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "◎Comprender"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "↗Intervenir"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "▤Aprender"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "⌕Investigar"
+    },
+    {
+      "id": "",
+      "outline": "solid",
+      "tag": "A",
+      "text": "↓Exportar"
+    },
+    {
+      "id": "a11y-toggle",
+      "outline": "solid",
+      "tag": "BUTTON",
+      "text": "Accesibilidad y lectura"
+    },
+    {
+      "action": "Abrir panel, activar contraste y cerrar con Escape",
+      "contrast": true,
+      "focus": "a11y-toggle",
+      "panelHidden": true
+    },
+    {
+      "action": "Cambiar territorio por teclado",
+      "focus": "territory-a",
+      "total": "POBLACIÓN TOTAL10.639.726Personas · ambos sexosDE 0 A 14 AÑOS12,82 %1.363.768 personas65 AÑOS O MÁS24,10 %2.564.575 personasDEPENDENCIA TOTAL58,53Por cada 100 de 15 a 64",
+      "value": "PT"
+    },
+    {
+      "action": "Elegir segundo caso por teclado",
+      "focus": "<button data-case=\"childhood\" aria-pressed=\"true\">02 · Infancia y adolescencia<small>Acceso a recursos educativos</small></button>",
+      "selected": "childhood"
+    },
+    {
+      "action": "Foco en diálogo modal",
+      "focus": "cancel-clear",
+      "modal": true
+    },
+    {
+      "action": "Foco en diálogo modal",
+      "focus": "confirm-clear",
+      "modal": true
+    },
+    {
+      "action": "Foco en diálogo modal",
+      "focus": "",
+      "modal": true
+    },
+    {
+      "action": "Escape del diálogo",
+      "focus": "clear-work",
+      "modal": false
+    }
+  ]
+}
