@@ -5,7 +5,7 @@ const target=process.argv[2];
 if(!target)throw Error('Indica la ruta del HTML autónomo de salida.');
 const data=fs.readFileSync('data/datasets.json','utf8').replace(/</g,'\\u003c');
 const modules=['core','io','learning','app'].map(name=>fs.readFileSync(`src/${name}.js`,'utf8').replace(/^import .*;\r?\n/gm,'').replace(/^export \{AGES\};?\r?\n/gm,'').replace(/^export /gm,''));
-let js=modules.join('\n');
+let js=modules.join('\n').replace(/\r\n?/g,'\n');
 const load="const response=await fetch('./data/datasets.json');if(!response.ok)throw Error('No se pudo descargar el archivo de datos.');datasets=await response.json();";
 if(!js.includes(load))throw Error('El punto de carga cambió; revisar el generador autónomo.');
 js=js.replace(load,`datasets=${data};`).replace("if('serviceWorker'in navigator){const scope=", "if(location.protocol.startsWith('http')&&'serviceWorker'in navigator){const scope=");
