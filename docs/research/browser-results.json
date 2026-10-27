@@ -1,0 +1,229 @@
+{
+  "appVersion": "2.0.0",
+  "date": "2026-10-27T10:45:48.601Z",
+  "results": [
+    {
+      "name": "Carga de datos reales y total ES 2024",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Cambio de periodo actualiza métricas, gráfico y tabla",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Alternancia absoluta conserva datos y escala gráfica exacta",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Selección y ampliación accesible de 65+",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Comparación con escala común y superposición",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Intercambio A/B actualiza todos los indicadores",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Motor transparente y revisión de cuaderno incompleto",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Persistencia tras recarga y vínculo explícito del cuaderno",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Seis casos y retroalimentación razonada",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Cuestionario distingue las cinco competencias",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Importación JSON válida, negativa y duplicada desde un archivo real",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Informe conserva fuentes, comparación, reglas y límites",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Descargas HTML, JSON, CSV, TXT y plantillas con contenido verificable",
+      "status": "pass",
+      "detail": [
+        {
+          "name": "informe-demografico.html",
+          "bytes": 34254
+        },
+        {
+          "name": "analisis-demografico.json",
+          "bytes": 13695
+        },
+        {
+          "name": "poblacion-analizada.csv",
+          "bytes": 21167
+        },
+        {
+          "name": "comentario-demografico.txt",
+          "bytes": 672
+        },
+        {
+          "name": "plantilla-poblacion.json",
+          "bytes": 2331
+        },
+        {
+          "name": "plantilla-poblacion.csv",
+          "bytes": 11482
+        }
+      ]
+    },
+    {
+      "name": "Botón PDF entrega el informe al diálogo de impresión",
+      "status": "pass",
+      "detail": "Integración con print comprobada con sustituto; no se guardó ni evaluó un PDF del navegador."
+    },
+    {
+      "name": "Escenario hipotético ejecutado y etiquetado",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Accesibilidad personalizada y cierre con Escape",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Los trece modelos sintéticos actualizan gráfico y total",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Tiempo local y recursos de carga registrados",
+      "status": "pass",
+      "detail": {
+        "domContentLoadedMs": 30.100000143051147,
+        "loadMs": 33.10000014305115,
+        "resourceCount": 6,
+        "context": "Una ejecución local en caché variable; no benchmark de producción ni Core Web Vitals."
+      }
+    },
+    {
+      "name": "Reflujo 320px en siete secciones",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Reflujo 768px en siete secciones",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Reflujo 1280px en siete secciones",
+      "status": "pass",
+      "detail": null
+    },
+    {
+      "name": "Auditoría automática axe WCAG 2.2 AA en siete secciones",
+      "status": "pass",
+      "detail": [
+        {
+          "section": "explorar",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 39
+            }
+          ]
+        },
+        {
+          "section": "comparar",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 67
+            }
+          ]
+        },
+        {
+          "section": "comprender",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 7
+            }
+          ]
+        },
+        {
+          "section": "intervenir",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 18
+            }
+          ]
+        },
+        {
+          "section": "aprender",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "aria-prohibited-attr",
+              "help": "Elements must only use permitted ARIA attributes",
+              "nodes": 1
+            },
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 8
+            }
+          ]
+        },
+        {
+          "section": "investigar",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 7
+            }
+          ]
+        },
+        {
+          "section": "exportar",
+          "violations": [],
+          "incomplete": [
+            {
+              "id": "color-contrast",
+              "help": "Elements must meet minimum color contrast ratio thresholds",
+              "nodes": 68
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

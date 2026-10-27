@@ -1,9 +1,10 @@
 {
-  "title": "Pirámides poblacionales: diagnóstico metodológico y comparación",
-  "subtitle": "Estructura Social - Grado de Educación Social - UNIR",
+  "title": "DemoLab · Demografía aplicada a la Educación Social",
+  "subtitle": "Laboratorio independiente de aprendizaje y análisis exploratorio",
   "author": "Aranda Tools®",
   "year": 2026,
-  "type": "static-interactive-dashboard",
+  "version": "2.0.0",
+  "type": "static-interactive-research-laboratory",
   "deployment": "GitHub Pages ready",
   "dependencies": "none"
 }

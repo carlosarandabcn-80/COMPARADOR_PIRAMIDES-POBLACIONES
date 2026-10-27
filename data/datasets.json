@@ -1,0 +1,1952 @@
+[
+  {
+    "id": "ES-2023",
+    "territory": "España",
+    "territoryCode": "ES",
+    "year": 2023,
+    "kind": "observed",
+    "unit": "persons",
+    "source": "Eurostat",
+    "sourceUrl": "https://doi.org/10.2908/demo_pjan",
+    "queryUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?lang=EN&geo=ES&geo=PT&sex=M&sex=F&sinceTimePeriod=2023&untilTimePeriod=2024",
+    "referenceDate": "2023-01-01",
+    "updated": "2026-09-25T23:00:00+0200",
+    "retrieved": "2026-10-27",
+    "version": "demo_pjan-79fd18acb42b",
+    "rawSha256": "79fd18acb42b1afc4def14acdfd6c8646d8645a59ef9075bdd96e4ef9aaf1640",
+    "method": "demo_pjan: población residente a 1 de enero; edad cumplida; sexos M y F según la fuente; agrupación quinquenal y 85+.",
+    "sexDefinition": "Males / Females, categorías estadísticas M y F de Eurostat. No mide identidad de género.",
+    "license": "Reutilización estadística Eurostat con atribución; agregación propia, Eurostat no es responsable de esta transformación.",
+    "limitations": [
+      "Datos agregados; no identifican necesidades, ocupación, dependencia funcional ni causas.",
+      "No combinar con series de otra definición sin revisar comparabilidad."
+    ],
+    "total": 48085361,
+    "flags": {},
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 917887,
+        "female": 868519
+      },
+      {
+        "age": "5-9",
+        "male": 1143451,
+        "female": 1078356
+      },
+      {
+        "age": "10-14",
+        "male": 1303110,
+        "female": 1225892
+      },
+      {
+        "age": "15-19",
+        "male": 1321437,
+        "female": 1241369
+      },
+      {
+        "age": "20-24",
+        "male": 1289104,
+        "female": 1213886
+      },
+      {
+        "age": "25-29",
+        "male": 1308770,
+        "female": 1264702
+      },
+      {
+        "age": "30-34",
+        "male": 1410086,
+        "female": 1389393
+      },
+      {
+        "age": "35-39",
+        "male": 1537853,
+        "female": 1547745
+      },
+      {
+        "age": "40-44",
+        "male": 1876160,
+        "female": 1863161
+      },
+      {
+        "age": "45-49",
+        "male": 2046931,
+        "female": 2008433
+      },
+      {
+        "age": "50-54",
+        "male": 1901292,
+        "female": 1898816
+      },
+      {
+        "age": "55-59",
+        "male": 1764844,
+        "female": 1818254
+      },
+      {
+        "age": "60-64",
+        "male": 1531128,
+        "female": 1627006
+      },
+      {
+        "age": "65-69",
+        "male": 1250138,
+        "female": 1381513
+      },
+      {
+        "age": "70-74",
+        "male": 1051457,
+        "female": 1219802
+      },
+      {
+        "age": "75-79",
+        "male": 846418,
+        "female": 1066594
+      },
+      {
+        "age": "80-84",
+        "male": 523919,
+        "female": 744858
+      },
+      {
+        "age": "85+",
+        "male": 541608,
+        "female": 1061469
+      }
+    ]
+  },
+  {
+    "id": "ES-2024",
+    "territory": "España",
+    "territoryCode": "ES",
+    "year": 2024,
+    "kind": "observed",
+    "unit": "persons",
+    "source": "Eurostat",
+    "sourceUrl": "https://doi.org/10.2908/demo_pjan",
+    "queryUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?lang=EN&geo=ES&geo=PT&sex=M&sex=F&sinceTimePeriod=2023&untilTimePeriod=2024",
+    "referenceDate": "2024-01-01",
+    "updated": "2026-09-25T23:00:00+0200",
+    "retrieved": "2026-10-27",
+    "version": "demo_pjan-79fd18acb42b",
+    "rawSha256": "79fd18acb42b1afc4def14acdfd6c8646d8645a59ef9075bdd96e4ef9aaf1640",
+    "method": "demo_pjan: población residente a 1 de enero; edad cumplida; sexos M y F según la fuente; agrupación quinquenal y 85+.",
+    "sexDefinition": "Males / Females, categorías estadísticas M y F de Eurostat. No mide identidad de género.",
+    "license": "Reutilización estadística Eurostat con atribución; agregación propia, Eurostat no es responsable de esta transformación.",
+    "limitations": [
+      "Datos agregados; no identifican necesidades, ocupación, dependencia funcional ni causas.",
+      "No combinar con series de otra definición sin revisar comparabilidad."
+    ],
+    "total": 48619695,
+    "flags": {},
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 896682,
+        "female": 848852
+      },
+      {
+        "age": "5-9",
+        "male": 1129681,
+        "female": 1066490
+      },
+      {
+        "age": "10-14",
+        "male": 1282236,
+        "female": 1206436
+      },
+      {
+        "age": "15-19",
+        "male": 1365911,
+        "female": 1278957
+      },
+      {
+        "age": "20-24",
+        "male": 1339587,
+        "female": 1263174
+      },
+      {
+        "age": "25-29",
+        "male": 1337669,
+        "female": 1285959
+      },
+      {
+        "age": "30-34",
+        "male": 1433634,
+        "female": 1404766
+      },
+      {
+        "age": "35-39",
+        "male": 1530503,
+        "female": 1538296
+      },
+      {
+        "age": "40-44",
+        "male": 1819465,
+        "female": 1818490
+      },
+      {
+        "age": "45-49",
+        "male": 2065486,
+        "female": 2034133
+      },
+      {
+        "age": "50-54",
+        "male": 1935652,
+        "female": 1931109
+      },
+      {
+        "age": "55-59",
+        "male": 1795185,
+        "female": 1848723
+      },
+      {
+        "age": "60-64",
+        "male": 1568711,
+        "female": 1665540
+      },
+      {
+        "age": "65-69",
+        "male": 1296776,
+        "female": 1432918
+      },
+      {
+        "age": "70-74",
+        "male": 1054644,
+        "female": 1221373
+      },
+      {
+        "age": "75-79",
+        "male": 873232,
+        "female": 1098991
+      },
+      {
+        "age": "80-84",
+        "male": 561655,
+        "female": 791516
+      },
+      {
+        "age": "85+",
+        "male": 540162,
+        "female": 1057101
+      }
+    ]
+  },
+  {
+    "id": "PT-2023",
+    "territory": "Portugal",
+    "territoryCode": "PT",
+    "year": 2023,
+    "kind": "observed",
+    "unit": "persons",
+    "source": "Eurostat",
+    "sourceUrl": "https://doi.org/10.2908/demo_pjan",
+    "queryUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?lang=EN&geo=ES&geo=PT&sex=M&sex=F&sinceTimePeriod=2023&untilTimePeriod=2024",
+    "referenceDate": "2023-01-01",
+    "updated": "2026-09-25T23:00:00+0200",
+    "retrieved": "2026-10-27",
+    "version": "demo_pjan-79fd18acb42b",
+    "rawSha256": "79fd18acb42b1afc4def14acdfd6c8646d8645a59ef9075bdd96e4ef9aaf1640",
+    "method": "demo_pjan: población residente a 1 de enero; edad cumplida; sexos M y F según la fuente; agrupación quinquenal y 85+.",
+    "sexDefinition": "Males / Females, categorías estadísticas M y F de Eurostat. No mide identidad de género.",
+    "license": "Reutilización estadística Eurostat con atribución; agregación propia, Eurostat no es responsable de esta transformación.",
+    "limitations": [
+      "Datos agregados; no identifican necesidades, ocupación, dependencia funcional ni causas.",
+      "No combinar con series de otra definición sin revisar comparabilidad."
+    ],
+    "total": 10516621,
+    "flags": {},
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 219895,
+        "female": 208606
+      },
+      {
+        "age": "5-9",
+        "male": 224265,
+        "female": 212966
+      },
+      {
+        "age": "10-14",
+        "male": 253076,
+        "female": 242664
+      },
+      {
+        "age": "15-19",
+        "male": 268327,
+        "female": 257247
+      },
+      {
+        "age": "20-24",
+        "male": 289136,
+        "female": 276242
+      },
+      {
+        "age": "25-29",
+        "male": 283434,
+        "female": 271650
+      },
+      {
+        "age": "30-34",
+        "male": 290068,
+        "female": 288366
+      },
+      {
+        "age": "35-39",
+        "male": 307340,
+        "female": 318264
+      },
+      {
+        "age": "40-44",
+        "male": 352494,
+        "female": 377363
+      },
+      {
+        "age": "45-49",
+        "male": 393300,
+        "female": 425152
+      },
+      {
+        "age": "50-54",
+        "male": 366542,
+        "female": 401390
+      },
+      {
+        "age": "55-59",
+        "male": 351904,
+        "female": 398617
+      },
+      {
+        "age": "60-64",
+        "male": 339566,
+        "female": 387843
+      },
+      {
+        "age": "65-69",
+        "male": 309736,
+        "female": 360010
+      },
+      {
+        "age": "70-74",
+        "male": 282322,
+        "female": 336437
+      },
+      {
+        "age": "75-79",
+        "male": 215355,
+        "female": 279276
+      },
+      {
+        "age": "80-84",
+        "male": 148063,
+        "female": 211198
+      },
+      {
+        "age": "85+",
+        "male": 125825,
+        "female": 242682
+      }
+    ]
+  },
+  {
+    "id": "PT-2024",
+    "territory": "Portugal",
+    "territoryCode": "PT",
+    "year": 2024,
+    "kind": "observed",
+    "unit": "persons",
+    "source": "Eurostat",
+    "sourceUrl": "https://doi.org/10.2908/demo_pjan",
+    "queryUrl": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?lang=EN&geo=ES&geo=PT&sex=M&sex=F&sinceTimePeriod=2023&untilTimePeriod=2024",
+    "referenceDate": "2024-01-01",
+    "updated": "2026-09-25T23:00:00+0200",
+    "retrieved": "2026-10-27",
+    "version": "demo_pjan-79fd18acb42b",
+    "rawSha256": "79fd18acb42b1afc4def14acdfd6c8646d8645a59ef9075bdd96e4ef9aaf1640",
+    "method": "demo_pjan: población residente a 1 de enero; edad cumplida; sexos M y F según la fuente; agrupación quinquenal y 85+.",
+    "sexDefinition": "Males / Females, categorías estadísticas M y F de Eurostat. No mide identidad de género.",
+    "license": "Reutilización estadística Eurostat con atribución; agregación propia, Eurostat no es responsable de esta transformación.",
+    "limitations": [
+      "Datos agregados; no identifican necesidades, ocupación, dependencia funcional ni causas.",
+      "No combinar con series de otra definición sin revisar comparabilidad."
+    ],
+    "total": 10639726,
+    "flags": {},
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 221121,
+        "female": 208651
+      },
+      {
+        "age": "5-9",
+        "male": 229621,
+        "female": 218559
+      },
+      {
+        "age": "10-14",
+        "male": 247542,
+        "female": 238274
+      },
+      {
+        "age": "15-19",
+        "male": 269206,
+        "female": 258900
+      },
+      {
+        "age": "20-24",
+        "male": 290561,
+        "female": 280090
+      },
+      {
+        "age": "25-29",
+        "male": 291928,
+        "female": 278498
+      },
+      {
+        "age": "30-34",
+        "male": 300061,
+        "female": 295770
+      },
+      {
+        "age": "35-39",
+        "male": 308975,
+        "female": 316753
+      },
+      {
+        "age": "40-44",
+        "male": 352038,
+        "female": 373875
+      },
+      {
+        "age": "45-49",
+        "male": 394465,
+        "female": 425996
+      },
+      {
+        "age": "50-54",
+        "male": 373346,
+        "female": 409236
+      },
+      {
+        "age": "55-59",
+        "male": 354591,
+        "female": 400294
+      },
+      {
+        "age": "60-64",
+        "male": 344026,
+        "female": 392774
+      },
+      {
+        "age": "65-69",
+        "male": 316994,
+        "female": 368303
+      },
+      {
+        "age": "70-74",
+        "male": 282121,
+        "female": 337022
+      },
+      {
+        "age": "75-79",
+        "male": 225565,
+        "female": 291354
+      },
+      {
+        "age": "80-84",
+        "male": 150497,
+        "female": 213353
+      },
+      {
+        "age": "85+",
+        "male": 130910,
+        "female": 248456
+      }
+    ]
+  },
+  {
+    "id": "model-expansiva",
+    "territory": "Modelo · Expansiva",
+    "territoryCode": "model-expansiva",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 6558,
+        "female": 6319
+      },
+      {
+        "age": "5-9",
+        "male": 6319,
+        "female": 6081
+      },
+      {
+        "age": "10-14",
+        "male": 5962,
+        "female": 5723
+      },
+      {
+        "age": "15-19",
+        "male": 5485,
+        "female": 5246
+      },
+      {
+        "age": "20-24",
+        "male": 4889,
+        "female": 4769
+      },
+      {
+        "age": "25-29",
+        "male": 4292,
+        "female": 4292
+      },
+      {
+        "age": "30-34",
+        "male": 3696,
+        "female": 3696
+      },
+      {
+        "age": "35-39",
+        "male": 3100,
+        "female": 3219
+      },
+      {
+        "age": "40-44",
+        "male": 2504,
+        "female": 2623
+      },
+      {
+        "age": "45-49",
+        "male": 2027,
+        "female": 2146
+      },
+      {
+        "age": "50-54",
+        "male": 1550,
+        "female": 1669
+      },
+      {
+        "age": "55-59",
+        "male": 1192,
+        "female": 1312
+      },
+      {
+        "age": "60-64",
+        "male": 859,
+        "female": 978
+      },
+      {
+        "age": "65-69",
+        "male": 596,
+        "female": 715
+      },
+      {
+        "age": "70-74",
+        "male": 405,
+        "female": 525
+      },
+      {
+        "age": "75-79",
+        "male": 262,
+        "female": 370
+      },
+      {
+        "age": "80-84",
+        "male": 155,
+        "female": 239
+      },
+      {
+        "age": "85+",
+        "male": 84,
+        "female": 143
+      }
+    ]
+  },
+  {
+    "id": "model-stationary",
+    "territory": "Modelo · Campana",
+    "territoryCode": "model-stationary",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 4120,
+        "female": 3953
+      },
+      {
+        "age": "5-9",
+        "male": 4064,
+        "female": 3875
+      },
+      {
+        "age": "10-14",
+        "male": 3953,
+        "female": 3808
+      },
+      {
+        "age": "15-19",
+        "male": 3841,
+        "female": 3763
+      },
+      {
+        "age": "20-24",
+        "male": 3953,
+        "female": 3919
+      },
+      {
+        "age": "25-29",
+        "male": 4064,
+        "female": 4042
+      },
+      {
+        "age": "30-34",
+        "male": 4031,
+        "female": 4008
+      },
+      {
+        "age": "35-39",
+        "male": 3875,
+        "female": 3897
+      },
+      {
+        "age": "40-44",
+        "male": 3619,
+        "female": 3697
+      },
+      {
+        "age": "45-49",
+        "male": 3285,
+        "female": 3396
+      },
+      {
+        "age": "50-54",
+        "male": 2839,
+        "female": 3006
+      },
+      {
+        "age": "55-59",
+        "male": 2361,
+        "female": 2561
+      },
+      {
+        "age": "60-64",
+        "male": 1871,
+        "female": 2116
+      },
+      {
+        "age": "65-69",
+        "male": 1370,
+        "female": 1614
+      },
+      {
+        "age": "70-74",
+        "male": 980,
+        "female": 1202
+      },
+      {
+        "age": "75-79",
+        "male": 646,
+        "female": 846
+      },
+      {
+        "age": "80-84",
+        "male": 379,
+        "female": 534
+      },
+      {
+        "age": "85+",
+        "male": 200,
+        "female": 312
+      }
+    ]
+  },
+  {
+    "id": "model-spain",
+    "territory": "Modelo · Base reducida",
+    "territoryCode": "model-spain",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 1770,
+        "female": 1670
+      },
+      {
+        "age": "5-9",
+        "male": 2199,
+        "female": 2079
+      },
+      {
+        "age": "10-14",
+        "male": 2579,
+        "female": 2429
+      },
+      {
+        "age": "15-19",
+        "male": 2859,
+        "female": 2649
+      },
+      {
+        "age": "20-24",
+        "male": 2859,
+        "female": 2669
+      },
+      {
+        "age": "25-29",
+        "male": 2859,
+        "female": 2699
+      },
+      {
+        "age": "30-34",
+        "male": 2979,
+        "female": 2879
+      },
+      {
+        "age": "35-39",
+        "male": 3119,
+        "female": 3099
+      },
+      {
+        "age": "40-44",
+        "male": 3539,
+        "female": 3549
+      },
+      {
+        "age": "45-49",
+        "male": 4139,
+        "female": 4109
+      },
+      {
+        "age": "50-54",
+        "male": 4039,
+        "female": 4029
+      },
+      {
+        "age": "55-59",
+        "male": 3699,
+        "female": 3799
+      },
+      {
+        "age": "60-64",
+        "male": 3309,
+        "female": 3509
+      },
+      {
+        "age": "65-69",
+        "male": 2789,
+        "female": 3069
+      },
+      {
+        "age": "70-74",
+        "male": 2189,
+        "female": 2539
+      },
+      {
+        "age": "75-79",
+        "male": 1800,
+        "female": 2269
+      },
+      {
+        "age": "80-84",
+        "male": 1250,
+        "female": 1750
+      },
+      {
+        "age": "85+",
+        "male": 1100,
+        "female": 2129
+      }
+    ]
+  },
+  {
+    "id": "model-europa",
+    "territory": "Modelo · Romboidal",
+    "territoryCode": "model-europa",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 2340,
+        "female": 2210
+      },
+      {
+        "age": "5-9",
+        "male": 2439,
+        "female": 2330
+      },
+      {
+        "age": "10-14",
+        "male": 2539,
+        "female": 2439
+      },
+      {
+        "age": "15-19",
+        "male": 2638,
+        "female": 2569
+      },
+      {
+        "age": "20-24",
+        "male": 2738,
+        "female": 2708
+      },
+      {
+        "age": "25-29",
+        "male": 2937,
+        "female": 2917
+      },
+      {
+        "age": "30-34",
+        "male": 3086,
+        "female": 3106
+      },
+      {
+        "age": "35-39",
+        "male": 3236,
+        "female": 3306
+      },
+      {
+        "age": "40-44",
+        "male": 3435,
+        "female": 3544
+      },
+      {
+        "age": "45-49",
+        "male": 3634,
+        "female": 3803
+      },
+      {
+        "age": "50-54",
+        "male": 3684,
+        "female": 3903
+      },
+      {
+        "age": "55-59",
+        "male": 3535,
+        "female": 3843
+      },
+      {
+        "age": "60-64",
+        "male": 3335,
+        "female": 3704
+      },
+      {
+        "age": "65-69",
+        "male": 2937,
+        "female": 3325
+      },
+      {
+        "age": "70-74",
+        "male": 2340,
+        "female": 2808
+      },
+      {
+        "age": "75-79",
+        "male": 1742,
+        "female": 2270
+      },
+      {
+        "age": "80-84",
+        "male": 1145,
+        "female": 1643
+      },
+      {
+        "age": "85+",
+        "male": 717,
+        "female": 1115
+      }
+    ]
+  },
+  {
+    "id": "model-rural",
+    "territory": "Modelo · Perfil rural didáctico",
+    "territoryCode": "model-rural",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 1488,
+        "female": 1339
+      },
+      {
+        "age": "5-9",
+        "male": 1488,
+        "female": 1414
+      },
+      {
+        "age": "10-14",
+        "male": 1637,
+        "female": 1488
+      },
+      {
+        "age": "15-19",
+        "male": 1488,
+        "female": 1414
+      },
+      {
+        "age": "20-24",
+        "male": 1265,
+        "female": 1116
+      },
+      {
+        "age": "25-29",
+        "male": 1116,
+        "female": 1042
+      },
+      {
+        "age": "30-34",
+        "male": 1339,
+        "female": 1339
+      },
+      {
+        "age": "35-39",
+        "male": 1786,
+        "female": 1860
+      },
+      {
+        "age": "40-44",
+        "male": 2679,
+        "female": 2604
+      },
+      {
+        "age": "45-49",
+        "male": 3571,
+        "female": 3497
+      },
+      {
+        "age": "50-54",
+        "male": 4167,
+        "female": 4241
+      },
+      {
+        "age": "55-59",
+        "male": 4762,
+        "female": 4985
+      },
+      {
+        "age": "60-64",
+        "male": 5060,
+        "female": 5580
+      },
+      {
+        "age": "65-69",
+        "male": 4911,
+        "female": 5729
+      },
+      {
+        "age": "70-74",
+        "male": 4167,
+        "female": 5283
+      },
+      {
+        "age": "75-79",
+        "male": 3125,
+        "female": 4315
+      },
+      {
+        "age": "80-84",
+        "male": 2009,
+        "female": 3125
+      },
+      {
+        "age": "85+",
+        "male": 1190,
+        "female": 2381
+      }
+    ]
+  },
+  {
+    "id": "model-metro",
+    "territory": "Modelo · Concentración adulta",
+    "territoryCode": "model-metro",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 3005,
+        "female": 2898
+      },
+      {
+        "age": "5-9",
+        "male": 3113,
+        "female": 3005
+      },
+      {
+        "age": "10-14",
+        "male": 2898,
+        "female": 2898
+      },
+      {
+        "age": "15-19",
+        "male": 3220,
+        "female": 3435
+      },
+      {
+        "age": "20-24",
+        "male": 4401,
+        "female": 4293
+      },
+      {
+        "age": "25-29",
+        "male": 5152,
+        "female": 4937
+      },
+      {
+        "age": "30-34",
+        "male": 5259,
+        "female": 5044
+      },
+      {
+        "age": "35-39",
+        "male": 4722,
+        "female": 4615
+      },
+      {
+        "age": "40-44",
+        "male": 3864,
+        "female": 3971
+      },
+      {
+        "age": "45-49",
+        "male": 3220,
+        "female": 3435
+      },
+      {
+        "age": "50-54",
+        "male": 2683,
+        "female": 2898
+      },
+      {
+        "age": "55-59",
+        "male": 2147,
+        "female": 2415
+      },
+      {
+        "age": "60-64",
+        "male": 1717,
+        "female": 1986
+      },
+      {
+        "age": "65-69",
+        "male": 1342,
+        "female": 1556
+      },
+      {
+        "age": "70-74",
+        "male": 1020,
+        "female": 1234
+      },
+      {
+        "age": "75-79",
+        "male": 751,
+        "female": 966
+      },
+      {
+        "age": "80-84",
+        "male": 483,
+        "female": 698
+      },
+      {
+        "age": "85+",
+        "male": 268,
+        "female": 451
+      }
+    ]
+  },
+  {
+    "id": "model-university",
+    "territory": "Modelo · Concentración juvenil",
+    "territoryCode": "model-university",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 2562,
+        "female": 2427
+      },
+      {
+        "age": "5-9",
+        "male": 2427,
+        "female": 2359
+      },
+      {
+        "age": "10-14",
+        "male": 2427,
+        "female": 2494
+      },
+      {
+        "age": "15-19",
+        "male": 6472,
+        "female": 6876
+      },
+      {
+        "age": "20-24",
+        "male": 7281,
+        "female": 7685
+      },
+      {
+        "age": "25-29",
+        "male": 5663,
+        "female": 5797
+      },
+      {
+        "age": "30-34",
+        "male": 4045,
+        "female": 4180
+      },
+      {
+        "age": "35-39",
+        "male": 3371,
+        "female": 3505
+      },
+      {
+        "age": "40-44",
+        "male": 2966,
+        "female": 3034
+      },
+      {
+        "age": "45-49",
+        "male": 2696,
+        "female": 2764
+      },
+      {
+        "age": "50-54",
+        "male": 2292,
+        "female": 2427
+      },
+      {
+        "age": "55-59",
+        "male": 1887,
+        "female": 2090
+      },
+      {
+        "age": "60-64",
+        "male": 1483,
+        "female": 1685
+      },
+      {
+        "age": "65-69",
+        "male": 1146,
+        "female": 1281
+      },
+      {
+        "age": "70-74",
+        "male": 876,
+        "female": 1025
+      },
+      {
+        "age": "75-79",
+        "male": 607,
+        "female": 755
+      },
+      {
+        "age": "80-84",
+        "male": 377,
+        "female": 512
+      },
+      {
+        "age": "85+",
+        "male": 202,
+        "female": 324
+      }
+    ]
+  },
+  {
+    "id": "model-litoral",
+    "territory": "Modelo · Cúspide amplia",
+    "territoryCode": "model-litoral",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 1100,
+        "female": 1045
+      },
+      {
+        "age": "5-9",
+        "male": 1210,
+        "female": 1155
+      },
+      {
+        "age": "10-14",
+        "male": 1320,
+        "female": 1265
+      },
+      {
+        "age": "15-19",
+        "male": 1541,
+        "female": 1519
+      },
+      {
+        "age": "20-24",
+        "male": 1871,
+        "female": 1816
+      },
+      {
+        "age": "25-29",
+        "male": 2201,
+        "female": 2146
+      },
+      {
+        "age": "30-34",
+        "male": 2311,
+        "female": 2311
+      },
+      {
+        "age": "35-39",
+        "male": 2531,
+        "female": 2586
+      },
+      {
+        "age": "40-44",
+        "male": 2861,
+        "female": 2971
+      },
+      {
+        "age": "45-49",
+        "male": 3301,
+        "female": 3521
+      },
+      {
+        "age": "50-54",
+        "male": 3741,
+        "female": 4071
+      },
+      {
+        "age": "55-59",
+        "male": 4071,
+        "female": 4566
+      },
+      {
+        "age": "60-64",
+        "male": 4291,
+        "female": 5007
+      },
+      {
+        "age": "65-69",
+        "male": 4401,
+        "female": 5282
+      },
+      {
+        "age": "70-74",
+        "male": 3961,
+        "female": 5007
+      },
+      {
+        "age": "75-79",
+        "male": 2971,
+        "female": 4071
+      },
+      {
+        "age": "80-84",
+        "male": 1981,
+        "female": 2916
+      },
+      {
+        "age": "85+",
+        "male": 1100,
+        "female": 1981
+      }
+    ]
+  },
+  {
+    "id": "model-crisis",
+    "territory": "Modelo · Cohortes irregulares",
+    "territoryCode": "model-crisis",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 3497,
+        "female": 3372
+      },
+      {
+        "age": "5-9",
+        "male": 3622,
+        "female": 3559
+      },
+      {
+        "age": "10-14",
+        "male": 3247,
+        "female": 3185
+      },
+      {
+        "age": "15-19",
+        "male": 2623,
+        "female": 2560
+      },
+      {
+        "age": "20-24",
+        "male": 3872,
+        "female": 3996
+      },
+      {
+        "age": "25-29",
+        "male": 4371,
+        "female": 4434
+      },
+      {
+        "age": "30-34",
+        "male": 2748,
+        "female": 2997
+      },
+      {
+        "age": "35-39",
+        "male": 4246,
+        "female": 4434
+      },
+      {
+        "age": "40-44",
+        "male": 3872,
+        "female": 4059
+      },
+      {
+        "age": "45-49",
+        "male": 3497,
+        "female": 3747
+      },
+      {
+        "age": "50-54",
+        "male": 3247,
+        "female": 3497
+      },
+      {
+        "age": "55-59",
+        "male": 2748,
+        "female": 3060
+      },
+      {
+        "age": "60-64",
+        "male": 2248,
+        "female": 2560
+      },
+      {
+        "age": "65-69",
+        "male": 1748,
+        "female": 2061
+      },
+      {
+        "age": "70-74",
+        "male": 1249,
+        "female": 1561
+      },
+      {
+        "age": "75-79",
+        "male": 874,
+        "female": 1186
+      },
+      {
+        "age": "80-84",
+        "male": 524,
+        "female": 774
+      },
+      {
+        "age": "85+",
+        "male": 275,
+        "female": 450
+      }
+    ]
+  },
+  {
+    "id": "model-baby",
+    "territory": "Modelo · Cohorte numerosa",
+    "territoryCode": "model-baby",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 2031,
+        "female": 1935
+      },
+      {
+        "age": "5-9",
+        "male": 2128,
+        "female": 2031
+      },
+      {
+        "age": "10-14",
+        "male": 2273,
+        "female": 2205
+      },
+      {
+        "age": "15-19",
+        "male": 2515,
+        "female": 2467
+      },
+      {
+        "age": "20-24",
+        "male": 2708,
+        "female": 2689
+      },
+      {
+        "age": "25-29",
+        "male": 2902,
+        "female": 2921
+      },
+      {
+        "age": "30-34",
+        "male": 3047,
+        "female": 3095
+      },
+      {
+        "age": "35-39",
+        "male": 3144,
+        "female": 3240
+      },
+      {
+        "age": "40-44",
+        "male": 3773,
+        "female": 3918
+      },
+      {
+        "age": "45-49",
+        "male": 4401,
+        "female": 4595
+      },
+      {
+        "age": "50-54",
+        "male": 4498,
+        "female": 4740
+      },
+      {
+        "age": "55-59",
+        "male": 4111,
+        "female": 4498
+      },
+      {
+        "age": "60-64",
+        "male": 3531,
+        "female": 4014
+      },
+      {
+        "age": "65-69",
+        "male": 2660,
+        "female": 3173
+      },
+      {
+        "age": "70-74",
+        "male": 1935,
+        "female": 2467
+      },
+      {
+        "age": "75-79",
+        "male": 1306,
+        "female": 1838
+      },
+      {
+        "age": "80-84",
+        "male": 774,
+        "female": 1209
+      },
+      {
+        "age": "85+",
+        "male": 435,
+        "female": 793
+      }
+    ]
+  },
+  {
+    "id": "model-japan",
+    "territory": "Modelo · Muy envejecida",
+    "territoryCode": "model-japan",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 1636,
+        "female": 1543
+      },
+      {
+        "age": "5-9",
+        "male": 1730,
+        "female": 1636
+      },
+      {
+        "age": "10-14",
+        "male": 1870,
+        "female": 1777
+      },
+      {
+        "age": "15-19",
+        "male": 2010,
+        "female": 1917
+      },
+      {
+        "age": "20-24",
+        "male": 2197,
+        "female": 2104
+      },
+      {
+        "age": "25-29",
+        "male": 2384,
+        "female": 2338
+      },
+      {
+        "age": "30-34",
+        "male": 2571,
+        "female": 2571
+      },
+      {
+        "age": "35-39",
+        "male": 2852,
+        "female": 2899
+      },
+      {
+        "age": "40-44",
+        "male": 3039,
+        "female": 3132
+      },
+      {
+        "age": "45-49",
+        "male": 3226,
+        "female": 3413
+      },
+      {
+        "age": "50-54",
+        "male": 3413,
+        "female": 3693
+      },
+      {
+        "age": "55-59",
+        "male": 3600,
+        "female": 4067
+      },
+      {
+        "age": "60-64",
+        "male": 3740,
+        "female": 4441
+      },
+      {
+        "age": "65-69",
+        "male": 3647,
+        "female": 4628
+      },
+      {
+        "age": "70-74",
+        "male": 3273,
+        "female": 4441
+      },
+      {
+        "age": "75-79",
+        "male": 2571,
+        "female": 3834
+      },
+      {
+        "age": "80-84",
+        "male": 1777,
+        "female": 2945
+      },
+      {
+        "age": "85+",
+        "male": 1075,
+        "female": 2010
+      }
+    ]
+  },
+  {
+    "id": "model-niger",
+    "territory": "Modelo · Muy joven",
+    "territoryCode": "model-niger",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 7479,
+        "female": 7256
+      },
+      {
+        "age": "5-9",
+        "male": 7033,
+        "female": 6921
+      },
+      {
+        "age": "10-14",
+        "male": 6586,
+        "female": 6475
+      },
+      {
+        "age": "15-19",
+        "male": 5916,
+        "female": 5805
+      },
+      {
+        "age": "20-24",
+        "male": 5023,
+        "female": 5135
+      },
+      {
+        "age": "25-29",
+        "male": 4242,
+        "female": 4354
+      },
+      {
+        "age": "30-34",
+        "male": 3461,
+        "female": 3572
+      },
+      {
+        "age": "35-39",
+        "male": 2679,
+        "female": 2902
+      },
+      {
+        "age": "40-44",
+        "male": 2121,
+        "female": 2288
+      },
+      {
+        "age": "45-49",
+        "male": 1619,
+        "female": 1786
+      },
+      {
+        "age": "50-54",
+        "male": 1172,
+        "female": 1340
+      },
+      {
+        "age": "55-59",
+        "male": 804,
+        "female": 949
+      },
+      {
+        "age": "60-64",
+        "male": 536,
+        "female": 670
+      },
+      {
+        "age": "65-69",
+        "male": 335,
+        "female": 469
+      },
+      {
+        "age": "70-74",
+        "male": 201,
+        "female": 312
+      },
+      {
+        "age": "75-79",
+        "male": 112,
+        "female": 201
+      },
+      {
+        "age": "80-84",
+        "male": 56,
+        "female": 112
+      },
+      {
+        "age": "85+",
+        "male": 22,
+        "female": 56
+      }
+    ]
+  },
+  {
+    "id": "model-industrial",
+    "territory": "Modelo · Perfil adulto irregular",
+    "territoryCode": "model-industrial",
+    "year": 2026,
+    "kind": "synthetic",
+    "unit": "persons",
+    "source": "Modelos del comparador original; normalización propia",
+    "sourceUrl": "https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES",
+    "referenceDate": "Sin fecha real",
+    "updated": "2026-10-27",
+    "retrieved": "2026-10-27",
+    "version": "didacticos-2",
+    "method": "Pesos originales normalizados a 100 000 personas ficticias mediante restos mayores. Año 2026 identifica la edición, no un periodo observado.",
+    "sexDefinition": "Dos categorías didácticas hombre y mujer; no representa un censo.",
+    "license": "Material heredado; derechos del titular original. No se concede licencia nueva.",
+    "limitations": [
+      "Modelo sintético; no describe ningún país o municipio real.",
+      "El perfil no prueba migración, fecundidad, pobreza ni necesidades."
+    ],
+    "total": 100000,
+    "rows": [
+      {
+        "age": "0-4",
+        "male": 2082,
+        "female": 1972
+      },
+      {
+        "age": "5-9",
+        "male": 2192,
+        "female": 2082
+      },
+      {
+        "age": "10-14",
+        "male": 2301,
+        "female": 2192
+      },
+      {
+        "age": "15-19",
+        "male": 2411,
+        "female": 2301
+      },
+      {
+        "age": "20-24",
+        "male": 2630,
+        "female": 2575
+      },
+      {
+        "age": "25-29",
+        "male": 2849,
+        "female": 2871
+      },
+      {
+        "age": "30-34",
+        "male": 3287,
+        "female": 3342
+      },
+      {
+        "age": "35-39",
+        "male": 3726,
+        "female": 3780
+      },
+      {
+        "age": "40-44",
+        "male": 4054,
+        "female": 4186
+      },
+      {
+        "age": "45-49",
+        "male": 4273,
+        "female": 4438
+      },
+      {
+        "age": "50-54",
+        "male": 4109,
+        "female": 4328
+      },
+      {
+        "age": "55-59",
+        "male": 3671,
+        "female": 3967
+      },
+      {
+        "age": "60-64",
+        "male": 3232,
+        "female": 3561
+      },
+      {
+        "age": "65-69",
+        "male": 2685,
+        "female": 3123
+      },
+      {
+        "age": "70-74",
+        "male": 2082,
+        "female": 2575
+      },
+      {
+        "age": "75-79",
+        "male": 1479,
+        "female": 2027
+      },
+      {
+        "age": "80-84",
+        "male": 899,
+        "female": 1370
+      },
+      {
+        "age": "85+",
+        "male": 493,
+        "female": 855
+      }
+    ]
+  }
+]

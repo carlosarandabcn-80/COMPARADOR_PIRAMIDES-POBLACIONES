@@ -1,0 +1,430 @@
+TAP version 13
+# Subtest: Ejemplo conocido: 200 jóvenes, 600 adultos y 200 mayores
+ok 1 - Ejemplo conocido: 200 jóvenes, 600 adultos y 200 mayores
+  ---
+  duration_ms: 6.2229
+  type: 'test'
+  ...
+# Subtest: No se redondea antes de sumar o dividir
+ok 2 - No se redondea antes de sumar o dividir
+  ---
+  duration_ms: 0.3607
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales ES-2023
+ok 3 - Contrato y conservación de totales ES-2023
+  ---
+  duration_ms: 1.004
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales ES-2024
+ok 4 - Contrato y conservación de totales ES-2024
+  ---
+  duration_ms: 0.4405
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales PT-2023
+ok 5 - Contrato y conservación de totales PT-2023
+  ---
+  duration_ms: 0.3367
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales PT-2024
+ok 6 - Contrato y conservación de totales PT-2024
+  ---
+  duration_ms: 0.3798
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-expansiva
+ok 7 - Contrato y conservación de totales model-expansiva
+  ---
+  duration_ms: 0.3504
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-stationary
+ok 8 - Contrato y conservación de totales model-stationary
+  ---
+  duration_ms: 0.2356
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-spain
+ok 9 - Contrato y conservación de totales model-spain
+  ---
+  duration_ms: 0.2329
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-europa
+ok 10 - Contrato y conservación de totales model-europa
+  ---
+  duration_ms: 0.3271
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-rural
+ok 11 - Contrato y conservación de totales model-rural
+  ---
+  duration_ms: 0.2668
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-metro
+ok 12 - Contrato y conservación de totales model-metro
+  ---
+  duration_ms: 0.2473
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-university
+ok 13 - Contrato y conservación de totales model-university
+  ---
+  duration_ms: 0.1557
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-litoral
+ok 14 - Contrato y conservación de totales model-litoral
+  ---
+  duration_ms: 0.122
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-crisis
+ok 15 - Contrato y conservación de totales model-crisis
+  ---
+  duration_ms: 0.1131
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-baby
+ok 16 - Contrato y conservación de totales model-baby
+  ---
+  duration_ms: 0.1097
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-japan
+ok 17 - Contrato y conservación de totales model-japan
+  ---
+  duration_ms: 0.1209
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-niger
+ok 18 - Contrato y conservación de totales model-niger
+  ---
+  duration_ms: 0.1148
+  type: 'test'
+  ...
+# Subtest: Contrato y conservación de totales model-industrial
+ok 19 - Contrato y conservación de totales model-industrial
+  ---
+  duration_ms: 0.1091
+  type: 'test'
+  ...
+# Subtest: Los cuatro totales oficiales coinciden con la descarga
+ok 20 - Los cuatro totales oficiales coinciden con la descarga
+  ---
+  duration_ms: 0.1744
+  type: 'test'
+  ...
+# Subtest: La huella vincula cada conjunto observado con el original conservado
+ok 21 - La huella vincula cada conjunto observado con el original conservado
+  ---
+  duration_ms: 1.0846
+  type: 'test'
+  ...
+# Subtest: Los modelos conservan los trece perfiles y un total normalizado
+ok 22 - Los modelos conservan los trece perfiles y un total normalizado
+  ---
+  duration_ms: 0.3147
+  type: 'test'
+  ...
+# Subtest: División por cero devuelve null
+ok 23 - División por cero devuelve null
+  ---
+  duration_ms: 0.2433
+  type: 'test'
+  ...
+# Subtest: Sin jóvenes no se inventa un índice de envejecimiento
+ok 24 - Sin jóvenes no se inventa un índice de envejecimiento
+  ---
+  duration_ms: 0.8855
+  type: 'test'
+  ...
+# Subtest: Sin mujeres no se inventa razón por sexo
+ok 25 - Sin mujeres no se inventa razón por sexo
+  ---
+  duration_ms: 0.1959
+  type: 'test'
+  ...
+# Subtest: Rechazo de negativos
+ok 26 - Rechazo de negativos
+  ---
+  duration_ms: 0.4659
+  type: 'test'
+  ...
+# Subtest: Rechazo de vacíos
+ok 27 - Rechazo de vacíos
+  ---
+  duration_ms: 0.2644
+  type: 'test'
+  ...
+# Subtest: Rechazo de texto numérico
+ok 28 - Rechazo de texto numérico
+  ---
+  duration_ms: 0.2258
+  type: 'test'
+  ...
+# Subtest: Rechazo de decimales
+ok 29 - Rechazo de decimales
+  ---
+  duration_ms: 0.2663
+  type: 'test'
+  ...
+# Subtest: Rechazo de grupos ausentes
+ok 30 - Rechazo de grupos ausentes
+  ---
+  duration_ms: 0.2437
+  type: 'test'
+  ...
+# Subtest: Rechazo de grupos duplicados
+ok 31 - Rechazo de grupos duplicados
+  ---
+  duration_ms: 0.1817
+  type: 'test'
+  ...
+# Subtest: Rechazo de grupos cruzados
+ok 32 - Rechazo de grupos cruzados
+  ---
+  duration_ms: 0.1625
+  type: 'test'
+  ...
+# Subtest: Rechazo de total incoherente
+ok 33 - Rechazo de total incoherente
+  ---
+  duration_ms: 0.1817
+  type: 'test'
+  ...
+# Subtest: Rechazo de unidad porcentual
+ok 34 - Rechazo de unidad porcentual
+  ---
+  duration_ms: 0.1984
+  type: 'test'
+  ...
+# Subtest: Rechazo de URL ejecutable
+ok 35 - Rechazo de URL ejecutable
+  ---
+  duration_ms: 0.1654
+  type: 'test'
+  ...
+# Subtest: Rechazo de año incorrecto
+ok 36 - Rechazo de año incorrecto
+  ---
+  duration_ms: 0.1514
+  type: 'test'
+  ...
+# Subtest: Rechazo de metadatos ausentes
+ok 37 - Rechazo de metadatos ausentes
+  ---
+  duration_ms: 0.1862
+  type: 'test'
+  ...
+# Subtest: Rechazo de tipo desconocido
+ok 38 - Rechazo de tipo desconocido
+  ---
+  duration_ms: 0.2257
+  type: 'test'
+  ...
+# Subtest: Rechazo de límites ausentes
+ok 39 - Rechazo de límites ausentes
+  ---
+  duration_ms: 0.1996
+  type: 'test'
+  ...
+# Subtest: Rechazo de entero inseguro
+ok 40 - Rechazo de entero inseguro
+  ---
+  duration_ms: 0.1762
+  type: 'test'
+  ...
+# Subtest: Variación: 20 a 25 son 5 puntos y 25 % relativo
+ok 41 - Variación: 20 a 25 son 5 puntos y 25 % relativo
+  ---
+  duration_ms: 0.7225
+  type: 'test'
+  ...
+# Subtest: Intercambiar A/B invierte la diferencia absoluta, no la base relativa
+ok 42 - Intercambiar A/B invierte la diferencia absoluta, no la base relativa
+  ---
+  duration_ms: 0.5755
+  type: 'test'
+  ...
+# Subtest: No se comparan grupos incompatibles
+ok 43 - No se comparan grupos incompatibles
+  ---
+  duration_ms: 0.4623
+  type: 'test'
+  ...
+# Subtest: Misma escala para ambos conjuntos y sexos
+ok 44 - Misma escala para ambos conjuntos y sexos
+  ---
+  duration_ms: 0.3162
+  type: 'test'
+  ...
+# Subtest: Cada regla conserva los cinco componentes de trazabilidad
+ok 45 - Cada regla conserva los cinco componentes de trazabilidad
+  ---
+  duration_ms: 0.231
+  type: 'test'
+  ...
+# Subtest: Las reglas no contienen diagnósticos de pobreza, cultura o soledad deducidos de edad
+ok 46 - Las reglas no contienen diagnósticos de pobreza, cultura o soledad deducidos de edad
+  ---
+  duration_ms: 0.3297
+  type: 'test'
+  ...
+# Subtest: Escenario conserva cohortes con q=1, nacimientos=0, entradas=0
+ok 47 - Escenario conserva cohortes con q=1, nacimientos=0, entradas=0
+  ---
+  duration_ms: 0.6304
+  type: 'test'
+  ...
+# Subtest: El grupo abierto acumula 80-84 y 85+
+ok 48 - El grupo abierto acumula 80-84 y 85+
+  ---
+  duration_ms: 0.2693
+  type: 'test'
+  ...
+# Subtest: Escenario q=0 conserva solo nacimientos y entradas
+ok 49 - Escenario q=0 conserva solo nacimientos y entradas
+  ---
+  duration_ms: 0.2503
+  type: 'test'
+  ...
+# Subtest: Parámetros de escenario rechazados {"births":-1,"survival":1,"migration":0}
+ok 50 - Parámetros de escenario rechazados {"births":-1,"survival":1,"migration":0}
+  ---
+  duration_ms: 0.1535
+  type: 'test'
+  ...
+# Subtest: Parámetros de escenario rechazados {"births":1,"survival":1.1,"migration":0}
+ok 51 - Parámetros de escenario rechazados {"births":1,"survival":1.1,"migration":0}
+  ---
+  duration_ms: 0.1195
+  type: 'test'
+  ...
+# Subtest: Parámetros de escenario rechazados {"births":1,"survival":1,"migration":-1}
+ok 52 - Parámetros de escenario rechazados {"births":1,"survival":1,"migration":-1}
+  ---
+  duration_ms: 0.1093
+  type: 'test'
+  ...
+# Subtest: Parámetros de escenario rechazados {"births":0.5,"survival":1,"migration":0}
+ok 53 - Parámetros de escenario rechazados {"births":0.5,"survival":1,"migration":0}
+  ---
+  duration_ms: 0.1063
+  type: 'test'
+  ...
+# Subtest: Parámetros de escenario rechazados {"births":1,"survival":null,"migration":0}
+ok 54 - Parámetros de escenario rechazados {"births":1,"survival":null,"migration":0}
+  ---
+  duration_ms: 0.1354
+  type: 'test'
+  ...
+# Subtest: JSON y CSV completan ida y vuelta sin perder recuentos
+ok 55 - JSON y CSV completan ida y vuelta sin perder recuentos
+  ---
+  duration_ms: 4.3318
+  type: 'test'
+  ...
+# Subtest: CSV admite coma, comillas y salto de línea dentro de una celda
+ok 56 - CSV admite coma, comillas y salto de línea dentro de una celda
+  ---
+  duration_ms: 1.9897
+  type: 'test'
+  ...
+# Subtest: Importación rechaza identificadores duplicados
+ok 57 - Importación rechaza identificadores duplicados
+  ---
+  duration_ms: 0.5026
+  type: 'test'
+  ...
+# Subtest: Importación rechaza errores CSV y cambios temporales dentro de un ID
+ok 58 - Importación rechaza errores CSV y cambios temporales dentro de un ID
+  ---
+  duration_ms: 0.79
+  type: 'test'
+  ...
+# Subtest: Importación limitada en tamaño, número y tipo de objeto
+ok 59 - Importación limitada en tamaño, número y tipo de objeto
+  ---
+  duration_ms: 3.6351
+  type: 'test'
+  ...
+# Subtest: localStorage bloqueado no interrumpe el trabajo
+ok 60 - localStorage bloqueado no interrumpe el trabajo
+  ---
+  duration_ms: 0.2295
+  type: 'test'
+  ...
+# Subtest: Persistencia con versión y recuperación de JSON corrupto
+ok 61 - Persistencia con versión y recuperación de JSON corrupto
+  ---
+  duration_ms: 0.1805
+  type: 'test'
+  ...
+# Subtest: Los seis casos tienen todos los elementos didácticos y datos existentes
+ok 62 - Los seis casos tienen todos los elementos didácticos y datos existentes
+  ---
+  duration_ms: 0.2434
+  type: 'test'
+  ...
+# Subtest: CSV neutraliza fórmulas de hojas de cálculo sin alterar los recuentos
+ok 63 - CSV neutraliza fórmulas de hojas de cálculo sin alterar los recuentos
+  ---
+  duration_ms: 0.1687
+  type: 'test'
+  ...
+# Subtest: CSV neutraliza arrays y representaciones equivalentes conservando números
+ok 64 - CSV neutraliza arrays y representaciones equivalentes conservando números
+  ---
+  duration_ms: 0.2344
+  type: 'test'
+  ...
+# Subtest: JSON a CSV no permite que propiedades de fila sustituyan metadatos
+ok 65 - JSON a CSV no permite que propiedades de fila sustituyan metadatos
+  ---
+  duration_ms: 1.0651
+  type: 'test'
+  ...
+# Subtest: CSV protege también importaciones restauradas del almacenamiento
+ok 66 - CSV protege también importaciones restauradas del almacenamiento
+  ---
+  duration_ms: 0.9482
+  type: 'test'
+  ...
+# Subtest: Metadatos opcionales mal tipados no alcanzan el renderizado
+ok 67 - Metadatos opcionales mal tipados no alcanzan el renderizado
+  ---
+  duration_ms: 0.3446
+  type: 'test'
+  ...
+# Subtest: Fecha observada inválida o incoherente se rechaza
+ok 68 - Fecha observada inválida o incoherente se rechaza
+  ---
+  duration_ms: 0.2787
+  type: 'test'
+  ...
+# Subtest: La evidencia de un modelo no se atribuye a Eurostat
+ok 69 - La evidencia de un modelo no se atribuye a Eurostat
+  ---
+  duration_ms: 0.4017
+  type: 'test'
+  ...
+# Subtest: Escenario exportado conserva parámetros y datos para reproducirlo
+ok 70 - Escenario exportado conserva parámetros y datos para reproducirlo
+  ---
+  duration_ms: 0.4192
+  type: 'test'
+  ...
+1..70
+# tests 70
+# suites 0
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 230.0742

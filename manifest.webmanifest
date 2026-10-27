@@ -1,16 +1,1 @@
-{
-  "name": "Pirámides poblacionales: diagnóstico metodológico y comparación",
-  "short_name": "Pirámides poblacionales",
-  "description": "Comparador visual e interactivo de pirámides poblacionales para análisis sociológico y aplicación socioeducativa.",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#0b1220",
-  "icons": [
-    {
-      "src": "./assets/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
-    }
-  ]
-}
+{"name":"DemoLab Demografía y Educación Social","short_name":"DemoLab","lang":"es","start_url":"./","display":"browser","background_color":"#f5f7f4","theme_color":"#12685e","icons":[{"src":"assets/favicon.svg","sizes":"any","type":"image/svg+xml"}]}
