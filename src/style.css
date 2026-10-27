@@ -13,3 +13,12 @@ input,select,textarea,fieldset,.card,.view,.controls>*,.meta-grid>*{min-width:0;
 
 .references a,.report a{overflow-wrap:anywhere} 
 
+/* Acceso revisado: contraste estable y ampliación de las unidades rem. */
+html.large{font-size:120%}body.large{font-size:inherit}
+button,input,select,textarea{border-color:#657d76}
+.pyramid svg .unfocused{opacity:1;fill:#596e68;stroke:#172d31;stroke-width:1;stroke-dasharray:3 2}
+.pyramid svg .outline.unfocused{fill:none;stroke:#172d31;stroke-width:2;stroke-dasharray:5 2}
+dialog{max-width:min(540px,calc(100% - 36px));padding:26px;border:2px solid #657d76;border-radius:12px;color:var(--ink);background:var(--white)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h2{margin-top:0}dialog p{overflow-wrap:anywhere}
+

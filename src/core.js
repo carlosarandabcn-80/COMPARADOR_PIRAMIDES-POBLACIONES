@@ -1,4 +1,4 @@
-export const VERSION = '2.0.0';
+export const VERSION = '2.0.1';
 export const AGES = Array.from({length:18},(_,i)=>i===17?'85+':`${i*5}-${i*5+4}`);
 export const safeRatio = (n,d,factor=100) => d===0 ? null : n/d*factor;
 export function validateDataset(d) {

@@ -3,7 +3,7 @@
   "subtitle": "Laboratorio independiente de aprendizaje y análisis exploratorio",
   "author": "Aranda Tools®",
   "year": 2026,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "static-interactive-research-laboratory",
   "deployment": "GitHub Pages ready",
   "dependencies": "none"

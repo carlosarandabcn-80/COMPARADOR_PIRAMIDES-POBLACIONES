@@ -1,5 +1,14 @@
 # Registro de cambios
 
+## 2.0.1 27 de octubre de 2026
+
+- Corregidos foco al elegir/cargar casos, ampliación en rem y contraste de bordes y barras.
+- Confirmación accesible antes de borrar trabajo local y retorno del foco al cancelar.
+- Grupo semántico de casos y contraste coherente en el informe HTML exportado.
+- 79 pruebas de cálculo/validación, 22 de integración y 21 de acceso ampliado superadas.
+- Matriz de los 55 criterios WCAG 2.2 A/AA, revisión técnica del contenido y límites explícitos.
+- Piloto real omitido por instrucción del promotor; simulación reproducible de tres escenarios con registros sintéticos, sin resultados atribuidos a participantes.
+
 ## 2.0.0 27 de octubre de 2026
 
 Se sustituye el cargador Gzip/Base64 y document.write por módulos estáticos legibles. Se conserva la revisión inicial y sus recursos inactivos. Los trece modelos pasan a ser perfiles sintéticos normalizados; se retiran nombres territoriales y diagnósticos no sustentados.

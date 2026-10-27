@@ -1,0 +1,448 @@
+{
+  "source": "https://www.w3.org/TR/WCAG22/",
+  "date": "2026-10-27",
+  "scope": "Interfaz web DemoLab 2.0.1; no incluye PDF externos ni productos de terceros.",
+  "conformanceClaim": false,
+  "criteria": [
+    {
+      "id": "1.1.1",
+      "name": "Non-text Content",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#non-text-content",
+      "status": "Parcial",
+      "evidence": "Gráficos con título, descripción y tablas; lectura real con AT pendiente."
+    },
+    {
+      "id": "1.2.1",
+      "name": "Audio-only and Video-only (Prerecorded)",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#audio-only-and-video-only-prerecorded",
+      "status": "No aplica",
+      "evidence": "No hay audio/vídeo pregrabado."
+    },
+    {
+      "id": "1.2.2",
+      "name": "Captions (Prerecorded)",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#captions-prerecorded",
+      "status": "No aplica",
+      "evidence": "No hay vídeo con audio."
+    },
+    {
+      "id": "1.2.3",
+      "name": "Audio Description or Media Alternative (Prerecorded)",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#audio-description-or-media-alternative-prerecorded",
+      "status": "No aplica",
+      "evidence": "No hay contenido audiovisual pregrabado."
+    },
+    {
+      "id": "1.2.4",
+      "name": "Captions (Live)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#captions-live",
+      "status": "No aplica",
+      "evidence": "No hay medios en directo."
+    },
+    {
+      "id": "1.2.5",
+      "name": "Audio Description (Prerecorded)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#audio-description-prerecorded",
+      "status": "No aplica",
+      "evidence": "No hay vídeo pregrabado."
+    },
+    {
+      "id": "1.3.1",
+      "name": "Info and Relationships",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#info-and-relationships",
+      "status": "Parcial",
+      "evidence": "Tablas y grupos semánticos comprobados; AT pendiente."
+    },
+    {
+      "id": "1.3.2",
+      "name": "Meaningful Sequence",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#meaningful-sequence",
+      "status": "Acotado",
+      "evidence": "Orden de lectura y DOM inspeccionados en las siete rutas."
+    },
+    {
+      "id": "1.3.3",
+      "name": "Sensory Characteristics",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#sensory-characteristics",
+      "status": "Acotado",
+      "evidence": "Instrucciones por nombre, sin depender solo de posición o color."
+    },
+    {
+      "id": "1.3.4",
+      "name": "Orientation",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#orientation",
+      "status": "Parcial",
+      "evidence": "Sin bloqueo de orientación en código; dispositivo físico pendiente."
+    },
+    {
+      "id": "1.3.5",
+      "name": "Identify Input Purpose",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#identify-input-purpose",
+      "status": "No aplica",
+      "evidence": "No se solicitan datos personales con propósitos enumerados."
+    },
+    {
+      "id": "1.4.1",
+      "name": "Use of Color",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#use-of-color",
+      "status": "Acotado",
+      "evidence": "Sexos por posición y etiquetas; B también por trazo discontinuo."
+    },
+    {
+      "id": "1.4.2",
+      "name": "Audio Control",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#audio-control",
+      "status": "No aplica",
+      "evidence": "No hay audio automático; la voz se inicia por petición."
+    },
+    {
+      "id": "1.4.3",
+      "name": "Contrast (Minimum)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#contrast-minimum",
+      "status": "Parcial",
+      "evidence": "Paleta y nodos incompletos de axe medidos; combinaciones de plataforma pendientes."
+    },
+    {
+      "id": "1.4.4",
+      "name": "Resize Text",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#resize-text",
+      "status": "Parcial",
+      "evidence": "Texto 200 % y ajuste rem comprobados; zoom de navegador pendiente."
+    },
+    {
+      "id": "1.4.5",
+      "name": "Images of Text",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#images-of-text",
+      "status": "No aplica",
+      "evidence": "No hay texto informativo presentado como imagen en la interfaz examinada."
+    },
+    {
+      "id": "1.4.10",
+      "name": "Reflow",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#reflow",
+      "status": "Parcial",
+      "evidence": "320 px sin desbordamiento de página; tablas desplazan en región propia. Zoom real/dispositivo pendiente."
+    },
+    {
+      "id": "1.4.11",
+      "name": "Non-text Contrast",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#non-text-contrast",
+      "status": "Parcial",
+      "evidence": "Bordes 4,42:1 y barras >=4,57:1; representación del sistema pendiente."
+    },
+    {
+      "id": "1.4.12",
+      "name": "Text Spacing",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#text-spacing",
+      "status": "Acotado",
+      "evidence": "Siete rutas a 320 px con espaciado prescrito sin desbordamiento de página."
+    },
+    {
+      "id": "1.4.13",
+      "name": "Content on Hover or Focus",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#content-on-hover-or-focus",
+      "status": "No aplica",
+      "evidence": "No hay ventanas emergentes propias por hover; títulos nativos del navegador."
+    },
+    {
+      "id": "2.1.1",
+      "name": "Keyboard",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#keyboard",
+      "status": "Parcial",
+      "evidence": "Controles nativos y recorridos específicos; todas las combinaciones de AT pendientes."
+    },
+    {
+      "id": "2.1.2",
+      "name": "No Keyboard Trap",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#no-keyboard-trap",
+      "status": "Parcial",
+      "evidence": "Diálogo nativo y panel comprobados; recorrido con AT pendiente."
+    },
+    {
+      "id": "2.1.4",
+      "name": "Character Key Shortcuts",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#character-key-shortcuts",
+      "status": "No aplica",
+      "evidence": "No se implementan atajos de carácter único."
+    },
+    {
+      "id": "2.2.1",
+      "name": "Timing Adjustable",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#timing-adjustable",
+      "status": "No aplica",
+      "evidence": "No hay tiempo límite para responder."
+    },
+    {
+      "id": "2.2.2",
+      "name": "Pause, Stop, Hide",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#pause-stop-hide",
+      "status": "Acotado",
+      "evidence": "Pausa disponible; reducción de movimiento impide animación."
+    },
+    {
+      "id": "2.3.1",
+      "name": "Three Flashes or Below Threshold",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#three-flashes-or-below-threshold",
+      "status": "Acotado",
+      "evidence": "Inspección: sin destellos; transición de cuatro píxeles sin flashes."
+    },
+    {
+      "id": "2.4.1",
+      "name": "Bypass Blocks",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#bypass-blocks",
+      "status": "Acotado",
+      "evidence": "Enlace de salto operativo; foco principal comprobado."
+    },
+    {
+      "id": "2.4.2",
+      "name": "Page Titled",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#page-titled",
+      "status": "Acotado",
+      "evidence": "Título identifica el laboratorio."
+    },
+    {
+      "id": "2.4.3",
+      "name": "Focus Order",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#focus-order",
+      "status": "Parcial",
+      "evidence": "Foco en rutas, casos y diálogo comprobado; recorrido total pendiente."
+    },
+    {
+      "id": "2.4.4",
+      "name": "Link Purpose (In Context)",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#link-purpose-in-context",
+      "status": "Parcial",
+      "evidence": "Enlaces contextualizados inspeccionados; experiencia de lectura pendiente."
+    },
+    {
+      "id": "2.4.5",
+      "name": "Multiple Ways",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#multiple-ways",
+      "status": "Parcial",
+      "evidence": "SPA con navegación persistente y enlaces contextuales; aplicabilidad requiere evaluación formal."
+    },
+    {
+      "id": "2.4.6",
+      "name": "Headings and Labels",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#headings-and-labels",
+      "status": "Acotado",
+      "evidence": "Encabezados, leyendas y etiquetas de controles examinados."
+    },
+    {
+      "id": "2.4.7",
+      "name": "Focus Visible",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#focus-visible",
+      "status": "Parcial",
+      "evidence": "Outline 3 px; muestra visual con teclado. Otros modos de sistema pendientes."
+    },
+    {
+      "id": "2.4.11",
+      "name": "Focus Not Obscured (Minimum)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#focus-not-obscured-minimum",
+      "status": "Parcial",
+      "evidence": "Foco comprobado en estados seleccionados; matrices completas de zoom/AT pendientes."
+    },
+    {
+      "id": "2.5.1",
+      "name": "Pointer Gestures",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#pointer-gestures",
+      "status": "No aplica",
+      "evidence": "No se requieren gestos multipunto o trayectorias."
+    },
+    {
+      "id": "2.5.2",
+      "name": "Pointer Cancellation",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#pointer-cancellation",
+      "status": "Acotado",
+      "evidence": "Acciones se activan con click, no en pointerdown; botones nativos."
+    },
+    {
+      "id": "2.5.3",
+      "name": "Label in Name",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#label-in-name",
+      "status": "Acotado",
+      "evidence": "Controles examinados con nombre que contiene su etiqueta visible."
+    },
+    {
+      "id": "2.5.4",
+      "name": "Motion Actuation",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#motion-actuation",
+      "status": "No aplica",
+      "evidence": "No se exige movimiento del dispositivo."
+    },
+    {
+      "id": "2.5.7",
+      "name": "Dragging Movements",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#dragging-movements",
+      "status": "No aplica",
+      "evidence": "No se requiere arrastrar."
+    },
+    {
+      "id": "2.5.8",
+      "name": "Target Size (Minimum)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#target-size-minimum",
+      "status": "Parcial",
+      "evidence": "Botones generales >=44 px; enlaces en línea con excepciones. Verificación completa de áreas y plataformas pendiente."
+    },
+    {
+      "id": "3.1.1",
+      "name": "Language of Page",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#language-of-page",
+      "status": "Acotado",
+      "evidence": "html lang=es verificado."
+    },
+    {
+      "id": "3.1.2",
+      "name": "Language of Parts",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#language-of-parts",
+      "status": "Parcial",
+      "evidence": "Referencias contienen títulos en inglés; revisar marcado de idioma por fragmento."
+    },
+    {
+      "id": "3.2.1",
+      "name": "On Focus",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#on-focus",
+      "status": "Acotado",
+      "evidence": "Recibir foco no cambia contexto ni envía respuestas."
+    },
+    {
+      "id": "3.2.2",
+      "name": "On Input",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#on-input",
+      "status": "Parcial",
+      "evidence": "Selecciones actualizan análisis sin navegar; cambios dinámicos requieren prueba con AT."
+    },
+    {
+      "id": "3.2.3",
+      "name": "Consistent Navigation",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#consistent-navigation",
+      "status": "Acotado",
+      "evidence": "Misma navegación en las siete secciones."
+    },
+    {
+      "id": "3.2.4",
+      "name": "Consistent Identification",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#consistent-identification",
+      "status": "Acotado",
+      "evidence": "Identificación consistente de acciones repetidas."
+    },
+    {
+      "id": "3.2.6",
+      "name": "Consistent Help",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#consistent-help",
+      "status": "No aplica",
+      "evidence": "No hay mecanismo de ayuda repetido del tipo descrito."
+    },
+    {
+      "id": "3.3.1",
+      "name": "Error Identification",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#error-identification",
+      "status": "Parcial",
+      "evidence": "Campos inválidos y errores de importación identificados; anuncio AT pendiente."
+    },
+    {
+      "id": "3.3.2",
+      "name": "Labels or Instructions",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#labels-or-instructions",
+      "status": "Acotado",
+      "evidence": "Campos y unidades explícitos; límites de importación indicados."
+    },
+    {
+      "id": "3.3.3",
+      "name": "Error Suggestion",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#error-suggestion",
+      "status": "Parcial",
+      "evidence": "Mensajes indican límites y grupos esperados; comprensión con usuarios pendiente."
+    },
+    {
+      "id": "3.3.4",
+      "name": "Error Prevention (Legal, Financial, Data)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#error-prevention-legal-financial-data",
+      "status": "Acotado",
+      "evidence": "Confirmación de borrado; cancelación y foco comprobados."
+    },
+    {
+      "id": "3.3.7",
+      "name": "Redundant Entry",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#redundant-entry",
+      "status": "No aplica",
+      "evidence": "No hay flujo que exija volver a introducir información ya dada."
+    },
+    {
+      "id": "3.3.8",
+      "name": "Accessible Authentication (Minimum)",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#accessible-authentication-minimum",
+      "status": "No aplica",
+      "evidence": "No hay autenticación."
+    },
+    {
+      "id": "4.1.2",
+      "name": "Name, Role, Value",
+      "level": "A",
+      "url": "https://www.w3.org/TR/WCAG22/#name-role-value",
+      "status": "Parcial",
+      "evidence": "Axe sin infracciones y grupo de casos corregido; compatibilidad AT pendiente."
+    },
+    {
+      "id": "4.1.3",
+      "name": "Status Messages",
+      "level": "AA",
+      "url": "https://www.w3.org/TR/WCAG22/#status-messages",
+      "status": "Parcial",
+      "evidence": "Regiones vivas comprobadas en DOM; anuncio real pendiente."
+    }
+  ]
+}
