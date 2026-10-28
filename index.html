@@ -2,37 +2,81 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pirámides poblacionales</title>
-<style>
-html,body{height:100%;margin:0;background:#0b1220;color:#e8eefc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{display:grid;place-items:center}.loader{max-width:620px;padding:24px;text-align:center}.loader b{display:block;font-size:20px;margin-bottom:8px;color:#66e3d4}.loader span{color:#aab7d6}.error{color:#ffd166;white-space:pre-wrap}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102033">
+<meta name="description" content="Laboratorio abierto de demografía y Educación Social: pirámides, comparación, fuentes, razonamiento crítico e intervención socioeducativa.">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./lab/style.css">
+<title>Laboratorio de demografía · Educación Social</title>
 </head>
 <body>
-<div class="loader" id="status"><b>Cargando comparador</b><span>Preparando la aplicación...</span></div>
-<script>
-(async()=>{
-  const status=document.getElementById('status');
-  try{
-    if(!('DecompressionStream' in window)){
-      throw new Error('Tu navegador no permite descomprimir el recurso de la aplicación. Actualiza el navegador o prueba con Chrome, Edge o Firefox recientes.');
-    }
-    const response=await fetch('./payload/index.html.gz.b64?v=20260616-1',{cache:'no-store'});
-    if(!response.ok){throw new Error('No se pudo cargar el paquete de la aplicación.');}
-    const b64=(await response.text()).replace(/\s/g,'');
-    const binary=atob(b64);
-    const bytes=new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++){bytes[i]=binary.charCodeAt(i);}
-    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const html=await new Response(stream).text();
-    document.open();
-    document.write(html);
-    document.close();
-  }catch(error){
-    status.innerHTML='<b>No se ha podido abrir la aplicación</b><span class="error"></span>';
-    status.querySelector('.error').textContent=error && error.message ? error.message : String(error);
-  }
-})();
-</script>
+<a class="skip" href="#contenido">Saltar al contenido principal</a>
+<header class="site-head">
+ <div class="brand"><span class="mark" aria-hidden="true">◈</span><span>ARANDA TOOLS <small>EDUCACIÓN SOCIAL · LABORATORIO ABIERTO</small></span></div>
+ <nav aria-label="Navegación principal">
+  <a href="#explorar">Explorar</a><a href="#comparar">Comparar</a><a href="#razonar">Interpretar</a><a href="#aprender">Aprender</a><a href="#documentar">Exportar</a><a href="./clasico.html">Comparador clásico ↗</a>
+ </nav>
+</header>
+<main id="contenido">
+ <section class="hero" aria-labelledby="principal">
+  <div class="eyebrow">LABORATORIO DE DEMOGRAFÍA APLICADA · EDICIÓN 2026</div>
+  <h1 id="principal">Los datos describen.<br><em>Las preguntas transforman.</em></h1>
+  <p>Un entorno de aprendizaje crítico para explorar estructuras demográficas, formular hipótesis prudentes y diseñar intervenciones socioeducativas evaluables.</p>
+  <div class="hero-actions"><a class="button primary" href="#explorar">Iniciar análisis <span aria-hidden="true">↗</span></a><a class="button secondary" href="#aprender">Resolver casos prácticos</a></div>
+  <p class="disclaimer"><strong>Importante.</strong> Los modelos precargados son sintéticos. Los datos oficiales solo se etiquetan como tales cuando proceden de una consulta verificada a Eurostat. Una pirámide no constituye, por sí misma, un diagnóstico social.</p>
+ </section>
+ <section class="workspace" id="explorar" aria-labelledby="t-explorar">
+  <div class="section-title"><p class="eyebrow">01 / OBSERVAR</p><h2 id="t-explorar">Explorador demográfico</h2><p>Elige un escenario sintético, importa tus datos o consulta Eurostat. Todas las visualizaciones tienen equivalencia tabular.</p></div>
+  <div class="control-grid">
+   <div class="field"><label for="primaryDataset">Población principal</label><select id="primaryDataset"><option value="transicion">Transición · sintético</option><option value="joven">Juvenil · sintético</option><option value="envejecida">Envejecimiento · sintético</option><option value="muesca">Muesca · sintético</option></select></div>
+   <div class="field"><label for="scale">Escala del gráfico</label><select id="scale"><option value="percent">Porcentaje del total (%)</option><option value="absolute">Valores absolutos</option></select></div>
+   <div class="field"><label for="focus">Destacar tramo de edad</label><select id="focus"><option value="all">Todas las edades</option><option value="youth">Menores de 15</option><option value="working">15–64 años</option><option value="old">65 años o más</option></select></div>
+  </div>
+  <div id="metaMain" class="source-note" role="status"></div>
+  <div class="pyramid-grid"><div class="card"><h3>Pirámide principal</h3><p class="muted">Hombres a la izquierda, mujeres a la derecha. Escala simétrica.</p><div id="chartMain"></div></div><div class="card"><h3>Indicadores calculados</h3><div id="metrics" class="metrics"></div><details><summary>Fórmulas y limitaciones</summary><div class="technical-text"><p>Dependencia juvenil = (0–14 / 15–64) × 100. Dependencia de mayores = (65+ / 15–64) × 100. Dependencia total = ((0–14 + 65+) / 15–64) × 100. Índice de envejecimiento = (65+ / 0–14) × 100.</p><p>Proporciones = (grupo / total) × 100. Razón de hombres por 100 mujeres = (hombres / mujeres) × 100. Denominador cero: indicador no calculable. Los tramos son convencionales: dependencia demográfica <strong>no</strong> implica dependencia funcional.</p></div></details></div></div>
+  <details class="card"><summary>Tabla accesible de edades y efectivos</summary><div class="table-scroll" id="tableMain"></div></details>
+ </section>
+ <section class="workspace" id="comparar" aria-labelledby="t-comparar">
+  <div class="section-title"><p class="eyebrow">02 / COMPARAR</p><h2 id="t-comparar">Contraste de estructuras</h2><p>Comparación proporcional de dos conjuntos de datos, sin ocultar sus limitaciones.</p></div>
+  <div class="control-grid">
+   <div class="field"><label for="secondaryDataset">Población de contraste</label><select id="secondaryDataset"><option value="envejecida">Envejecimiento · sintético</option><option value="joven">Juvenil · sintético</option><option value="transicion">Transición · sintético</option><option value="muesca">Muesca · sintético</option></select></div>
+   <div class="field align-bottom"><button id="swap" type="button" class="button secondary">⇄ Intercambiar poblaciones</button></div>
+  </div>
+  <div id="compareStatus" class="source-note" role="status"></div>
+  <div class="pyramid-grid"><div class="card"><h3>Segunda pirámide</h3><div id="chartSecondary"></div><details><summary>Tabla de la segunda pirámide</summary><div class="table-scroll" id="tableSecondary"></div></details></div><div class="card"><h3>Diferencias de indicadores</h3><div id="comparison" class="comparison"></div><p class="muted">Diferencia = primera población menos segunda. Para proporciones se expresa en puntos porcentuales.</p></div></div>
+ </section>
+ <section class="workspace" id="razonar" aria-labelledby="t-razonar">
+  <div class="section-title"><p class="eyebrow">03 / RAZONAR E INTERVENIR</p><h2 id="t-razonar">De la observación a una decisión justificable</h2><p>Cada sugerencia separa el dato calculado, su interpretación, una hipótesis alternativa, información pendiente y una actuación condicionada.</p></div>
+  <ol class="steps"><li>Observar</li><li>Interpretar</li><li>Hipotetizar</li><li>Investigar</li><li>Intervenir</li><li>Evaluar</li><li>Cuestionar</li></ol>
+  <div id="reasoning"></div>
+  <div class="card proposal"><h3>Ficha de intervención socioeducativa</h3><p class="muted">Elabora una propuesta provisional. No la presentes como diagnóstico confirmado sin investigación y participación comunitaria.</p>
+   <div class="form-grid">
+    <label>Necesidad que se investigaría<textarea id="need" rows="3" placeholder="¿Qué información adicional y voces de la comunidad necesitas?"></textarea></label>
+    <label>Hipótesis contrastables<textarea id="hypotheses" rows="3" placeholder="Incluye explicaciones alternativas..."></textarea></label>
+    <label>Participación y derechos<textarea id="rights" rows="3" placeholder="Consentimiento, autonomía, acceso, no discriminación..."></textarea></label>
+    <label>Intervención condicionada<textarea id="action" rows="3" placeholder="Si se confirma la necesidad, propongo..."></textarea></label>
+    <label>Indicadores de proceso<textarea id="process" rows="3" placeholder="Cobertura, participación, actividades..."></textarea></label>
+    <label>Indicadores de resultados y evaluación<textarea id="outcomes" rows="3" placeholder="Cambios observables, medición previa/posterior, límites de atribución..."></textarea></label>
+   </div>
+   <div class="actions"><button id="saveProposal" class="button primary" type="button">Guardar en este navegador</button><button id="clearProposal" class="button secondary" type="button">Limpiar ficha</button><span id="saveStatus" role="status"></span></div>
+  </div>
+ </section>
+ <section class="workspace" id="aprender" aria-labelledby="t-aprender">
+  <div class="section-title"><p class="eyebrow">04 / APRENDER</p><h2 id="t-aprender">Seis casos de pensamiento crítico</h2><p>Evaluación formativa autocorregible. Los casos son ficticios y sirven para distinguir evidencia, hipótesis e inferencias erróneas.</p></div>
+  <div class="card"><label for="caseSelector">Selecciona un caso</label><select id="caseSelector"></select><div id="casePanel"></div></div>
+ </section>
+ <section class="workspace" id="datos" aria-labelledby="t-datos">
+  <div class="section-title"><p class="eyebrow">05 / FUENTES</p><h2 id="t-datos">Datos, procedencia y transparencia</h2><p>El laboratorio diferencia material didáctico, archivos aportados y estadísticas oficiales consultadas.</p></div>
+  <div class="pyramid-grid"><div class="card"><h3>Consultar datos oficiales de Eurostat</h3><div class="control-grid compact"><div class="field"><label for="country">País</label><select id="country"><option value="ES">España</option><option value="FR">Francia</option><option value="DE">Alemania</option><option value="IT">Italia</option><option value="PT">Portugal</option></select></div><div class="field"><label for="year">Año de referencia</label><select id="year"></select></div></div><button class="button primary" id="loadEurostat" type="button">Consultar Eurostat (en línea)</button><p id="apiStatus" role="status" class="muted">Serie demo_pjan, ambos sexos, edades simples agregadas en grupos quinquenales.</p><p><a href="https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en" target="_blank" rel="noopener noreferrer">Abrir fuente oficial ↗</a></p></div>
+   <div class="card"><h3>Importar tus propios datos</h3><p>CSV con cabecera <code>edad,hombres,mujeres</code> y 18 filas (0-4 … 85+), o JSON exportado por esta herramienta. Los archivos aportados <strong>no</strong> se certifican automáticamente como oficiales.</p><label for="upload">Archivo CSV o JSON</label><input type="file" id="upload" accept=".csv,.json,text/csv,application/json"><p id="uploadStatus" role="status" class="muted"></p><div class="actions"><button id="downloadCSV" type="button" class="button secondary">Exportar CSV</button><button id="downloadJSON" type="button" class="button secondary">Exportar JSON</button></div></div></div>
+ </section>
+ <section class="workspace" id="documentar" aria-labelledby="t-documentar">
+  <div class="section-title"><p class="eyebrow">06 / DOCUMENTAR</p><h2 id="t-documentar">Informe académico reproducible</h2><p>Genera un borrador documentado con datos, indicadores, reglas interpretativas, limitaciones y tu ficha de intervención.</p></div>
+  <div class="card"><div class="actions"><button id="downloadReport" type="button" class="button primary">Descargar informe TXT</button><button id="printReport" type="button" class="button secondary">Imprimir / Guardar PDF</button></div><p class="muted">Para guardar PDF se utiliza la función de impresión del navegador. Las referencias deben revisarse antes de entregar un trabajo académico.</p><pre id="reportPreview" tabindex="0" class="report-preview" aria-label="Vista previa del informe"></pre></div>
+ </section>
+ <section class="workspace sources" id="metodologia"><div class="section-title"><p class="eyebrow">07 / TRANSPARENCIA</p><h2>Metodología y límites</h2></div><p>Esta aplicación es un recurso educativo y una herramienta exploratoria. La capacidad de aprendizaje, la accesibilidad completa y la validez profesional requieren evaluación específica. Ninguna distribución por edad demuestra por sí misma una necesidad socioeducativa.</p><p>Referencias técnicas: <a href="https://ec.europa.eu/eurostat/web/user-guides/data-browser/api-data-access/api-getting-started/api" target="_blank" rel="noopener noreferrer">API Eurostat</a> · <a href="https://www.ine.es/datosabiertos/" target="_blank" rel="noopener noreferrer">Datos abiertos INE</a> · <a href="https://www.idescat.cat/dades/obertes/" target="_blank" rel="noopener noreferrer">Datos abiertos Idescat</a> · <a href="https://www.w3.org/TR/WCAG22/" target="_blank" rel="noopener noreferrer">WCAG 2.2</a> · <a href="https://udlguidelines.cast.org/" target="_blank" rel="noopener noreferrer">DUA de CAST</a>.</p><p>Los nombres de los conjuntos, su año de referencia, procedencia y limitaciones figuran junto a cada análisis. Consulte la <a href="./docs/guia_docente.md">guía docente</a> y el <a href="./docs/protocolo_piloto.md">protocolo de investigación</a>.</p></section>
+</main>
+<footer>ARANDA TOOLS · 2026 · Herramienta de aprendizaje abierto · <a href="./clasico.html">Acceder al comparador original</a> · <a href="./docs/diagnostico_inicial_2026-10-26.md">Auditoría inicial</a></footer>
+<script type="module" src="./lab/main.mjs"></script>
 </body>
 </html>
