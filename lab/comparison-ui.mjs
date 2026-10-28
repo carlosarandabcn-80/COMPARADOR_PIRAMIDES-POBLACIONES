@@ -129,5 +129,6 @@ function init(){
  $('export').addEventListener('click',()=>download('comparacion-estructura-social.txt',exportText(),'text/plain;charset=utf-8'));
  $('exportCSV').addEventListener('click',()=>download('piramides-A-y-B.csv','Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres\n'+['A','B'].flatMap(side=>state[side].cohorts.map(row=>[side,state[side].meta.provider,state[side].meta.place,state[side].meta.year,row.label,row.m,row.f].join(';'))).join('\n')+'\n','text/csv;charset=utf-8'));
  $('print').addEventListener('click',()=>{showComparison();window.print();});
+ Promise.all([load('A'),load('B')]).then(()=>{if(state.A&&state.B)showComparison();});
 }
 init();
