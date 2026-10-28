@@ -6,9 +6,9 @@ function sampleGrouped(geo='DE',year=2009){
  const codes=['TOTAL',...BANDS.map((b,i)=>i===0?'Y_LT5':i===17?'Y_GE85':'Y'+(i*5)+'-'+(i*5+4)),'UNK'];
  const idx=a=>Object.fromEntries(a.map((v,i)=>[v,i]));
  const value={};let totalM=0,totalF=0;
- for(let i=1;i<=18;i++){value[3*i]=1000+i;value[3*i+1]=900+i;totalM+=1000+i;totalF+=900+i;}
+ for(let i=1;i<=18;i++){value[codes.length+i]=1000+i;value[2*codes.length+i]=900+i;totalM+=1000+i;totalF+=900+i;}
  // T, M, F are the published sex positions; simulated T group values are optional.
- value[1]=totalM;value[2]=totalF;value[3*19+1]=0;value[3*19+2]=0;
+ value[codes.length]=totalM;value[2*codes.length]=totalF;value[2*codes.length-1]=0;value[3*codes.length-1]=0;
  return {id:['freq','unit','sex','age','geo','time'],size:[1,1,3,codes.length,1,1],
  dimension:{freq:{category:{index:{A:0}}},unit:{category:{index:{NR:0}}},sex:{category:{index:{T:0,M:1,F:2}}},
   age:{category:{index:idx(codes)}},geo:{category:{index:{[geo]:0}}},time:{category:{index:{[year]:0}}}},
@@ -42,8 +42,8 @@ test('Alemania 2009: 85+ agregado Y_GE85, sin exigir edad 95 inexistente',()=>{
  assert.equal(d.total,18*1900+2*171);
 });
 test('no inventar cohortes ausentes ni conciliar totales discrepantes',()=>{
- let j=sampleGrouped();delete j.value[3*17+1];assert.throws(()=>fromEurostat(j,'DE',2009),/falta un dato oficial/);
- j=sampleGrouped();j.value[1]+=50;assert.throws(()=>fromEurostat(j,'DE',2009),/discrepancia/);
+ let j=sampleGrouped();delete j.value[20+17];assert.throws(()=>fromEurostat(j,'DE',2009),/falta un dato oficial/);
+ j=sampleGrouped();j.value[20]+=50;assert.throws(()=>fromEurostat(j,'DE',2009),/discrepancia/);
  j=sampleGrouped();assert.throws(()=>fromEurostat(j,'ES',2009),/no ofrece/);
 });
 test('INE mantiene todas las edades exportadas y rechaza series vacías',()=>{
