@@ -27,7 +27,7 @@ Se han examinado el código nuevo y las pruebas de automatización. Las pruebas 
 ## Datos y cálculos
 Las fórmulas se fijan de modo explícito: juvenil (0–14 / 15–64) × 100; mayores (65+ / 15–64) × 100; dependencia total ((0–14 + 65+) / 15–64) × 100; envejecimiento (65+ / 0–14) × 100. Las sumas de efectivos se realizan sin redondear; los cocientes se redondean únicamente para mostrarlos. Una cohorte es un grupo de edades, no un diagnóstico de derechos, bienestar o dependencia funcional.
 
-Se implementa un conector a Eurostat demo_pjan con validación del resultado JSON-stat. **Limitación abierta**: la carga real de Eurostat puede variar con endpoint, disponibilidad y estructura de edades; las pruebas actuales usan una respuesta representativa simulada, no una auditoría de la API en vivo. No se han integrado aún datos del INE ni Idescat en el producto.
+Se implementa un conector a Eurostat demo_pjan con validación del resultado JSON-stat. **Comprobación complementaria**: el 28-10-2026 se ejecutó una petición real a Eurostat (España, 2025; HTTP 200) y la normalización de grupos quinquenales obtuvo 49.128.297 personas, con fecha de actualización comunicada por el servicio 25-09-2026. Ver evidencia CI: https://github.com/carlosarandabcn-80/COMPARADOR_PIRAMIDES-POBLACIONES/actions/runs/40667789782. Esta comprobación de un país y año no garantiza continuidad de servicio ni calidad de todas las series. No se han integrado aún datos del INE ni Idescat en el producto.
 
 ## Accesibilidad
 Existe navegación semántica con salto al contenido, etiquetas, foco visible, reflujo, contraste previsto, preferencia de movimiento reducido, títulos y alternativas tabulares. La ejecución automatizada de axe-core en Chromium forma parte de CI. **Esta comprobación no certifica WCAG 2.2 AA**: quedan pendientes comprobaciones manuales en múltiples resoluciones, Zoom 200/400 %, funcionamiento con teclado en todo el flujo, VoiceOver/NVDA, lectura y contraste del comparador clásico y manejo de dispositivos táctiles.
@@ -53,7 +53,7 @@ No se asigna puntuación global por carecer de evidencias suficientes para todas
 **Prototipo funcional con verificación automatizada parcial y documentación académica preliminar.** No es una herramienta validada científicamente. La posible transferencia a la enseñanza universitaria requiere revisión metodológica independiente, comprobaciones manuales de accesibilidad, evaluación con estudiantes y autorización institucional cuando corresponda.
 
 ### Riesgos prioritarios aún abiertos
-1. Confirmar comportamiento de la consulta Eurostat en navegadores y redes reales, incluidas banderas de calidad.
+1. Ampliar la comprobación de Eurostat (distintos países/años, banderas de calidad) y validar su funcionamiento en navegadores reales; existe una prueba satisfactoria desde Node para España 2025.
 2. Revisión manual WCAG AA y comparador clásico.
 3. Validación por expertos de reglas de razonamiento y adecuación profesional.
 4. Estudios de usabilidad e impacto educativo antes de afirmar eficacia.
