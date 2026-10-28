@@ -108,9 +108,12 @@ export function parseINE(json,year){
    if(isM===isF)continue;
    if(/espanola|extranjera|nacionalidad|comunidad|provincia/.test(norm))continue;
    const age=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*anos?(?:\b|$)/);
-   const open=/100\s*(?:y\s*)?(?:mas|\+)/.test(norm);
+   const open=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*y\s*mas(?:\b|$)/);
    if(!age&&!open)continue;
-   const a=open?100:Number(age[1]);if(a>100)continue;
+   // INE publica también un subtotal 100+ además de 100,101…104 y 105+.
+   // Excluimos el subtotal 100+ para impedir duplicaciones.
+   if(open&&Number(open[1])!==105)continue;
+   const a=open?105:Number(age[1]);if(a>105)continue;
    const record=series.Data.find(item=>{const d=String(item?.Anyo??item?.Año??item?.NombrePeriodo??'');return d===String(year)||d.includes(String(year));});
    if(!record||!safe(record.Valor))continue;
    const target=isM?rows.m:rows.f;
@@ -118,9 +121,12 @@ export function parseINE(json,year){
    target.set(a,record.Valor);
  }
  const cohorts=BANDS.map((b,i)=>{
-   const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?100:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
+   const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?105:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
    return {...b,m:get('m'),f:get('f')};
  });
+ const total=cohorts.reduce((sum,b)=>sum+b.m+b.f,0);
+ const officialTotal=json.find(s=>/total nacional\. todas las edades\. total\./i.test(s.Nombre||''))?.Data?.find(x=>x.Anyo===year)?.Valor;
+ if(safe(officialTotal)&&total!==officialTotal)fail('INE: las edades suman '+total+' pero el total publicado es '+officialTotal+'. Se rechaza el desglose.');
  return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Estadística Continua de Población (cifras a 1 de enero). Comprueba las series, la continuidad metodológica desde 1971 y las revisiones en la ficha oficial.'},cohorts});
 }
 export function serializeCSV(dataset){
