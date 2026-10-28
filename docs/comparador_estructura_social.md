@@ -21,14 +21,14 @@ El criterio automático «compatible con expansiva/estacionaria/regresiva» es u
 Tabla **demo_pjangroup**: *Population on 1 January by age group and sex*.
 Ficha: https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en
 
-La aplicación solicita país, año, sexo masculino/femenino y grupos de edad oficiales con la API JSON-stat. Agrupa 0–4, …, 80–84 y 85+ (incluye la categoría abierta Y_OPEN, habitualmente 100+). Los valores faltantes bloquean la pirámide. Puede obtener datos de los países incluidos por Eurostat siempre que estén disponibles para ese año.
+La aplicación solicita país, año, sexo masculino/femenino y grupos de edad oficiales con la API JSON-stat. Utiliza directamente 0–4, …, 80–84 y la categoría abierta Y_GE85 (85+) de Eurostat; no necesita sumar edades simples incompletas. Los valores faltantes bloquean la pirámide. Puede obtener datos de los países incluidos por Eurostat siempre que estén disponibles para ese año.
 
 ## Fuente 2. INE
 Tabla **56934**: *Población residente por fecha, sexo y edad (desde 1971)*. Operación Estadística Continua de Población; ámbito nacional.
 Ficha: https://www.ine.es/jaxiT3/Tabla.htm?t=56934
 Descripción/API: https://www.ine.es/dyngs/DAB/index.htm?cid=1100
 
-La consulta filtra expresamente **1 de enero del año elegido** mediante `date=AAAAMMDD:AAAAMMDD` y `tip=A`, con respuesta JSON de 327 series. Se seleccionan únicamente registros de hombres/mujeres del total nacional, edades 0 a 99 y categoría agregada **100 y más años**. El INE también distribuye edades individuales de 100 a 104 y 105+; **no se suman a la categoría 100+**, porque produciría duplicaciones. Se valida que la suma de cohortes coincide con el total de población publicado en la tabla.
+La consulta filtra expresamente **1 de enero del año elegido** mediante `date=AAAAMMDD:AAAAMMDD` y `tip=A`, con respuesta JSON de 327 series. Se seleccionan únicamente registros de hombres/mujeres del total nacional, edades 0 a 99 y categoría agregada **100 y más años**. El INE también distribuye edades individuales de 100 a 104 y 105+; **no se suman a la categoría 100+**, porque produciría duplicaciones. Se contrasta la suma de cohortes con el total publicado. Las discrepancias oficiales mínimas, cuando aparecen, se conservan y se documentan sin imputación de datos.
 
 La serie puede incorporar cambios de base o revisiones históricos; el usuario debe comprobar las notas oficiales. Las solicitudes del navegador al INE usan su API pública con política CORS de la respuesta consultada; si el servicio es inaccesible, la aplicación muestra el fallo sin generar cifras alternativas.
 
@@ -53,3 +53,6 @@ Las pautas del examen de la asignatura suministradas indican que **no se permite
 Pruebas unitarias en `tests/comparison.test.mjs`, pruebas de navegador `tests/lab.e2e.spec.mjs`, análisis automático axe-core, y prueba real de endpoints `scripts/verificar-fuentes.mjs`. La automatización no acredita por sí sola conformidad total WCAG 2.2 AA ni eficacia académica.
 
 La licencia del software nuevo se especifica en `LICENSE`; los derechos de fuentes oficiales y contenidos docentes pertenecen a sus titulares.
+
+## Lectura comparada ampliada (octubre de 2026)
+La aplicación incorpora una lectura determinista y reproducible con nueve apartados: identificación, morfología, composición por edad, mayores diferencias quinquenales, distribución por sexo en mayores, índices, comparabilidad temporal/territorial, marco de Estructura Social y síntesis. Se ofrece además una versión abreviada de estudio y una matriz accesible con los 18 grupos. Las diferencias de porcentajes se expresan en puntos porcentuales; la evolución del volumen solo se describe cuando coinciden territorio y fuente y cambian fechas. El nuevo método no infiere causas de una muesca ni convierte diferencias entre fuentes en cambios demográficos. Véase [Protocolo de lectura comparada académica](lectura_comparada_academica.md).
