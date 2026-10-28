@@ -6,20 +6,20 @@ on:
 permissions:
   contents: read
 jobs:
-  verificar:
+  unidad:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Analizar sintaxis JS
+      - name: Comprobar sintaxis
         run: |
           node --check lab/core.mjs
           node --check lab/main.mjs
-      - name: Ejecutar pruebas unitarias sin dependencias
-        run: node --test tests/*.test.mjs
-      - name: Confirmar recursos estáticos críticos
+      - name: Probar funciones de demografía
+        run: node --test tests/core.test.mjs
+      - name: Comprobar recursos críticos
         run: |
           test -s index.html
           test -s lab/style.css
@@ -27,3 +27,22 @@ jobs:
           test -s lab/main.mjs
           test -s clasico.html
           test -s payload/index.html.gz.b64
+  navegador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar herramientas de pruebas (solo en CI)
+        run: npm install --no-save @playwright/test @axe-core/playwright
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Ejecutar E2E y comprobación automática de accesibilidad
+        run: npx playwright test
+      - name: Conservar evidencias si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-y-registros-de-pruebas
+          path: test-results/
