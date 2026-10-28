@@ -138,5 +138,5 @@ test('lectura comparada académica: nueve apartados, cohortes y síntesis',async
  const txt=await (await import('node:fs/promises')).readFile(await file.path(),'utf8');
  expect(txt).toContain('LECTURA COMPARADA');
  expect(txt).toContain('Morfología: base, tronco y cúspide');
- expect(txt).toContain('COHORTES QUINQUENALES');
+ expect(txt).toContain('GRUPOS DE EDAD (17 QUINQUENALES Y 85+ ABIERTO)');
 });
