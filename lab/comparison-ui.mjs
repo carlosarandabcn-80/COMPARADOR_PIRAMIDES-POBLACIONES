@@ -1,4 +1,5 @@
 import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,serializeCSV} from './comparison-core.mjs';
+import {academicComparison} from './academic-reading.mjs';
 const $=id=>document.getElementById(id),format=new Intl.NumberFormat('es-ES',{maximumFractionDigits:2}),n=x=>x===null?'No calculable':format.format(x);
 const esc=s=>String(s).replace(/[&<>"']/g,v=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[v]));
 const state={A:null,B:null,loading:{A:false,B:false},revision:{A:0,B:0},controllers:{A:null,B:null},catalogVersion:{A:0,B:0},catalogPromise:{A:null,B:null}};
@@ -111,23 +112,46 @@ function refreshCharts(){
  const scale=$('view').value,focus=$('focus').value,max=maxShared(scale);
  for(const side of ['A','B']){const d=state[side];if(!d)continue;chart(d,side,scale,focus,max);renderMeta(d,side);renderStats(d,side);renderTable(d,side);renderDesc(d,side);}
 }
+function comparisonReadout(){
+ if(!state.A||!state.B)return null;
+ const numerical=compare(state.A,state.B),academic=academicComparison(state.A,state.B);
+ const summary=$('readingMode')?.value==='summary',wanted=summary?new Set(['identificacion','morfologia','edades','contexto','conclusion']):null;
+ const sections=academic.sections.filter(s=>!wanted||wanted.has(s.id));
+ return {numerical,academic,sections,summary};
+}
 function showComparison(){
- if(!state.A||!state.B)return;const r=compare(state.A,state.B);
- const table='<div class="scroll"><table class="comparison-table"><caption>Comparación A menos B</caption><thead><tr><th scope="col">Indicador</th><th scope="col">A</th><th scope="col">B</th><th scope="col">Diferencia</th></tr></thead><tbody>'+
- r.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+' <small>'+esc(row.unit)+'</small></td></tr>').join('')+'</tbody></table></div>';
- $('results').innerHTML='<h3>Comparación de estructuras poblacionales</h3>'+table+'<div class="result-text"><h4>Descripción comparada</h4><p>'+esc(r.description)+'</p></div><div class="subtle">'+r.notes.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div>';
+ const data=comparisonReadout();if(!data)return;
+ const {numerical,academic,sections}=data;
+ const table='<div class="scroll"><table class="comparison-table"><caption>Indicadores A menos B · diferencia expresada en unidades indicadas</caption><thead><tr><th scope="col">Indicador</th><th scope="col">A</th><th scope="col">B</th><th scope="col">Diferencia</th></tr></thead><tbody>'+
+ numerical.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+' <small>'+esc(row.unit)+'</small></td></tr>').join('')+'</tbody></table></div>';
+ const reading='<div class="academic-head"><h4>Comentario comparado fundamentado</h4><span class="academic-length">'+academic.wordCount+' palabras en el informe íntegro · '+(data.summary?'síntesis':'lectura detallada')+'</span></div>'+
+ '<div class="academic-reading">'+sections.map(s=>'<section class="academic-section" aria-labelledby="reading-'+s.id+'"><h5 id="reading-'+s.id+'">'+esc(s.title)+'</h5><p>'+esc(s.text)+'</p></section>').join('')+'</div>';
+ const c=academic.cohorts,detail='<details class="cohorts-detail"><summary>Contrastar todas las cohortes quinquenales (18 grupos)</summary><div class="scroll">'+
+ '<table class="comparison-table"><caption>Peso de cada grupo quinquenal sobre la población total</caption><thead><tr><th scope="col">Edad</th><th scope="col">A (%)</th><th scope="col">B (%)</th><th scope="col">A−B (pp)</th></tr></thead><tbody>'+
+ c.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+'</td></tr>').join('')+
+ '</tbody></table></div></details>';
+ const cautions='<div class="reading-notes" aria-label="Limitaciones metodológicas"><h4>Alcance del análisis</h4>'+
+ academic.caution.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div>';
+ $('results').innerHTML='<h3>Comparación de estructuras poblacionales</h3>'+table+reading+detail+cautions;
 }
 function exportText(){
- if(!state.A||!state.B)return '';
- const a=state.A,b=state.B,r=compare(a,b);
- return ['ESTRUCTURA SOCIAL · COMPARACIÓN DE PIRÁMIDES',new Date().toLocaleDateString('es-ES'),
-  '\nPIRÁMIDE A: '+a.meta.provider+' · '+a.meta.place+' · '+a.meta.year,'Fuente: '+a.meta.sourceUrl,'Fecha: '+a.meta.referenceDate,
-  ...describe(a).paragraphs,'\nPIRÁMIDE B: '+b.meta.provider+' · '+b.meta.place+' · '+b.meta.year,'Fuente: '+b.meta.sourceUrl,
-  ...describe(b).paragraphs,'\nCOMPARACIÓN DE INDICADORES (A menos B)',
-  ...r.rows.map(x=>x.label+' | A: '+n(x.a)+' | B: '+n(x.b)+' | diferencia: '+n(x.delta)+' '+x.unit),
-  '\nDESCRIPCIÓN COMPARADA',r.description,'\nNOTAS Y LIMITACIONES',...r.notes,
-  '\nFuente INE: '+SOURCES.ine.url,'Fuente Eurostat: '+SOURCES.eurostat.url,
-  'NOTA: material de estudio independiente, basado en lectura demográfica del proyecto Estructura Social (UNIR).'].join('\n');
+ const data=comparisonReadout();if(!data)return '';
+ const {academic,numerical,sections}=data,a=state.A,b=state.B;
+ return ['ESTRUCTURA SOCIAL · LECTURA ACADÉMICA DE DOS PIRÁMIDES',new Date().toLocaleDateString('es-ES'),
+ '\nFUENTE A: '+a.meta.provider+' · '+a.meta.place+' · '+a.meta.year,
+ 'Ficha estadística: '+a.meta.sourceUrl,'Actualización fuente: '+a.meta.updatedAt,
+ '\nFUENTE B: '+b.meta.provider+' · '+b.meta.place+' · '+b.meta.year,
+ 'Ficha estadística: '+b.meta.sourceUrl,'Actualización fuente: '+b.meta.updatedAt,
+ '\nINDICADORES COMPARADOS A MENOS B',
+ ...numerical.rows.map(x=>x.label+' | A: '+n(x.a)+' | B: '+n(x.b)+' | diferencia: '+n(x.delta)+' '+x.unit),
+ '\nLECTURA COMPARADA',
+ ...sections.map(s=>s.title+'\n'+s.text+'\n'),
+ '\nCOHORTES QUINQUENALES · porcentajes de la población de cada selección; diferencias en puntos porcentuales',
+ ...academic.cohorts.rows.map(x=>x.label+' | A: '+n(x.a)+' % | B: '+n(x.b)+' % | A−B: '+n(x.delta)+' pp'),
+ '\nLÍMITES METODOLÓGICOS',...academic.caution,
+ '\nMetodología: '+SOURCES.ine.url+' | '+SOURCES.eurostat.url,
+ 'Lectura morfológica basada en los materiales de Estructura Social consultados en el proyecto (base, tronco, cúspide y comparación de cohortes).',
+ 'Las afirmaciones de causalidad demográfica o desigualdad social requieren evidencia adicional.'].join('\n');
 }
 function download(name,content,mime){
  const url=URL.createObjectURL(new Blob([content],{type:mime})),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800);
@@ -163,6 +187,7 @@ function init(){
   refreshCharts();resultReset();updateButtons();
  });
  $('analyze').addEventListener('click',showComparison);
+ $('readingMode').addEventListener('change',()=>{if(state.A&&state.B)showComparison();});
  $('export').addEventListener('click',()=>download('comparacion-estructura-social.txt',exportText(),'text/plain;charset=utf-8'));
  $('exportCSV').addEventListener('click',()=>download('piramides-A-y-B.csv','Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres\n'+['A','B'].flatMap(side=>state[side].cohorts.map(row=>[side,state[side].meta.provider,state[side].meta.place,state[side].meta.year,row.label,row.m,row.f].join(';'))).join('\n')+'\n','text/csv;charset=utf-8'));
  $('print').addEventListener('click',()=>{showComparison();window.print();});
