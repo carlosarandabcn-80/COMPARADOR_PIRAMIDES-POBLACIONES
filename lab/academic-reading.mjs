@@ -97,7 +97,9 @@ export function academicComparison(first,second){
  const broad='En A, la distribución por grandes grupos es '+ages(a)+'. En B es '+ages(b)+'. '+
   'Al restar A menos B, la diferencia en el peso de menores de 15 años es '+phrase(delta.youth)+', la de edades 15–64 es '+phrase(delta.working)+' y la de 65 años o más es '+phrase(delta.older)+'. '+
   'Se expresan en puntos porcentuales, de modo que la comparación de estructuras no depende del volumen absoluto de cada territorio.';
- const detail='La mayor separación entre cohortes quinquenales corresponde a '+c.largest.label+': en A representa '+fmt(c.largest.a)+' % y en B '+fmt(c.largest.b)+' %, diferencia '+phrase(c.largest.delta)+
+ const detail=Math.abs(c.largest.delta)<0.005
+  ?'Los 18 grupos quinquenales presentan porcentajes equivalentes al redondear a dos decimales. No se identifica una cohorte con diferencia material en la distribución comparada. La coincidencia de perfiles no implica por sí sola igualdad de efectivos absolutos.'
+  :'La mayor separación entre cohortes quinquenales corresponde a '+c.largest.label+': en A representa '+fmt(c.largest.a)+' % y en B '+fmt(c.largest.b)+' %, diferencia '+phrase(c.largest.delta)+
   '. Los otros dos contrastes más acusados se localizan en '+c.largestThree.slice(1).map(r=>r.label+' ('+phrase(r.delta)+')').join(' y ')+'. '+
   'El signo refleja A menos B, no crecimiento o decrecimiento de una misma generación. '+
   'Una irregularidad o «muesca» puede motivar una hipótesis histórica, pero necesita datos externos de nacimientos, defunciones o migraciones para explicarse.';
@@ -147,7 +149,10 @@ export function academicComparison(first,second){
   'Su lectura permite formular preguntas sobre la distribución generacional y las relaciones con instituciones, empleo, educación o cuidados a escala macro, meso y micro; no mide directamente clase social, condiciones de vida, desigualdad ni acceso efectivo a servicios. '+
   'De acuerdo con el enfoque de descripción y comparación del material de la asignatura, se debe separar el patrón observado de las hipótesis explicativas y evitar inferir necesidades sociales sin indicadores adicionales.';
 
- const verdict='En síntesis, A presenta '+change(a,b,'youth')+' de 0–14 años y '+change(a,b,'older')+' de 65 años o más respecto de B. '+
+ const structureContrast=delta.older>0.005&&delta.youth< -0.005?'A muestra una estructura relativamente más envejecida (más peso de 65+ y menos de menores de 15) que B. ':
+  delta.older< -0.005&&delta.youth>0.005?'B muestra una estructura relativamente más envejecida (más peso de 65+ y menos de menores de 15) que A. ':
+  'Las variaciones en la base y la cúspide no indican una contraposición única entre población joven y envejecida. ';
+ const verdict='En síntesis, A presenta '+change(a,b,'youth')+' de 0–14 años y '+change(a,b,'older')+' de 65 años o más respecto de B. '+structureContrast+
    'La mayor diferencia quinquenal se sitúa en '+c.largest.label+' ('+phrase(c.largest.delta)+'). '+
    (sameObservations?'La coincidencia de fuente, fecha y territorio impide hablar de una transformación entre ambos gráficos.':
    'La lectura es descriptiva y debe mantenerse condicionada por la comparabilidad de fuentes, fechas y territorios.') ;
