@@ -82,3 +82,39 @@ test('cambio de país durante una consulta lenta no muestra resultados obsoletos
  await page.locator('#formB button').click();
  await expect(page.locator('#metaB')).toContainText('Alemania');
 });
+
+
+test('exportaciones de la comparación real incluyen procedencia y series completas',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
+ await page.goto('/');
+ await expect(page.locator('#statusA')).toContainText('Datos oficiales cargados');
+ await expect(page.locator('#statusB')).toContainText('Datos oficiales cargados');
+ await page.locator('#analyze').click();
+ const first=page.waitForEvent('download');await page.locator('#export').click();const download=await first;
+ expect(download.suggestedFilename()).toContain('comparacion-estructura-social.txt');
+ const text=(await import('node:fs/promises')).readFile(await download.path(),'utf8'); 
+ expect(await text).toContain('INE');expect(await text).toContain('Eurostat');
+ const second=page.waitForEvent('download');await page.locator('#exportCSV').click();const csv=await second;
+ const body=await (await import('node:fs/promises')).readFile(await csv.path(),'utf8');
+ expect(body).toContain('Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres');
+ expect(body.split('\n').filter(row=>row.startsWith('A;')).length).toBe(18);
+ expect(body.split('\n').filter(row=>row.startsWith('B;')).length).toBe(18);
+ const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+ expect(axe.violations).toEqual([]);
+});
+test('el catálogo no ofrece años con cohortes oficialmente incompletas',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>{
+  const json=eurostatFixture(route.request().url());
+  if(!new URL(route.request().url()).searchParams.get('time')){
+   const ages=20,n=3,yearIndex=json.dimension.time.category.index['2009'];
+   delete json.value[(ages+17)*n+yearIndex]; // 80-84 años, hombres, 2009
+  }
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(json)});
+ });
+ await page.goto('/');
+ await expect(page.locator('#statusB')).toContainText('Datos oficiales cargados');
+ await expect(page.locator('#formB [name=year] option[value="2009"]')).toHaveCount(0);
+ await expect(page.locator('#formB [name=year] option[value="2025"]')).toHaveCount(1);
+});
