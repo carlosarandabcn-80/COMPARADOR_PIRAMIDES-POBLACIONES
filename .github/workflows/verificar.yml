@@ -1,7 +1,7 @@
-name: Verificación técnica del laboratorio
+name: Verificación técnica del comparador de pirámides
 on:
   push:
-    branches: [main, mejora-laboratorio-socioeducativo-20261026]
+    branches: [main, redisenio-comparador-estructura-social-20261028]
   pull_request:
 permissions:
   contents: read
@@ -17,14 +17,19 @@ jobs:
         run: |
           node --check lab/core.mjs
           node --check lab/main.mjs
+          node --check lab/comparison-ui.mjs
+          node --check lab/comparison-core.mjs
       - name: Probar funciones de demografía
-        run: node --test tests/core.test.mjs
+        run: node --test tests/*.test.mjs
       - name: Comprobar recursos críticos
         run: |
           test -s index.html
           test -s lab/style.css
           test -s lab/core.mjs
           test -s lab/main.mjs
+          test -s lab/comparison-core.mjs
+          test -s lab/comparison-ui.mjs
+          test -s lab/comparison.css
           test -s clasico.html
           test -s payload/index.html.gz.b64
   navegador:
