@@ -3,7 +3,7 @@ export const BANDS=Object.freeze(Array.from({length:18},(_,i)=>({label:i===17?'8
 const fail=s=>{throw new Error(s)};
 export const SOURCES={
  eurostat:{name:'Eurostat',table:'demo_pjan',label:'Population on 1 January by age and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en'},
- ine:{name:'Instituto Nacional de Estadística',table:'68534',label:'Censo anual de población: población por sexo y edad, año a año, ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=68534'}
+ ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'}
 };
 export const COUNTRIES={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal',BE:'Bélgica',NL:'Países Bajos',SE:'Suecia',PL:'Polonia',IE:'Irlanda',GR:'Grecia',AT:'Austria',DK:'Dinamarca',FI:'Finlandia',NO:'Noruega'};
 const safe=(v)=>typeof v==='number' && Number.isSafeInteger(v) && v>=0;
@@ -92,10 +92,10 @@ export function fromEurostat(json,geo,year){
  if(Number.isFinite(overall)&&overall!==aggregate+unknown)fail('No coincide el desglose con el total Eurostat.');
  return check({meta:{provider:'Eurostat',kind:'oficial',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),note:unknown?'Se excluyen '+unknown+' personas de edad desconocida.':'Se incluye toda la población con edad conocida.'},cohorts});
 }
-export const INE_TABLE='68534';
+export const INE_TABLE='56934';
 export function ineURL(year){
- if(!Number.isInteger(year)||year<2021||year>2026)fail('Año INE fuera del periodo permitido.');
- return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+INE_TABLE+'?nult=6&tip=AM';
+ if(!Number.isInteger(year)||year<1971||year>2026)fail('Año INE fuera del periodo permitido.');
+ return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+INE_TABLE+'?date='+year+'0101:'+year+'0101&tip=A';
 }
 export function parseINE(json,year){
  if(!Array.isArray(json))fail('La respuesta del INE no contiene series de datos.');
@@ -121,7 +121,7 @@ export function parseINE(json,year){
    const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?100:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
    return {...b,m:get('m'),f:get('f')};
  });
- return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Censo anual. Comprueba las series y revisiones en la ficha oficial.'},cohorts});
+ return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Estadística Continua de Población (cifras a 1 de enero). Comprueba las series, la continuidad metodológica desde 1971 y las revisiones en la ficha oficial.'},cohorts});
 }
 export function serializeCSV(dataset){
  const d=check(dataset);return 'edad;hombres;mujeres\n'+d.cohorts.map(c=>[c.label,c.m,c.f].join(';')).join('\n')+'\n';
