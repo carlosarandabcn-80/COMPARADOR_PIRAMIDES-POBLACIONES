@@ -116,11 +116,12 @@ function init(){
  $('focus').addEventListener('change',refreshCharts);
  $('swap').addEventListener('click',()=>{
   const formA=$('formA'),formB=$('formB');
+  const originalA=state.A,originalB=state.B;
   const left={p:select(formA,'provider').value,l:select(formA,'place').value,y:select(formA,'year').value};
   const right={p:select(formB,'provider').value,l:select(formB,'place').value,y:select(formB,'year').value};
   const set=(f,v)=>{select(f,'provider').value=v.p;select(f,'provider').dispatchEvent(new Event('change'));select(f,'place').value=v.l;select(f,'year').value=v.y;};
   set(formA,right);set(formB,left);
-  [state.A,state.B]=[state.B,state.A];
+  [state.A,state.B]=[originalB,originalA];
   if(state.A)setStatus('A','Datos oficiales intercambiados.');if(state.B)setStatus('B','Datos oficiales intercambiados.');
   refreshCharts();resultReset();updateButtons();
  });
