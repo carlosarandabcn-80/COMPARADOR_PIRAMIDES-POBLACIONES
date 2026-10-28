@@ -110,10 +110,10 @@ export function parseINE(json,year){
    const age=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*anos?(?:\b|$)/);
    const open=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*y\s*mas(?:\b|$)/);
    if(!age&&!open)continue;
-   // INE publica también un subtotal 100+ además de 100,101…104 y 105+.
-   // Excluimos el subtotal 100+ para impedir duplicaciones.
-   if(open&&Number(open[1])!==105)continue;
-   const a=open?105:Number(age[1]);if(a>105)continue;
+   // INE publica un agregado oficial 100+ además de edades individuales.
+   // Se utiliza 100+ como cierre del intervalo y se ignoran edades 100,101...
+   if(open&&Number(open[1])!==100)continue;
+   const a=open?100:Number(age[1]);if(a>100 || (a===100&&!open))continue;
    const record=series.Data.find(item=>{const d=String(item?.Anyo??item?.Año??item?.NombrePeriodo??'');return d===String(year)||d.includes(String(year));});
    if(!record||!safe(record.Valor))continue;
    const target=isM?rows.m:rows.f;
@@ -121,7 +121,7 @@ export function parseINE(json,year){
    target.set(a,record.Valor);
  }
  const cohorts=BANDS.map((b,i)=>{
-   const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?105:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
+   const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?100:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
    return {...b,m:get('m'),f:get('f')};
  });
  const total=cohorts.reduce((sum,b)=>sum+b.m+b.f,0);
