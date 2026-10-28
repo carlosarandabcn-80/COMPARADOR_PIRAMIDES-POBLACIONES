@@ -75,3 +75,15 @@ test('fuentes con unidades incompatibles no pueden compararse',()=>{
  const a=dataset(),b=dataset();b.meta.unit='miles';
  assert.throws(()=>academicComparison(a,b),/Unidades diferentes/);
 });
+
+test('la banda abierta 85+ no se interpreta como cohorte quinquenal ni domina el ranking',()=>{
+ const a=dataset(2001),b=dataset(2025,'España','Eurostat','young');
+ for(const d of [a,b]){d.cohorts[17].m=1_000_000;d.cohorts[17].f=2_000_000;}
+ const p=profile(a),r=academicComparison(a,b);
+ assert.notEqual(p.peak.label,'85+');
+ assert.notEqual(r.cohorts.largest.label,'85+');
+ assert.ok(r.cohorts.largestThree.every(x=>x.label!=='85+'));
+ assert.ok(r.caution.some(x=>x.includes('17 bandas quinquenales')));
+ assert.ok(r.sections.find(x=>x.id==='cohortes').text.includes('intervalos quinquenales cerrados'));
+ assert.equal(r.cohorts.rows.length,18); // 85+ sigue disponible en la tabla.
+});
