@@ -8,7 +8,7 @@ Aplicación web estática para **describir y comparar tipos de pirámides de pob
 ## Funcionalidades
 - Explicación con esquemas **conceptuales** de pirámides expansivas, estacionarias y regresivas (sin simular datos observados).
 - Dos selectores independientes A y B, fuente oficial, ámbito geográfico y año.
-- Fuente Eurostat `demo_pjan`: países disponibles y años de la serie.
+- Fuente Eurostat `demo_pjangroup`: países disponibles y años de la serie.
 - Fuente INE `56934`: total nacional a 1 de enero de los años disponibles (serie desde 1971).
 - Gráficos SVG con escalas idénticas entre A/B, porcentajes o valores absolutos, resaltado por grandes grupos y tablas accesibles.
 - Indicadores con fórmula explícita, lectura morfológica automatizada **orientativa** y comparación en puntos porcentuales.
@@ -41,7 +41,7 @@ Requiere conexión a internet para las consultas reales. Sin API operativa no se
 
 ## Atribución
 - INE, [Población residente por fecha, sexo y edad (desde 1971), tabla 56934](https://www.ine.es/jaxiT3/Tabla.htm?t=56934).
-- Eurostat, [Population on 1 January by age and sex, demo_pjan](https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en).
+- Eurostat, [Population on 1 January by age and sex, demo_pjan](https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en).
 - Referencia docente del proyecto de Estructura Social: material de la UNIR sobre tipologías y guía de lectura de Tezanos 1960–2001 (ver `docs/comparador_estructura_social.md`).
 
 La aplicación es una iniciativa independiente, no un producto oficial de la UNIR. Durante el examen deben respetarse las instrucciones docentes específicas (no consultar internet ni sistemas de IA, según pautas aportadas).
