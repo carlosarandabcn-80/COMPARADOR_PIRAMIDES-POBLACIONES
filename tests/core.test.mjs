@@ -53,7 +53,7 @@ test('la URL oficial es estable y verifica el año',()=>{
   assert.throws(()=>eurostatURL('XX-peligro',2025));
 });
 test('JSON-stat se convierte a cohortes solo con todas las edades y ambos sexos',()=>{
-  const ages=[...Array.from({length:100},(_,i)=>'Y'+i),'Y_GE100'];
+  const ages=['Y_LT1',...Array.from({length:99},(_,i)=>'Y'+(i+1)),'Y_OPEN'];
   const index=arr=>Object.fromEntries(arr.map((v,i)=>[v,i]));
   const json={id:['age','sex','geo','time','unit','freq'],size:[101,2,1,1,1,1],
     dimension:{age:{category:{index:index(ages)}},sex:{category:{index:{M:0,F:1}}},
