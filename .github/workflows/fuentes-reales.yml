@@ -1,7 +1,7 @@
 name: Comprobación de datos reales INE y Eurostat
 on:
   push:
-    branches: [main, fix-validacion-ine-eurostat-20261028]
+    branches: [main, feat-lectura-comparada-academica-20261028]
   workflow_dispatch:
 permissions:
   contents: read
