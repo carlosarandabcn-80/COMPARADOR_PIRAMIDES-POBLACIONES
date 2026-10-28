@@ -1,0 +1,17 @@
+name: Comprobación de datos reales INE y Eurostat
+on:
+  push:
+    branches: [main, redisenio-comparador-estructura-social-20261028]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fuentes-reales:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar INE 2001/2025 y Eurostat 2025 mediante API oficiales
+        run: node scripts/verificar-fuentes.mjs
