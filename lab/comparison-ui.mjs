@@ -126,8 +126,8 @@ function showComparison(){
  numerical.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+' <small>'+esc(row.unit)+'</small></td></tr>').join('')+'</tbody></table></div>';
  const reading='<div class="academic-head"><h4>Comentario comparado fundamentado</h4><span class="academic-length">'+academic.wordCount+' palabras en el informe íntegro · '+(data.summary?'síntesis':'lectura detallada')+'</span></div>'+
  '<div class="academic-reading">'+sections.map(s=>'<section class="academic-section" aria-labelledby="reading-'+s.id+'"><h5 id="reading-'+s.id+'">'+esc(s.title)+'</h5><p>'+esc(s.text)+'</p></section>').join('')+'</div>';
- const c=academic.cohorts,detail='<details class="cohorts-detail"><summary>Contrastar todas las cohortes quinquenales (18 grupos)</summary><div class="scroll">'+
- '<table class="comparison-table"><caption>Peso de cada grupo quinquenal sobre la población total</caption><thead><tr><th scope="col">Edad</th><th scope="col">A (%)</th><th scope="col">B (%)</th><th scope="col">A−B (pp)</th></tr></thead><tbody>'+
+ const c=academic.cohorts,detail='<details class="cohorts-detail"><summary>Contrastar todos los intervalos de edad (17 quinquenales y 85+ abierto)</summary><div class="scroll">'+
+ '<table class="comparison-table"><caption>Peso por grupo de edad (85+ es intervalo abierto)</caption><thead><tr><th scope="col">Edad</th><th scope="col">A (%)</th><th scope="col">B (%)</th><th scope="col">A−B (pp)</th></tr></thead><tbody>'+
  c.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+'</td></tr>').join('')+
  '</tbody></table></div></details>';
  const cautions='<div class="reading-notes" aria-label="Limitaciones metodológicas"><h4>Alcance del análisis</h4>'+
@@ -146,7 +146,7 @@ function exportText(){
  ...numerical.rows.map(x=>x.label+' | A: '+n(x.a)+' | B: '+n(x.b)+' | diferencia: '+n(x.delta)+' '+x.unit),
  '\nLECTURA COMPARADA',
  ...sections.map(s=>s.title+'\n'+s.text+'\n'),
- '\nCOHORTES QUINQUENALES · porcentajes de la población de cada selección; diferencias en puntos porcentuales',
+ '\nGRUPOS DE EDAD (17 QUINQUENALES Y 85+ ABIERTO) · porcentajes sobre el total; diferencia en puntos porcentuales',
  ...academic.cohorts.rows.map(x=>x.label+' | A: '+n(x.a)+' % | B: '+n(x.b)+' % | A−B: '+n(x.delta)+' pp'),
  '\nLÍMITES METODOLÓGICOS',...academic.caution,
  '\nMetodología: '+SOURCES.ine.url+' | '+SOURCES.eurostat.url,
