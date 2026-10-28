@@ -27,7 +27,7 @@ test('consulta Eurostat emite filtros y validación de respuesta',()=>{
  const value={};let total=0;
  ages.forEach((a,i)=>{const base=i*2;if(a==='TOTAL')return;
   if(a==='UNK')return;value[base]=100;value[base+1]=101;total+=201;});
- value[0]=total/2;value[1]=total/2; // por defecto el total acumulado está representado en el primer bloque
+ value[0]=10100;value[1]=10201; // totales de 101 edades (0–99 y 100+)
  const sample={id:['age','sex','geo','time','unit','freq'],size:[ages.length,2,1,1,1,1],dimension:{
   age:{category:{index:idx(ages)}},sex:{category:{index:{M:0,F:1}}},geo:{category:{index:{ES:0}}},time:{category:{index:{'2025':0}}},unit:{category:{index:{NR:0}}},freq:{category:{index:{A:0}}}},value,updated:'2026-10-01'};
  assert.equal(fromEurostat(sample,'ES',2025).meta.provider,'Eurostat');
