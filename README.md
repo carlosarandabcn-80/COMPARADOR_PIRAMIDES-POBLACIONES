@@ -12,6 +12,7 @@ Aplicación web estática para **describir y comparar tipos de pirámides de pob
 - Fuente INE `56934`: total nacional a 1 de enero de los años disponibles (serie desde 1971). La validación conserva cualquier pequeña discrepancia oficial documentada, sin inventar datos.
 - Gráficos SVG con escalas idénticas entre A/B, porcentajes o valores absolutos, resaltado por grandes grupos y tablas accesibles.
 - Indicadores con fórmula explícita, lectura morfológica automatizada **orientativa** y comparación en puntos porcentuales.
+- **Lectura académica comparada de Estructura Social**: identificación de fuentes, comparación de base/tronco/cúspide, tres diferencias quinquenales principales, composición por sexo en 65+, índices, tipo de comparación temporal/territorial, límites inferenciales y conclusión. Dos niveles de extensión (completo y síntesis), matriz de 18 cohortes y exportación coherente. [Metodología](docs/lectura_comparada_academica.md).
 - Exportación de comparación TXT, ambos conjuntos a CSV e impresión/PDF desde el navegador.
 
 ## Calidad de datos
