@@ -148,18 +148,22 @@ export function parseEurostat(json,geo,year){
     const first=i*5,last=i===17?99:first+4;
     const read=sex=>{
       let t=0;
-      for(let a=first;a<=last;a++){const v=cell('Y'+a,sex);if(v===null)error('Eurostat carece de edad '+a+' para '+sex+'; no se imputan valores faltantes.');t+=v;}
-      if(i===17){const v=cell('Y_GE100',sex);if(v===null)error('No se ha encontrado 100+ en Eurostat; se evita truncar 85+.');t+=v;}
+      for(let a=first;a<=last;a++){const v=cell(a===0?'Y_LT1':'Y'+a,sex);if(v===null)error('Eurostat carece de edad '+a+' para '+sex+'; no se imputan valores faltantes.');t+=v;}
+      if(i===17){const v=cell('Y_OPEN',sex);if(v===null)error('No se ha encontrado la edad abierta Y_OPEN en Eurostat; se evita truncar 85+.');t+=v;}
       return t;
     };
     return {...band,m:read('M'),f:read('F')};
   });
+  const known=cohorts.reduce((sum,band)=>sum+band.m+band.f,0);
+  const unknown=(cell('UNK','M')??0)+(cell('UNK','F')??0);
+  const maleTotal=cell('TOTAL','M'),femaleTotal=cell('TOTAL','F');
+  if(maleTotal!==null && femaleTotal!==null && known+unknown!==maleTotal+femaleTotal)error('Incoherencia entre edades desglosadas y TOTAL de Eurostat; se rechaza el conjunto.');
   const names={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal'};
   return validateDataset({meta:{id:'eurostat-'+geo+'-'+year,name:(names[geo]||geo)+' · '+year,kind:'oficial',
     source:'Eurostat, Population on 1 January by age and sex (demo_pjan).',
     sourceUrl:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en',
     referenceDate:year+'-01-01',updatedAt:String(json.updated||'No comunicada'),
-    unit:'personas',limitations:'Cifras oficiales del conjunto demo_pjan. Verificar notas, banderas, revisiones y comparabilidad temporal.'},cohorts});
+    unit:'personas',limitations:'Cifras del conjunto demo_pjan. Personas con edad desconocida excluidas del gráfico: '+unknown+'. Verificar banderas, revisiones y comparabilidad temporal.'},cohorts});
 }
 export const CASES=Object.freeze([
   {id:'C1',name:'Envejecimiento y redes comunitarias',dataset:'envejecida',question:'¿Demuestra una cúspide ancha que la población mayor depende funcionalmente de terceros?',answer:false,why:'La edad y la dependencia funcional son conceptos diferentes. Se requieren datos sobre autonomía, redes, preferencias y servicios.',activity:'Diseña una consulta participativa con personas mayores y una propuesta condicional de accesibilidad.'},
