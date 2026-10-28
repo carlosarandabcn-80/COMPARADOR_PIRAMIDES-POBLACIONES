@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pirámides poblacionales</title>
+<style>
+html,body{height:100%;margin:0;background:#0b1220;color:#e8eefc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{display:grid;place-items:center}.loader{max-width:620px;padding:24px;text-align:center}.loader b{display:block;font-size:20px;margin-bottom:8px;color:#66e3d4}.loader span{color:#aab7d6}.error{color:#ffd166;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<div class="loader" id="status"><b>Cargando comparador</b><span>Preparando la aplicación...</span></div>
+<script>
+(async()=>{
+  const status=document.getElementById('status');
+  try{
+    if(!('DecompressionStream' in window)){
+      throw new Error('Tu navegador no permite descomprimir el recurso de la aplicación. Actualiza el navegador o prueba con Chrome, Edge o Firefox recientes.');
+    }
+    const response=await fetch('./payload/index.html.gz.b64?v=20260616-1',{cache:'no-store'});
+    if(!response.ok){throw new Error('No se pudo cargar el paquete de la aplicación.');}
+    const b64=(await response.text()).replace(/\s/g,'');
+    const binary=atob(b64);
+    const bytes=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++){bytes[i]=binary.charCodeAt(i);}
+    const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const html=await new Response(stream).text();
+    document.open();
+    document.write(html);
+    document.close();
+  }catch(error){
+    status.innerHTML='<b>No se ha podido abrir la aplicación</b><span class="error"></span>';
+    status.querySelector('.error').textContent=error && error.message ? error.message : String(error);
+  }
+})();
+</script>
+</body>
+</html>
