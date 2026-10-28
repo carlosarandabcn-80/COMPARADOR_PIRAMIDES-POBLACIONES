@@ -126,8 +126,9 @@ export function parseINE(json,year){
  });
  const total=cohorts.reduce((sum,b)=>sum+b.m+b.f,0);
  const officialTotal=json.find(s=>/total nacional\. todas las edades\. total\./i.test(s.Nombre||''))?.Data?.find(x=>x.Anyo===year)?.Valor;
- if(safe(officialTotal)&&total!==officialTotal)fail('INE: las edades suman '+total+' pero el total publicado es '+officialTotal+'. Se rechaza el desglose.');
- return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Estadística Continua de Población (cifras a 1 de enero). Comprueba las series, la continuidad metodológica desde 1971 y las revisiones en la ficha oficial.'},cohorts});
+ const discrepancy=safe(officialTotal)?total-officialTotal:null;
+ if(discrepancy!==null&&Math.abs(discrepancy)>Math.max(5,Math.ceil(officialTotal/1000000)))fail('INE: diferencia excesiva entre edades ('+total+') y total oficial ('+officialTotal+').');
+ return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Estadística Continua de Población (cifras a 1 de enero). '+(discrepancy?'La suma de cohortes difiere en '+discrepancy+' personas del total publicado; se conservan los valores originales sin ajuste ni imputación. ':'')+'Revisar las notas de continuidad metodológica desde 1971.'},cohorts});
 }
 export function serializeCSV(dataset){
  const d=check(dataset);return 'edad;hombres;mujeres\n'+d.cohorts.map(c=>[c.label,c.m,c.f].join(';')).join('\n')+'\n';
