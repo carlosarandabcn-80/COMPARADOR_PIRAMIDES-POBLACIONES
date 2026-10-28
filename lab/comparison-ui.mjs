@@ -1,47 +1,48 @@
 import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,serializeCSV} from './comparison-core.mjs';
 const $=id=>document.getElementById(id),format=new Intl.NumberFormat('es-ES',{maximumFractionDigits:2}),n=x=>x===null?'No calculable':format.format(x);
 const esc=s=>String(s).replace(/[&<>"']/g,v=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[v]));
-const state={A:null,B:null,loading:{A:false,B:false}};
+const state={A:null,B:null,loading:{A:false,B:false},revision:{A:0,B:0},controllers:{A:null,B:null}};
 const labels=[['pYouth','0–14 años','%'],['pActive','15–64 años','%'],['pOld','65+ años','%'],['ageing','Índice envejecimiento','65+/0–14 × 100'],['dependency','Dependencia demográfica','(0–14 + 65+) / 15–64 × 100'],['total','Población total','personas']];
 const select=(form,key)=>form.elements.namedItem(key);
 function setupForm(side,defYear){
  const f=$('form'+side),provider=select(f,'provider'),place=select(f,'place'),year=select(f,'year');
  const refresh=()=>{const euro=provider.value==='eurostat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:{ES:'España'})){const opt=new Option(name,code);place.add(opt);}
- place.value='ES';year.replaceChildren();for(let y=2026;y>=(euro?1960:1971);y--)year.add(new Option(String(y),String(y)));
+ place.value='ES';year.replaceChildren();for(let y=(euro?2025:2026);y>=(euro?1960:1971);y--)year.add(new Option(String(y),String(y)));
  year.value=String(defYear);clear(side);};
  provider.addEventListener('change',refresh);
  for(const s of [place,year])s.addEventListener('change',()=>clear(side));
  f.addEventListener('submit',e=>{e.preventDefault();load(side);});
  refresh();
 }
-function clear(side){state[side]=null;$('status'+side).textContent='Selecciona el periodo y carga datos oficiales.';$('status'+side).className='status';$('chart'+side).innerHTML='<div class="placeholder">Sin datos cargados para esta selección.</div>';$('meta'+side).replaceChildren();$('stats'+side).replaceChildren();$('table'+side).replaceChildren();$('desc'+side).replaceChildren();resultReset();updateButtons();}
+function clear(side){state.revision[side]++;state.controllers[side]?.abort();state.controllers[side]=null;state.loading[side]=false;const button=$('form'+side).querySelector('button[type=submit]');if(button)button.disabled=false;state[side]=null;$('status'+side).textContent='Selecciona el periodo y carga datos oficiales.';$('status'+side).className='status';$('chart'+side).innerHTML='<div class="placeholder">Sin datos cargados para esta selección.</div>';$('meta'+side).replaceChildren();$('stats'+side).replaceChildren();$('table'+side).replaceChildren();$('desc'+side).replaceChildren();resultReset();updateButtons();}
 function resultReset(){$('results').innerHTML='<h3>Resultado comparativo</h3><p>Selecciona dos fuentes y periodos y pulsa «Comparar estructuras A y B».</p>';}
 function updateButtons(){const ready=Boolean(state.A&&state.B&&status(state.A,state.B).ok);$('analyze').disabled=!ready;$('export').disabled=!ready;$('print').disabled=!ready;$('exportCSV').disabled=!ready;}
 function setStatus(side,message,isError=false){const el=$('status'+side);el.textContent=message;el.className='status '+(isError?'error':'good');}
-async function getJSON(url,ms=25000){
+async function getJSON(url,ms=25000,externalSignal){
  const control=new AbortController(),t=setTimeout(()=>control.abort(),ms);
+ const cancel=()=>control.abort();externalSignal?.addEventListener('abort',cancel,{once:true});
  try{
   const response=await fetch(url,{signal:control.signal,cache:'no-store'});
   if(!response.ok)throw new Error('La fuente devolvió HTTP '+response.status);
   const length=Number(response.headers.get('content-length')||0);
   if(length>80000000)throw new Error('Respuesta demasiado grande. Escoge otra selección.');
   return await response.json();
- }finally{clearTimeout(t);}
+ }finally{clearTimeout(t);externalSignal?.removeEventListener('abort',cancel);}
 }
 async function load(side){
- if(state.loading[side])return;
  const f=$('form'+side),provider=select(f,'provider').value,place=select(f,'place').value,year=Number(select(f,'year').value);
- clear(side);state.loading[side]=true;
+ clear(side);const revision=state.revision[side],controller=new AbortController();state.controllers[side]=controller;state.loading[side]=true;
  const button=f.querySelector('button[type=submit]');button.disabled=true;
  setStatus(side,'Consultando '+(provider==='ine'?'INE':'Eurostat')+' · '+year+'. Obteniendo únicamente datos oficiales…');
  try{
   let dataset;
-  if(provider==='eurostat')dataset=fromEurostat(await getJSON(eurostatURL(place,year),35000),place,year);
-  else dataset=parseINE(await getJSON(ineURL(year),90000),year);
+  if(provider==='eurostat')dataset=fromEurostat(await getJSON(eurostatURL(place,year),35000,controller.signal),place,year);
+  else dataset=parseINE(await getJSON(ineURL(year),90000,controller.signal),year);
+  if(revision!==state.revision[side])return;
   state[side]=dataset;setStatus(side,'Datos oficiales cargados y validados. '+dataset.meta.provider+' · '+dataset.meta.place+' · '+year+'.');
   refreshCharts();resultReset();updateButtons();
- }catch(error){setStatus(side,'No se han podido obtener datos válidos: '+error.message+'. Comprueba la fuente y vuelve a intentarlo. Nunca se sustituyen los datos por modelos ficticios.',true);}
- finally{state.loading[side]=false;button.disabled=false;}
+ }catch(error){if(revision===state.revision[side])setStatus(side,'No se han podido obtener datos válidos: '+(error.name==='AbortError'?'La consulta ha superado el tiempo disponible.':error.message)+'. Comprueba la fuente y vuelve a intentarlo. Nunca se sustituyen los datos por modelos ficticios.',true);}
+ finally{if(revision===state.revision[side]){state.loading[side]=false;state.controllers[side]=null;button.disabled=false;}}
 }
 function maxShared(scale){
  const arr=[state.A,state.B].filter(Boolean),values=arr.flatMap(d=>d.cohorts.flatMap(b=>scale==='percent'?[b.m/d.total*100,b.f/d.total*100]:[b.m,b.f]));
@@ -130,5 +131,6 @@ function init(){
  $('exportCSV').addEventListener('click',()=>download('piramides-A-y-B.csv','Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres\n'+['A','B'].flatMap(side=>state[side].cohorts.map(row=>[side,state[side].meta.provider,state[side].meta.place,state[side].meta.year,row.label,row.m,row.f].join(';'))).join('\n')+'\n','text/csv;charset=utf-8'));
  $('print').addEventListener('click',()=>{showComparison();window.print();});
  Promise.all([load('A'),load('B')]).then(()=>{if(state.A&&state.B)showComparison();});
+ if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 init();
