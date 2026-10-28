@@ -1,9 +1,13 @@
 {
-  "title": "Pirámides poblacionales: diagnóstico metodológico y comparación",
-  "subtitle": "Estructura Social - Grado de Educación Social - UNIR",
-  "author": "Aranda Tools®",
+  "title": "Comparador de pirámides poblacionales: INE y Eurostat",
+  "subtitle": "Estructura Social · Grado en Educación Social · Material de estudio independiente basado en contenidos de UNIR",
+  "author": "Aranda Tools",
   "year": 2026,
-  "type": "static-interactive-dashboard",
-  "deployment": "GitHub Pages ready",
-  "dependencies": "none"
+  "scope": "Descripción morfológica y comparación de pirámides de población",
+  "sources": [
+    "INE 56934",
+    "Eurostat demo_pjan"
+  ],
+  "deployment": "GitHub Pages",
+  "dependencies": "none in production"
 }
