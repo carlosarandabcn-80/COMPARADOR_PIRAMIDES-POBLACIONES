@@ -2,7 +2,7 @@
 export const BANDS=Object.freeze(Array.from({length:18},(_,i)=>({label:i===17?'85+':i*5+'–'+(i*5+4),start:i*5,end:i===17?null:i*5+4})));
 const fail=s=>{throw new Error(s)};
 export const SOURCES={
- eurostat:{name:'Eurostat',table:'demo_pjan',label:'Population on 1 January by age and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en'},
+ eurostat:{name:'Eurostat',table:'demo_pjangroup',label:'Population on 1 January by age group and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en'},
  ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'}
 };
 export const COUNTRIES={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal',BE:'Bélgica',NL:'Países Bajos',SE:'Suecia',PL:'Polonia',IE:'Irlanda',GR:'Grecia',AT:'Austria',DK:'Dinamarca',FI:'Finlandia',NO:'Noruega'};
@@ -64,33 +64,54 @@ export function compare(a,b){
  return {rows:content,notes,description:'La proporción de menores de 15 años es '+x.pYouth.toFixed(2)+' % en '+a.meta.place+' ('+a.meta.year+') y '+y.pYouth.toFixed(2)+' % en '+b.meta.place+' ('+b.meta.year+'). La proporción de 65 años o más es '+x.pOld.toFixed(2)+' % y '+y.pOld.toFixed(2)+' %, respectivamente. La diferencia entre el peso de población mayor es de '+delta(x.pOld,y.pOld).toFixed(2)+' puntos porcentuales (A menos B). '+notes.join(' ')};
 }
 export function eurostatURL(geo,year){
- if(!Object.hasOwn(COUNTRIES,geo)||!Number.isInteger(year)||year<1960||year>2026)fail('País o año de Eurostat no permitido.');
+ if(!Object.hasOwn(COUNTRIES,geo)||!Number.isInteger(year)||year<1960||year>2025)fail('País o año de Eurostat no permitido.');
  const p=new URLSearchParams({format:'JSON',lang:'EN',geo,time:String(year),freq:'A',unit:'NR'});
  p.append('sex','M');p.append('sex','F');
- return 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjan?'+p;
+ return 'https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_pjangroup?'+p;
 }
 const categoryIndex=obj=>Array.isArray(obj)?Object.fromEntries(obj.map((x,i)=>[x,i])):obj||{};
+/**
+ * Fuente: Eurostat, demo_pjangroup. Grupos quinquenales YA publicados por
+ * Eurostat. No se suman edades simples incompletas ni se rellenan ausencias.
+ * La categoría abierta Y_GE85 incluye todas las edades de 85 o más.
+ */
 export function fromEurostat(json,geo,year){
- if(!Array.isArray(json?.id)||!Array.isArray(json?.size)||!json.dimension)fail('Eurostat no devolvió un objeto JSON-stat compatible.');
- for(const id of ['age','sex','geo','time','unit'])if(!json.id.includes(id))fail('Eurostat: falta la dimensión '+id);
- const indices={};for(const id of json.id)indices[id]=categoryIndex(json.dimension[id]?.category?.index);
- if(!Object.hasOwn(indices.geo,geo)||!Object.hasOwn(indices.time,String(year)))fail('Eurostat no ofrece esa selección.');
+ if(!Array.isArray(json?.id)||!Array.isArray(json?.size)||!json.dimension||json.id.length!==json.size.length)fail('Eurostat: respuesta JSON-stat incompatible.');
+ for(const id of ['freq','unit','age','sex','geo','time'])if(!json.id.includes(id))fail('Eurostat: falta la dimensión '+id);
+ const indices={};for(const id of json.id){
+  indices[id]=categoryIndex(json.dimension[id]?.category?.index);
+  if(!indices[id] || Object.keys(indices[id]).length===0)fail('Eurostat: dimensión vacía '+id);
+ }
+ if(!Object.hasOwn(indices.geo,geo)||!Object.hasOwn(indices.time,String(year))||!Object.hasOwn(indices.unit,'NR')||!Object.hasOwn(indices.freq,'A'))fail('Eurostat no ofrece el país/año solicitado en personas.');
  const strides=json.size.map((_,i)=>json.size.slice(i+1).reduce((a,b)=>a*b,1));
- const cell=(age,sex)=>{if(!Object.hasOwn(indices.age,age)||!Object.hasOwn(indices.sex,sex))return null;
+ const cell=(age,sex)=>{
   const selected={age,sex,geo,time:String(year),unit:'NR',freq:'A'};
-  let pos=0;for(let i=0;i<json.id.length;i++){const v=indices[json.id[i]][selected[json.id[i]]];if(v===undefined)return null;pos+=v*strides[i];}
-  const n=json.value?.[pos];return safe(n)?n:null;
+  let pos=0;
+  for(let i=0;i<json.id.length;i++){
+   const id=json.id[i],v=indices[id][selected[id]];
+   if(!Number.isSafeInteger(v)||v<0||v>=json.size[i])return null;
+   pos+=v*strides[i];
+  }
+  const value=json.value?.[pos];return safe(value)?value:null;
  };
+ const ageCode=(i)=>i===0?'Y_LT5':i===17?'Y_GE85':'Y'+(i*5)+'-'+(i*5+4);
  const cohorts=BANDS.map((b,i)=>{
-  const calc=sex=>{let sum=0;for(let age=b.start;age<=(i===17?99:b.end);age++){const n=cell(age===0?'Y_LT1':'Y'+age,sex);if(n===null)fail('Eurostat: falta el valor '+age+' ('+sex+').');sum+=n;}
-   if(i===17){const n=cell('Y_OPEN',sex);if(n===null)fail('Eurostat: falta la clase abierta 100+ (Y_OPEN).');sum+=n;}
-   return sum;};
-  return {...b,m:calc('M'),f:calc('F')};
+  const code=ageCode(i),m=cell(code,'M'),f=cell(code,'F');
+  if(m===null||f===null)fail('Eurostat: falta un dato oficial en '+b.label+' ('+[m===null?'hombres':'',f===null?'mujeres':''].filter(Boolean).join(' y ')+') para '+geo+' '+year+'. No se reemplaza por cero ni por cifras simuladas.');
+  return {...b,m,f};
  });
- const unknown=(cell('UNK','M')??0)+(cell('UNK','F')??0);
- const aggregate=cohorts.reduce((n,c)=>n+c.m+c.f,0),overall=cell('TOTAL','M')+cell('TOTAL','F');
- if(Number.isFinite(overall)&&overall!==aggregate+unknown)fail('No coincide el desglose con el total Eurostat.');
- return check({meta:{provider:'Eurostat',kind:'oficial',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),note:unknown?'Se excluyen '+unknown+' personas de edad desconocida.':'Se incluye toda la población con edad conocida.'},cohorts});
+ const totalM=cell('TOTAL','M'),totalF=cell('TOTAL','F');
+ if(totalM===null||totalF===null)fail('Eurostat: falta el total de uno de los sexos; no se puede conciliar la serie.');
+ const sumM=cohorts.reduce((n,b)=>n+b.m,0),sumF=cohorts.reduce((n,b)=>n+b.f,0);
+ const unknownM=cell('UNK','M'),unknownF=cell('UNK','F');
+ // Cuando falta UNK, solo se acepta coincidencia exacta con el total.
+ const expectedM=sumM+(unknownM??0),expectedF=sumF+(unknownF??0);
+ if(expectedM!==totalM||expectedF!==totalF)fail('Eurostat: discrepancia entre grupos quinquenales, edades desconocidas y totales publicados ('+geo+' '+year+').');
+ const unknown=(unknownM??0)+(unknownF??0);
+ const notes=['Cohortes quinquenales oficiales de demo_pjangroup, sin imputación.'];
+ if(unknown>0)notes.push('Se excluyen '+unknown+' personas de edad desconocida; los porcentajes se calculan sobre la población de edad conocida.');
+ if(json.status && Object.keys(json.status).length)notes.push('La fuente contiene banderas de calidad (revisar estimaciones, provisionalidad y rupturas de serie en Eurostat).');
+ return check({meta:{provider:'Eurostat',kind:'oficial',table:'demo_pjangroup',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),note:notes.join(' ')},cohorts});
 }
 export const INE_TABLE='56934';
 export function ineURL(year){
