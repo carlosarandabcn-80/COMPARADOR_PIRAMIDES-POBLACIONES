@@ -12,7 +12,7 @@ Las pautas de examen de la asignatura (documento UNIR facilitado, profesor Anton
 1. **Identificación**. Fuente, país, fecha, efectivo total, criterio de comparación y unidad.
 2. **Morfología**. Base (0–14), cuerpo (15–64), cúspide (65+), pico quinquenal y clasificación de forma; el esquema expansivo/estacionario/regresivo se presenta como interpretación didáctica, no taxonomía oficial.
 3. **Composición**. Porcentajes de los tres grandes grupos con idéntico denominador, la población total de edades conocidas.
-4. **Divergencias quinquenales**. Diferencia A−B para las 18 bandas; identificación de las tres diferencias en valor absoluto de mayor magnitud.
+4. **Divergencias quinquenales**. Diferencia A−B para los 18 grupos publicados; el ranking de las tres mayores diferencias se calcula solo entre los 17 intervalos quinquenales cerrados. El tramo 85+ permanece visible y computa en los totales, pero no es directamente comparable por anchura a una cohorte de cinco años.
 5. **Asimetría por sexo**. Porcentaje de mujeres dentro del grupo de 65+, distinto del porcentaje de mujeres de toda la población.
 6. **Índices**. Envejecimiento y dependencia demográfica, distinguiéndolos de dependencia funcional y desempleo.
 7. **Comparabilidad**. Se separan contraste entre dos fechas de un mismo territorio y fuente, territorial en el mismo año, dos operaciones estadísticas para una misma población, o comparación heterogénea.
@@ -29,7 +29,7 @@ Sea N el total poblacional con edad conocida, N_i el total de personas de la cla
 - Porcentaje de mujeres de 65+ = 100 × N(65+,mujeres) / N(65+).
 - Variación del volumen en comparación temporal homogénea = 100 × (N posterior − N anterior) / N anterior.
 
-El tramo superior 85+ es abierto. Ningún indicador puede desagregarlo internamente. Los denominadores cero se expresan como NO CALCULABLE. Se calcula sobre efectivos originales y solo se redondea al mostrar resultados.
+El tramo superior 85+ es abierto. Ningún indicador puede desagregarlo internamente ni compararlo como si tuviera cinco años de amplitud. Los denominadores cero se expresan como NO CALCULABLE. Se calcula sobre efectivos originales y solo se redondea al mostrar resultados.
 
 ## Riesgos analíticos
 Dos intervalos 30–34 observados con años de distancia representan cohortes de nacimiento distintas, no seguimiento longitudinal de personas. Una muesca no demuestra por sí sola conflicto bélico, migración ni caída de nacimientos. Diferentes fuentes pueden mostrar datos distintos por población de referencia, metodología o revisión. La variación temporal del volumen tampoco permite atribuir causas.
