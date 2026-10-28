@@ -1,0 +1,29 @@
+name: Verificación técnica del laboratorio
+on:
+  push:
+    branches: [main, mejora-laboratorio-socioeducativo-20261026]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Analizar sintaxis JS
+        run: |
+          node --check lab/core.mjs
+          node --check lab/main.mjs
+      - name: Ejecutar pruebas unitarias sin dependencias
+        run: node --test tests/*.test.mjs
+      - name: Confirmar recursos estáticos críticos
+        run: |
+          test -s index.html
+          test -s lab/style.css
+          test -s lab/core.mjs
+          test -s lab/main.mjs
+          test -s clasico.html
+          test -s payload/index.html.gz.b64
