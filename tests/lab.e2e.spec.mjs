@@ -9,7 +9,17 @@ function eurostatFixture(url){
  value[0]=totalM;value[1]=totalF;
  return {id:['age','sex','geo','time','unit','freq'],size:[ages.length,2,1,1,1,1],dimension:{age:{category:{index:idx(ages)}},sex:{category:{index:{M:0,F:1}}},geo:{category:{index:{[geo]:0}}},time:{category:{index:{[year]:0}}},unit:{category:{index:{NR:0}}},freq:{category:{index:{A:0}}}},value,updated:'2026-10-28'};
 }
+function ineFixture(url){
+ const match=url.match(/date=(\d{4})0101/),year=Number(match?.[1]||2025),arr=[];
+ let total=0;
+ for(let a=0;a<=99;a++){for(const [sex,value] of [['Hombres',1000+a],['Mujeres',1200+a]]){arr.push({Nombre:'Total Nacional. '+a+' años. '+sex+'. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}}
+ for(const [sex,value] of [['Hombres',10000],['Mujeres',12000]]){arr.push({Nombre:sex+'. 100 y más años. Total Nacional. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}
+ arr.push({Nombre:'Total Nacional. Todas las edades. Total. Población. Número. ',Data:[{Anyo:year,Valor:total}]});
+ return arr;
+}
+
 test('tipologías docentes, dos pirámides reales y comparación',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
  await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
  await page.goto('/');
  await expect(page.getByRole('heading',{name:'Tipos de pirámides poblacionales'})).toBeVisible();
@@ -26,9 +36,9 @@ test('tipologías docentes, dos pirámides reales y comparación',async({page})=
 });
 test('una fuente inaccesible produce un error y no inventa datos',async({page})=>{
  await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:503,body:'Unavailable'}));
- await page.goto('/');await page.locator('#formA button').click();
- await expect(page.locator('#statusA')).toContainText('No se han podido obtener datos válidos');
- await expect(page.locator('#chartA svg')).toHaveCount(0);await expect(page.locator('#analyze')).toBeDisabled();
+ await page.goto('/');await page.locator('#formB button').click();
+ await expect(page.locator('#statusB')).toContainText('No se han podido obtener datos válidos');
+ await expect(page.locator('#chartB svg')).toHaveCount(0);await expect(page.locator('#analyze')).toBeDisabled();
 });
 test('accesibilidad automática de la página y estados',async({page})=>{
  await page.goto('/');
