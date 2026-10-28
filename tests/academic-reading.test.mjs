@@ -16,7 +16,7 @@ test('morfología, pico y proporciones son coherentes con efectivos de origen',(
  assert.equal(a.shares.older,100*a.groups.older/a.total);
  assert.equal(a.cohorts[17].label,'85+');
  assert.ok(a.peak.label);
- assert.equal(a.shares.olderWomen,200/300*100);
+ assert.ok(Math.abs(a.shares.olderWomen-200/300*100)<1e-10);
 });
 test('comentario identifica diferencias exactas A menos B en puntos porcentuales',()=>{
  const a=dataset(),b=dataset(2025,'España','Eurostat','young'),report=academicComparison(a,b);
