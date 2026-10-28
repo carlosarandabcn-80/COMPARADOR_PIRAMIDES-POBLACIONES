@@ -1,14 +1,26 @@
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 function eurostatFixture(url){
- const p=new URL(url).searchParams,geo=p.get('geo'),year=p.get('time');
+ const p=new URL(url).searchParams,geo=p.get('geo');
+ const times=p.get('time')?[p.get('time')]:['2001','2009','2025'];
  const ages=['TOTAL',...Array.from({length:18},(_,i)=>i===0?'Y_LT5':i===17?'Y_GE85':'Y'+(i*5)+'-'+(i*5+4)),'UNK'];
  const idx=a=>Object.fromEntries(a.map((v,i)=>[v,i]));
  const value={};let totalM=0,totalF=0;
- for(let i=1;i<=18;i++){value[ages.length+i]=1000+i*2;value[2*ages.length+i]=1100+i*2;totalM+=1000+i*2;totalF+=1100+i*2;}
- value[ages.length]=totalM;value[2*ages.length]=totalF;value[2*ages.length-1]=0;value[3*ages.length-1]=0;
- return {id:['freq','unit','sex','age','geo','time'],size:[1,1,3,ages.length,1,1],dimension:{freq:{category:{index:{A:0}}},unit:{category:{index:{NR:0}}},
-  sex:{category:{index:{T:0,M:1,F:2}}},age:{category:{index:idx(ages)}},geo:{category:{index:{[geo]:0}}},time:{category:{index:{[year]:0}}}},
+ for(let time=0;time<times.length;time++){
+  totalM=0;totalF=0;
+  for(let i=1;i<=18;i++){
+   const m=1000+i*2+time,f=1100+i*2+time;
+   value[(ages.length+i)*times.length+time]=m;
+   value[(2*ages.length+i)*times.length+time]=f;
+   totalM+=m;totalF+=f;
+  }
+  value[ages.length*times.length+time]=totalM;
+  value[2*ages.length*times.length+time]=totalF;
+  value[(2*ages.length-1)*times.length+time]=0;
+  value[(3*ages.length-1)*times.length+time]=0;
+ }
+ return {id:['freq','unit','sex','age','geo','time'],size:[1,1,3,ages.length,1,times.length],dimension:{freq:{category:{index:{A:0}}},unit:{category:{index:{NR:0}}},
+  sex:{category:{index:{T:0,M:1,F:2}}},age:{category:{index:idx(ages)}},geo:{category:{index:{[geo]:0}}},time:{category:{index:idx(times)}}},
  value,updated:'2026-09-25'};
 }
 function ineFixture(url){
