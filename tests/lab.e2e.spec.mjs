@@ -1,43 +1,37 @@
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {synthetic,toCSV} from '../lab/core.mjs';
-
-test('exploración y comparación de pirámides, tablas, indicadores y razonamiento',async({page})=>{
-  await page.goto('/');
-  await expect(page.getByRole('heading',{name:/Los datos describen/})).toBeVisible();
-  await expect(page.locator('#chartMain svg')).toBeVisible();
-  await expect(page.locator('#tableMain tbody tr')).toHaveCount(18);
-  await expect(page.locator('#metrics .metric')).toHaveCount(9);
-  await expect(page.locator('#reasoning .reason-card')).toHaveCount(4);
-  await page.locator('#scale').selectOption('absolute');
-  await expect(page.locator('#chartMain svg')).toContainText('Efectivos');
-  await page.locator('#focus').selectOption('old');
-  await expect(page.locator('#chartMain .dimmed').first()).toHaveCount(1);
-  await page.locator('#swap').click();
-  await expect(page.locator('#primaryDataset')).toHaveValue('envejecida');
-  await expect(page.locator('#reportPreview')).toContainText('MODELO SINTÉTICO');
+function eurostatFixture(url){
+ const p=new URL(url).searchParams,geo=p.get('geo'),year=p.get('time');
+ const ages=['TOTAL','Y_LT1',...Array.from({length:99},(_,i)=>'Y'+(i+1)),'Y_OPEN','UNK'];
+ const idx=a=>Object.fromEntries(a.map((v,i)=>[v,i]));
+ const value={};let totalM=0,totalF=0;
+ ages.forEach((age,i)=>{if(['TOTAL','UNK'].includes(age))return;const m=age==='Y_OPEN'?30:1000+i*2,f=age==='Y_OPEN'?42:1100+i*2;value[2*i]=m;value[2*i+1]=f;totalM+=m;totalF+=f;});
+ value[0]=totalM;value[1]=totalF;
+ return {id:['age','sex','geo','time','unit','freq'],size:[ages.length,2,1,1,1,1],dimension:{age:{category:{index:idx(ages)}},sex:{category:{index:{M:0,F:1}}},geo:{category:{index:{[geo]:0}}},time:{category:{index:{[year]:0}}},unit:{category:{index:{NR:0}}},freq:{category:{index:{A:0}}}},value,updated:'2026-10-28'};
+}
+test('tipologías docentes, dos pirámides reales y comparación',async({page})=>{
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
+ await page.goto('/');
+ await expect(page.getByRole('heading',{name:'Tipos de pirámides poblacionales'})).toBeVisible();
+ await expect(page.locator('.type-card')).toHaveCount(3);
+ await page.locator('#formA button').click();await page.locator('#formB button').click();
+ await expect(page.locator('#chartA svg')).toBeVisible();
+ await expect(page.locator('#chartB svg')).toBeVisible();
+ await expect(page.locator('#tableA tbody tr')).toHaveCount(18);
+ await expect(page.locator('#analyze')).toBeEnabled();
+ await page.locator('#analyze').click();await expect(page.locator('#results')).toContainText('Comparación de estructuras poblacionales');
+ await page.locator('#view').selectOption('absolute');
+ await expect(page.locator('#chartA')).toContainText('Efectivos');
+ await page.locator('#swap').click();await expect(page.locator('#analyze')).toBeEnabled();
 });
-test('casos formativos con retroalimentación y guardado local',async({page})=>{
-  await page.goto('/');
-  await page.locator('#caseSelector').selectOption('C6');
-  await page.getByRole('button',{name:'Sí, está demostrado'}).click();
-  await expect(page.locator('#casePanel [role=status]')).toContainText('Correcto');
-  await page.locator('#need').fill('Comprobar barreras de acceso mediante entrevistas con participación voluntaria.');
-  await page.locator('#saveProposal').click();
-  await expect(page.locator('#saveStatus')).toContainText('Guardado');
-  await page.reload();
-  await expect(page.locator('#need')).toHaveValue(/Comprobar barreras/);
+test('una fuente inaccesible produce un error y no inventa datos',async({page})=>{
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:503,body:'Unavailable'}));
+ await page.goto('/');await page.locator('#formA button').click();
+ await expect(page.locator('#statusA')).toContainText('No se han podido obtener datos válidos');
+ await expect(page.locator('#chartA svg')).toHaveCount(0);await expect(page.locator('#analyze')).toBeDisabled();
 });
-test('CSV importado es etiquetado y se bloquean comparaciones sintético/observado',async({page})=>{
-  await page.goto('/');
-  const csv=toCSV(synthetic('joven'));
-  await page.locator('#upload').setInputFiles({name:'datos.csv',mimeType:'text/csv',buffer:Buffer.from(csv)});
-  await expect(page.locator('#uploadStatus')).toContainText('Importación local correcta');
-  await expect(page.locator('#metaMain')).toContainText('DATOS APORTADOS');
-  await expect(page.locator('#comparison')).toContainText('COMPARACIÓN BLOQUEADA');
-});
-test('lectura sin ratón y auditoría automática WCAG 2.2 A/AA',async({page})=>{
-  await page.goto('/');
-  const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
-  expect(axe.violations).toEqual([]);
+test('accesibilidad automática de la página y estados',async({page})=>{
+ await page.goto('/');
+ const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+ expect(result.violations).toEqual([]);
 });
