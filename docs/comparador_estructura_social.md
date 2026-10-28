@@ -18,10 +18,10 @@ Se han retirado de la interfaz principal la ficha de intervención, los casos de
 El criterio automático «compatible con expansiva/estacionaria/regresiva» es una regla **operativa didáctica**, no una tipología oficial ni un diagnóstico científico. Utiliza el cociente entre efectivo medio por cohorte de 0–14 y efectivo medio por cohorte de 30–44; la etiqueta expansiva requiere además proporción 65+ menor del 15 %. Umbrales: expansiva ≥1,25; regresiva ≤0,8; estacionaria/transición en el rango intermedio. Ningún umbral se atribuye al INE, Eurostat o UNIR. Debe leerse junto con el gráfico.
 
 ## Fuente 1. Eurostat
-Tabla **demo_pjan**: *Population on 1 January by age and sex*.
-Ficha: https://ec.europa.eu/eurostat/databrowser/view/demo_pjan/default/table?lang=en
+Tabla **demo_pjangroup**: *Population on 1 January by age group and sex*.
+Ficha: https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en
 
-La aplicación solicita país, año, sexo masculino/femenino, número de residentes y edades simples con la API JSON-stat. Agrupa 0–4, …, 80–84 y 85+ (incluye la categoría abierta Y_OPEN, habitualmente 100+). Los valores faltantes bloquean la pirámide. Puede obtener datos de los países incluidos por Eurostat siempre que estén disponibles para ese año.
+La aplicación solicita país, año, sexo masculino/femenino y grupos de edad oficiales con la API JSON-stat. Agrupa 0–4, …, 80–84 y 85+ (incluye la categoría abierta Y_OPEN, habitualmente 100+). Los valores faltantes bloquean la pirámide. Puede obtener datos de los países incluidos por Eurostat siempre que estén disponibles para ese año.
 
 ## Fuente 2. INE
 Tabla **56934**: *Población residente por fecha, sexo y edad (desde 1971)*. Operación Estadística Continua de Población; ámbito nacional.
