@@ -60,7 +60,7 @@ function compareCohorts(a,b){
  });
  // 85+ figura en la tabla, pero no puede competir con intervalos de cinco años.
  const sorted=[...rows.slice(0,17)].sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)||BANDS.findIndex(b=>b.label===x.label)-BANDS.findIndex(b=>b.label===y.label));
- return {rows,largest:sorted[0],largestThree:sorted.slice(0,3),positive:[...rows].sort((x,y)=>y.delta-x.delta)[0],negative:[...rows].sort((x,y)=>x.delta-y.delta)[0]};
+ return {rows,largest:sorted[0],largestThree:sorted.slice(0,3),positive:[...rows.slice(0,17)].sort((x,y)=>y.delta-x.delta)[0],negative:[...rows.slice(0,17)].sort((x,y)=>x.delta-y.delta)[0]};
 }
 const cutoff=(num,unit,plus='mayor',minus='menor')=>{
  if(Math.abs(num)<0.005)return 'presentan valores prácticamente iguales';
@@ -93,7 +93,7 @@ export function academicComparison(first,second){
   kind==='misma-seleccion'?'Dos selecciones equivalentes en territorio, fecha y fuente.':
   'Comparación heterogénea: cambian '+(a.meta.place===b.meta.place?'la fecha y la fuente':'el territorio y la fecha')+'.';
 
- const individual='La pirámide A tiene una base que '+describeBase(a.baseRatio)+', '+fmt(a.shares.older)+' % de habitantes de 65+ y presenta su mayor peso quinquenal en '+a.peak.label+' ('+fmt(a.peak.share)+' %). '+
+ const individual='La pirámide A tiene una base que '+describeBase(a.baseRatio)+', '+fmt(a.shares.older)+' % de habitantes de 65+ y presenta su mayor peso entre las bandas de cinco años en '+a.peak.label+' ('+fmt(a.peak.share)+' %). '+
  'La pirámide B muestra una base que '+describeBase(b.baseRatio)+', '+fmt(b.shares.older)+' % de 65+ y alcanza su mayor proporción entre los intervalos de cinco años en '+b.peak.label+' ('+fmt(b.peak.share)+' %). '+
  'La tipología orientativa es «'+a.shape.type+'» para A y «'+b.shape.type+'» para B. Estas etiquetas resumen la forma, no equivalen a categorías estadísticas oficiales.';
 
