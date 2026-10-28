@@ -58,8 +58,10 @@ export function indicators(dataset){
 }
 export function comparable(a,b){
   const x=validateDataset(a),y=validateDataset(b);
-  if(x.meta.kind==='sintetico'||y.meta.kind==='sintetico')return {valid:true,warning:'Comparación exclusivamente didáctica: incluye al menos un modelo sintético; nunca se interpreta como realidad territorial.'};
+  if(x.meta.kind==='sintetico'!== (y.meta.kind==='sintetico'))return {valid:false,warning:'COMPARACIÓN BLOQUEADA: una población es sintética y la otra no. No se comparan valores inventados con estadísticas de población.'};
+  if(x.meta.kind==='sintetico')return {valid:true,warning:'Comparación exclusivamente didáctica entre dos modelos sintéticos; nunca se interpreta como realidad territorial.'};
   if(x.meta.unit!==y.meta.unit)return {valid:false,warning:'Unidades incompatibles; no se deben comparar estos conjuntos.'};
+  if(x.meta.kind==='aportado'||y.meta.kind==='aportado')return {valid:true,warning:'Datos aportados sin validación independiente. Comprueba origen, fechas, cobertura y metodología antes de interpretar diferencias.'};
   return {valid:true,warning:'Las definiciones quinquenales coinciden. Comprueba diferencias en fecha de referencia, cobertura, población y metodología.'};
 }
 export function trace(dataset,other=null){
