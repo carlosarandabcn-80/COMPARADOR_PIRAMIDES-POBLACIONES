@@ -5,7 +5,7 @@ export const SOURCES={
  eurostat:{name:'Eurostat',table:'demo_pjangroup',label:'Population on 1 January by age group and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en'},
  ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'}
 };
-export const COUNTRIES={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal',BE:'Bélgica',NL:'Países Bajos',SE:'Suecia',PL:'Polonia',IE:'Irlanda',GR:'Grecia',AT:'Austria',DK:'Dinamarca',FI:'Finlandia',NO:'Noruega'};
+export const COUNTRIES={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal',BE:'Bélgica',NL:'Países Bajos',SE:'Suecia',PL:'Polonia',IE:'Irlanda',EL:'Grecia',AT:'Austria',DK:'Dinamarca',FI:'Finlandia',NO:'Noruega'};
 const safe=(v)=>typeof v==='number' && Number.isSafeInteger(v) && v>=0;
 export function check(dataset){
  if(!dataset||!Array.isArray(dataset.cohorts)||dataset.cohorts.length!==18)fail('Se requieren dieciocho cohortes quinquenales hasta 85+.');
