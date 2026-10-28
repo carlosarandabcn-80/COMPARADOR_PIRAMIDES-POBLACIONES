@@ -1,7 +1,7 @@
 name: Verificación técnica del comparador de pirámides
 on:
   push:
-    branches: [main, fix-validacion-ine-eurostat-20261028]
+    branches: [main, feat-lectura-comparada-academica-20261028]
   pull_request:
 permissions:
   contents: read
@@ -19,6 +19,7 @@ jobs:
           node --check lab/main.mjs
           node --check lab/comparison-ui.mjs
           node --check lab/comparison-core.mjs
+          node --check lab/academic-reading.mjs
       - name: Probar funciones de demografía
         run: node --test tests/*.test.mjs
       - name: Comprobar recursos críticos

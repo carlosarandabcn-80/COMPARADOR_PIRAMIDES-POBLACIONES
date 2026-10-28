@@ -118,3 +118,25 @@ test('el catálogo no ofrece años con cohortes oficialmente incompletas',async(
  await expect(page.locator('#formB [name=year] option[value="2009"]')).toHaveCount(0);
  await expect(page.locator('#formB [name=year] option[value="2025"]')).toHaveCount(1);
 });
+
+test('lectura comparada académica: nueve apartados, cohortes y síntesis',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
+ await page.goto('/');
+ await expect(page.locator('#statusA')).toContainText('Datos oficiales cargados');
+ await expect(page.locator('#statusB')).toContainText('Datos oficiales cargados');
+ await page.locator('#analyze').click();
+ await expect(page.locator('#results .academic-section')).toHaveCount(9);
+ await expect(page.locator('#results')).toContainText('Morfología: base, tronco y cúspide');
+ await expect(page.locator('#results')).toContainText('Estructura por sexo y edad');
+ await expect(page.locator('#results')).toContainText('puntos porcentuales');
+ await page.locator('#results .cohorts-detail summary').click();
+ await expect(page.locator('#results .cohorts-detail tbody tr')).toHaveCount(18);
+ await page.locator('#readingMode').selectOption('summary');
+ await expect(page.locator('#results .academic-section')).toHaveCount(5);
+ const pending=page.waitForEvent('download');await page.locator('#export').click();const file=await pending;
+ const txt=await (await import('node:fs/promises')).readFile(await file.path(),'utf8');
+ expect(txt).toContain('LECTURA COMPARADA');
+ expect(txt).toContain('Morfología: base, tronco y cúspide');
+ expect(txt).toContain('COHORTES QUINQUENALES');
+});
