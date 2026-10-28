@@ -62,7 +62,7 @@ async function ensureYears(side){
    setStatus(side,'No se ha podido consultar el catálogo de años ('+err.message+'). Puedes intentar cargar directamente el año seleccionado.',true);
   }
  }finally{
-  if(state.catalogVersion[side]===token &&provider.value==='eurostat'&&country.value===code){year.disabled=false;button.disabled=state.loading[side];}
+  if(state.catalogVersion[side]===token &&provider.value==='eurostat'&&country.value===code){year.disabled=year.options.length===0;button.disabled=state.loading[side]||year.options.length===0;}
  }
 }
 async function load(side){
@@ -166,7 +166,8 @@ function init(){
  $('export').addEventListener('click',()=>download('comparacion-estructura-social.txt',exportText(),'text/plain;charset=utf-8'));
  $('exportCSV').addEventListener('click',()=>download('piramides-A-y-B.csv','Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres\n'+['A','B'].flatMap(side=>state[side].cohorts.map(row=>[side,state[side].meta.provider,state[side].meta.place,state[side].meta.year,row.label,row.m,row.f].join(';'))).join('\n')+'\n','text/csv;charset=utf-8'));
  $('print').addEventListener('click',()=>{showComparison();window.print();});
- Promise.all([load('A'),state.catalogPromise.B.then(()=>{if(select($('formB'),'year').value)return load('B');})]).then(()=>{if(state.A&&state.B)showComparison();});
+ const initialBRevision=state.revision.B;
+ Promise.all([load('A'),state.catalogPromise.B.then(()=>{if(state.revision.B===initialBRevision&&select($('formB'),'year').value)return load('B');})]).then(()=>{if(state.A&&state.B)showComparison();});
  if('serviceWorker' in navigator && location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
 }
 init();
