@@ -7,7 +7,7 @@ const select=(form,key)=>form.elements.namedItem(key);
 function setupForm(side,defYear){
  const f=$('form'+side),provider=select(f,'provider'),place=select(f,'place'),year=select(f,'year');
  const refresh=()=>{const euro=provider.value==='eurostat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:{ES:'España'})){const opt=new Option(name,code);place.add(opt);}
- place.value='ES';year.replaceChildren();for(let y=euro?2026:2025;y>=(euro?1960:2021);y--)year.add(new Option(String(y),String(y)));
+ place.value='ES';year.replaceChildren();for(let y=2026;y>=(euro?1960:1971);y--)year.add(new Option(String(y),String(y)));
  year.value=String(euro?defYear:2025);clear(side);};
  provider.addEventListener('change',refresh);
  for(const s of [place,year])s.addEventListener('change',()=>clear(side));
