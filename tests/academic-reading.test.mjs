@@ -33,8 +33,8 @@ test('la diferencia quinquenal máxima coincide con el cálculo independiente',(
  const a=dataset(),b=dataset(2025,'España','Eurostat','young');
  const r=academicComparison(a,b);
  const diffs=Array.from({length:18},(_,i)=>100*(a.cohorts[i].m+a.cohorts[i].f)/a.total-100*(b.cohorts[i].m+b.cohorts[i].f)/b.total);
- assert.ok(Math.abs(r.cohorts.largest.delta-Math.max(...diffs.map(Math.abs))*Math.sign(r.cohorts.largest.delta))<1e-9);
- assert.deepEqual(r.cohorts.largestThree.map(x=>x.label),[...r.cohorts.rows].sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)).slice(0,3).map(x=>x.label));
+ assert.ok(Math.abs(r.cohorts.largest.delta-Math.max(...diffs.slice(0,17).map(Math.abs))*Math.sign(r.cohorts.largest.delta))<1e-9);
+ assert.deepEqual(r.cohorts.largestThree.map(x=>x.label),[...r.cohorts.rows.slice(0,17)].sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)).slice(0,3).map(x=>x.label));
 });
 test('contraste entre países mismo año no se confunde con evolución demográfica',()=>{
  const r=academicComparison(dataset(2025,'España'),dataset(2025,'Alemania','Eurostat','young'));
@@ -74,4 +74,16 @@ test('mismo territorio, año y fuente se rotula como control, no cambio',()=>{
 test('fuentes con unidades incompatibles no pueden compararse',()=>{
  const a=dataset(),b=dataset();b.meta.unit='miles';
  assert.throws(()=>academicComparison(a,b),/Unidades diferentes/);
+});
+
+test('la banda abierta 85+ no se interpreta como cohorte quinquenal ni domina el ranking',()=>{
+ const a=dataset(2001),b=dataset(2025,'España','Eurostat','young');
+ for(const d of [a,b]){d.cohorts[17].m=1_000_000;d.cohorts[17].f=2_000_000;}
+ const p=profile(a),r=academicComparison(a,b);
+ assert.notEqual(p.peak.label,'85+');
+ assert.notEqual(r.cohorts.largest.label,'85+');
+ assert.ok(r.cohorts.largestThree.every(x=>x.label!=='85+'));
+ assert.ok(r.caution.some(x=>x.includes('17 bandas quinquenales')));
+ assert.ok(r.sections.find(x=>x.id==='cohortes').text.includes('intervalos quinquenales cerrados'));
+ assert.equal(r.cohorts.rows.length,18); // 85+ sigue disponible en la tabla.
 });
