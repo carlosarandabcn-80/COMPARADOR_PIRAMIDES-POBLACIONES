@@ -4,20 +4,40 @@ export const BANDS=Object.freeze(Array.from({length:18},(_,i)=>({label:i===17?'8
 const fail=s=>{throw new Error(s)};
 export const SOURCES={
  eurostat:{name:'Eurostat',table:'demo_pjangroup',label:'Population on 1 January by age group and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en'},
- ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'}
+ ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'},
+  idescat:{name:'Idescat',table:'censph_539_mun_2025_pc',label:'Censo anual de población 2025, municipios por sexo y edad quinquenal',url:'https://www.idescat.cat/dades/obertes/?lang=es'}
 };
 export const INE_TERRITORIES=Object.freeze({
  ES:{title:'España',table:'56934',level:'nacional',start:1971,end:2026},
- CT:{title:'Cataluña',table:'59238',level:'comunidad autónoma',start:2021,end:2026},
- BCN_P:{title:'Barcelona (provincia)',table:'59589',level:'provincia',start:2021,end:2026},
- BCN_M:{title:'Barcelona (municipio)',table:'69129',level:'municipio',start:2021,end:2025},
- HOSP_M:{title:"L'Hospitalet de Llobregat (municipio)",table:'69129',level:'municipio',start:2021,end:2025}
+ AN:{title:'Andalucía',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ AR:{title:'Aragón',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ AS:{title:'Asturias',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ IB:{title:'Illes Balears',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CN:{title:'Canarias',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CB:{title:'Cantabria',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CL:{title:'Castilla y León',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CM:{title:'Castilla-La Mancha',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CT:{title:'Cataluña',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ VC:{title:'Comunitat Valenciana',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ EX:{title:'Extremadura',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ GA:{title:'Galicia',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ MD:{title:'Madrid (comunidad)',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ MC:{title:'Murcia (región)',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ NC:{title:'Navarra',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ PV:{title:'País Vasco',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ RI:{title:'La Rioja',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ CE:{title:'Ceuta',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ ML:{title:'Melilla',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
+ BCN_P:{title:'Barcelona (provincia)',table:'59589',level:'provincia',start:2026,end:2026}
+});
+export const IDESCAT_TERRITORIES=Object.freeze({
+ BCN_M:'Barcelona (municipio)',HOSP_M:"L'Hospitalet de Llobregat (municipio)"
 });
 export const COUNTRIES={ES:'España',FR:'Francia',DE:'Alemania',IT:'Italia',PT:'Portugal',BE:'Bélgica',NL:'Países Bajos',SE:'Suecia',PL:'Polonia',IE:'Irlanda',EL:'Grecia',AT:'Austria',DK:'Dinamarca',FI:'Finlandia',NO:'Noruega'};
 const safe=(v)=>typeof v==='number' && Number.isSafeInteger(v) && v>=0;
 export function check(dataset){
  if(!dataset||!Array.isArray(dataset.cohorts)||dataset.cohorts.length!==18)fail('Se requieren dieciocho cohortes quinquenales hasta 85+.');
- if(dataset.meta?.kind!=='oficial'||!['Eurostat','INE'].includes(dataset.meta.provider))fail('Solo se admiten series oficiales identificadas.');
+ if(dataset.meta?.kind!=='oficial'||!['Eurostat','INE','Idescat'].includes(dataset.meta.provider))fail('Solo se admiten series oficiales identificadas.');
  let total=0;
  const cohorts=dataset.cohorts.map((b,i)=>{if(b.label!==BANDS[i].label||!safe(b.m)||!safe(b.f))fail('Edad o recuento inválido en '+BANDS[i].label);total+=b.m+b.f;return {...BANDS[i],m:b.m,f:b.f};});
  if(!Number.isSafeInteger(total)||total<=0)fail('Total poblacional incorrecto.');
@@ -166,13 +186,15 @@ export function ineTerritoryURL(code,year){
  return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+t.table+'?date='+year+'0101:'+year+'0101&tip=A';
 }
 const strip=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
-const geoMatch=(text,code)=>{
- if(code==='CT')return /\bcataluna\b|\bcatalunya\b/.test(text);
- if(code==='BCN_P')return /\bbarcelona\b/.test(text);
- if(code==='BCN_M')return /\b08019\b/.test(text)||/\bmunicipio\s*:?\s*barcelona\b/.test(text);
- if(code==='HOSP_M')return /\b08101\b/.test(text)||/\bhospitalet de llobregat\b/.test(text);
- return false;
-};
+const GEO_MATCH=Object.freeze({
+ AN:/\bandalucia\b/,AR:/\baragon\b/,AS:/\basturias\b/,IB:/\bbalears\b|\bbaleares\b/,
+ CN:/\bcanarias\b/,CB:/\bcantabria\b/,CL:/\bcastilla y leon\b/,
+ CM:/\bcastilla.{0,4}la mancha\b/,CT:/\bcataluna\b|\bcatalunya\b/,
+ VC:/\bvalencia\b|\bvalenciana\b/,EX:/\bextremadura\b/,GA:/\bgalicia\b/,
+ MD:/\bmadrid\b/,MC:/\bmurcia\b/,NC:/\bnavarra\b/,PV:/\bpais vasco\b|\beuskadi\b/,
+ RI:/\brioja\b/,CE:/\bceuta\b/,ML:/\bmelilla\b/,BCN_P:/\bbarcelona\b/
+});
+const geoMatch=(text,code)=>GEO_MATCH[code]?.test(text)??false;
 export function parseINETerritory(json,code,year){
  const terr=INE_TERRITORIES[code];
  if(!terr||code==='ES'||!Number.isInteger(year)||year<terr.start||year>terr.end)fail('Ámbito territorial inválido');
@@ -223,6 +245,24 @@ export function parseINETerritory(json,code,year){
   'Cobertura histórica y revisiones propias de la tabla '+terr.table+'. Los datos del año en curso pueden ser provisionales.';
  return check({meta:{provider:'INE',kind:'oficial',unit:'personas',table:terr.table,place:terr.title,year,referenceDate:year+'-01-01',
   updatedAt:'Consultar ficha INE',sourceUrl:'https://www.ine.es/jaxiT3/Tabla.htm?t='+terr.table,apiUrl:ineTerritoryURL(code,year),note},cohorts});
+}
+
+
+/** Fotografía municipal oficial del Idescat, basada en el Censo Anual 2025.
+ * Se distribuye con el proyecto para evitar bloqueos CORS del archivo CSV original.
+ */
+export function parseIdescatSnapshot(json,code,year){
+ if(year!==2025||!Object.hasOwn(IDESCAT_TERRITORIES,code)||json?.year!==2025||
+  !json?.sourceUrl?.startsWith('https://www.idescat.cat/'))fail('Idescat: metadatos de origen o periodo no válidos.');
+ const source=json.municipalities?.[code];
+ if(!source||!Array.isArray(source.cohorts)||source.cohorts.length!==18)fail('Idescat: datos municipales incompletos');
+ const data=check({cohorts:source.cohorts.map((v,i)=>({...BANDS[i],m:v.m,f:v.f,label:v.label})),
+  meta:{provider:'Idescat',kind:'oficial',unit:'personas',table:'censph_539_mun_2025_pc',
+   place:IDESCAT_TERRITORIES[code],year,referenceDate:'2025-01-01',
+   updatedAt:'Publicado por Idescat en 2025',sourceUrl:json.sourceUrl,
+   note:'Instantánea local de datos oficiales municipales publicada por Idescat; no consulta de API en tiempo real. Agrupación de los intervalos 85–89, 90–94, 95–99 y 100+ en 85+. Origen: Censo anual del INE difundido por Idescat.'}});
+ if(data.total!==source.total)fail('Idescat: el total no concilia con la suma de cohortes.');
+ return data;
 }
 
 export function serializeCSV(dataset){
