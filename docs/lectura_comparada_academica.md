@@ -48,3 +48,6 @@ INE. Población residente por fecha, sexo y edad (tabla 56934). https://www.ine.
 Eurostat. Population on 1 January by age group and sex (demo_pjangroup). https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en
 
 Documento de base: UNIR. Estructura Social. Pautas para el examen final de la asignatura (material facilitado en el proyecto). No se afirma que UNIR haya evaluado o autorizado el software.
+
+## Complemento de octubre de 2026
+El comentario morfológico identifica ahora patrones adicionales mediante reglas reproducibles: salientes, muescas, concentración o déficit de adultos jóvenes, perfiles invertidos, envejecimiento intenso y asimetría en edades mayores. No se infieren causas históricas ni se transforman los patrones en grupos oficiales. La selección «Diferencias A/B» destaca simultáneamente tres cohortes cerradas con mayor diferencia absoluta en puntos porcentuales y preserva el grupo abierto 85+ en el análisis cuantitativo general. La trazabilidad exige comprobar tabla, territorio, año y categoría de fuente, particularmente en cruces entre operaciones estadísticas.
