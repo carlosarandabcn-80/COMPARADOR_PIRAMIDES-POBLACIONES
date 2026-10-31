@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BANDS,check,indicators,status,classify,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,serializeCSV} from '../lab/comparison-core.mjs';
+import {BANDS,check,indicators,status,classify,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,IDESCAT_TERRITORIES,parseIdescatSnapshot,serializeCSV} from '../lab/comparison-core.mjs';
+import {readFile} from 'node:fs/promises';
 import {MODELS,recognizeMorphology} from '../lab/morphology.mjs';
 const make=(provider='Eurostat',year=2025)=>check({meta:{provider,kind:'oficial',place:'España',unit:'personas',year,referenceDate:year+'-01-01',sourceUrl:'https://example.org',updatedAt:'test',note:''},cohorts:BANDS.map((b,i)=>({...b,m:100-i,f:90-i}))});
 function sampleGrouped(geo='DE',year=2009){
@@ -84,8 +85,8 @@ test('reconocimiento morfológico identifica patrones, sin diagnosticar causas',
  assert.ok(r.patterns.every(p=>p.evidence&&!/migraci[oó]n.*demostr/i.test(p.evidence)));
 });
 test('INE territorial: localidades y fechas con cohortes completas',()=>{
- for(const code of ['CT','BCN_P','BCN_M','HOSP_M']){
-  const year=2025,tab=INE_TERRITORIES[code].table;
+ for(const code of ['CT','BCN_P']){
+  const year=2026,tab=INE_TERRITORIES[code].table;
   assert.ok(ineTerritoryURL(code,year).includes('/'+tab+'?'));
   const d=parseINETerritory(territoryFixture(code,year),code,year);
   assert.equal(d.cohorts.length,18);assert.equal(d.meta.table,tab);
@@ -94,8 +95,22 @@ test('INE territorial: localidades y fechas con cohortes completas',()=>{
  assert.throws(()=>ineTerritoryURL('BCN_M',2026));
 });
 test('INE territorial: faltantes, territorios erróneos y duplicados bloqueados',()=>{
- assert.throws(()=>parseINETerritory(territoryFixture('CT',2025,'3 años'),'CT',2025),/falta/);
- assert.throws(()=>parseINETerritory(territoryFixture('CT',2025),'BCN_P',2025),/falta/);
- const a=territoryFixture('BCN_M',2025);a.push(a[0]);
- assert.throws(()=>parseINETerritory(a,'BCN_M',2025),/duplicada/);
+ assert.throws(()=>parseINETerritory(territoryFixture('CT',2026,'3 años'),'CT',2026),/falta/);
+ assert.throws(()=>parseINETerritory(territoryFixture('CT',2026),'BCN_P',2026),/falta/);
+ const a=territoryFixture('CT',2026);a.push(a[0]);
+ assert.throws(()=>parseINETerritory(a,'CT',2026),/duplicada/);
+});
+
+test('Idescat: dos municipios 2025 con sumas y procedencia verificadas',async()=>{
+ const json=JSON.parse(await readFile(new URL('../data/idescat-municipios-2025.json',import.meta.url),'utf8'));
+ assert.equal(Object.keys(IDESCAT_TERRITORIES).length,2);
+ for(const code of Object.keys(IDESCAT_TERRITORIES)){
+  const d=parseIdescatSnapshot(json,code,2025);
+  assert.equal(d.cohorts.length,18);assert.equal(d.total,json.municipalities[code].total);
+ }
+ assert.equal(parseIdescatSnapshot(json,'BCN_M',2025).total,1713247);
+ assert.equal(parseIdescatSnapshot(json,'HOSP_M',2025).total,292161);
+ const bad=structuredClone(json);bad.municipalities.BCN_M.cohorts[0].m=-5;
+ assert.throws(()=>parseIdescatSnapshot(bad,'BCN_M',2025));
+ assert.throws(()=>parseIdescatSnapshot(json,'BCN_M',2026));
 });
