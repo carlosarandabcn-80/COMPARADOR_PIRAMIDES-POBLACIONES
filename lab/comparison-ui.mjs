@@ -1,4 +1,4 @@
-import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,serializeCSV} from './comparison-core.mjs';
+import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,IDESCAT_TERRITORIES,parseIdescatSnapshot,serializeCSV} from './comparison-core.mjs';
 import {MODELS} from './morphology.mjs';
 import {academicComparison} from './academic-reading.mjs';
 const $=id=>document.getElementById(id),format=new Intl.NumberFormat('es-ES',{maximumFractionDigits:2}),n=x=>x===null?'No calculable':format.format(x);
@@ -11,8 +11,11 @@ const labels=[['pYouth','0–14 años','%'],['pActive','15–64 años','%'],['pO
 const select=(form,key)=>form.elements.namedItem(key);
 function setupForm(side,defYear){
  const f=$('form'+side),provider=select(f,'provider'),place=select(f,'place'),year=select(f,'year');
- const refresh=()=>{const euro=provider.value==='eurostat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:INE_PLACES)){const opt=new Option(name,code);place.add(opt);}
- place.value='ES';year.replaceChildren();for(let y=(euro?2025:INE_TERRITORIES.ES.end);y>=(euro?1960:INE_TERRITORIES.ES.start);y--)year.add(new Option(String(y),String(y)));
+ const refresh=()=>{const euro=provider.value==='eurostat',idescat=provider.value==='idescat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:idescat?IDESCAT_TERRITORIES:INE_PLACES)){const opt=new Option(name,code);place.add(opt);}
+ place.value=euro?'ES':idescat?'BCN_M':'ES';
+ year.replaceChildren();
+ if(idescat)year.add(new Option('2025','2025'));
+ else for(let y=(euro?2025:INE_TERRITORIES.ES.end);y>=(euro?1960:INE_TERRITORIES.ES.start);y--)year.add(new Option(String(y),String(y)));
  year.value=String(defYear);clear(side);state.catalogVersion[side]++;state.catalogPromise[side]=euro?ensureYears(side):Promise.resolve();};
  provider.addEventListener('change',refresh);
  place.addEventListener('change',()=>{
@@ -23,6 +26,10 @@ function setupForm(side,defYear){
   year.replaceChildren(...Array.from({length:t.end-t.start+1},(_,i)=>new Option(String(t.end-i),String(t.end-i))));
   state.catalogPromise[side]=Promise.resolve();
   setStatus(side,'Tabla territorial INE '+t.table+' · '+t.title+'. Disponibilidad sujeta a la API oficial.');
+ }else if(provider.value==='idescat'){
+  state.catalogVersion[side]++;year.replaceChildren(new Option('2025','2025'));
+  state.catalogPromise[side]=Promise.resolve();
+  setStatus(side,'Censo municipal 2025 · Idescat · copia documentada de datos oficiales.');
  }else state.catalogPromise[side]=ensureYears(side);
 });
  year.addEventListener('change',()=>clear(side));
@@ -82,12 +89,13 @@ async function load(side){
  const f=$('form'+side),provider=select(f,'provider').value,place=select(f,'place').value,year=Number(select(f,'year').value);
  clear(side);const revision=state.revision[side],controller=new AbortController();state.controllers[side]=controller;state.loading[side]=true;
  const button=f.querySelector('button[type=submit]');button.disabled=true;
- setStatus(side,'Consultando '+(provider==='ine'?'INE':'Eurostat')+' · '+year+'. Obteniendo únicamente datos oficiales…');
+ setStatus(side,'Consultando '+(provider==='ine'?'INE':provider==='idescat'?'Idescat':'Eurostat')+' · '+year+'. Obteniendo únicamente datos oficiales…');
  try{
   let dataset;
   if(provider==='eurostat')dataset=fromEurostat(await (eurostatArchives.get(place) || getJSON(eurostatURL(place,year),35000,controller.signal)),place,year);
   else if(place==='ES')dataset=parseINE(await getJSON(ineURL(year),90000,controller.signal),year);
-  else dataset=parseINETerritory(await getJSON(ineTerritoryURL(place,year),90000,controller.signal),place,year);
+  else if(provider==='ine')dataset=parseINETerritory(await getJSON(ineTerritoryURL(place,year),90000,controller.signal),place,year);
+  else dataset=parseIdescatSnapshot(await getJSON('./data/idescat-municipios-2025.json',15000,controller.signal),place,year);
   if(revision!==state.revision[side])return;
   state[side]=dataset;setStatus(side,'Datos oficiales cargados y validados. '+dataset.meta.provider+' · '+dataset.meta.place+' · '+year+'.');
   refreshCharts();resultReset();updateButtons();
