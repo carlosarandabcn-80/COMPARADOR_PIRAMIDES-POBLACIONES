@@ -95,7 +95,9 @@ export function academicComparison(first,second){
 
  const individual='La pirámide A tiene una base que '+describeBase(a.baseRatio)+', '+fmt(a.shares.older)+' % de habitantes de 65+ y presenta su mayor peso entre las bandas de cinco años en '+a.peak.label+' ('+fmt(a.peak.share)+' %). '+
  'La pirámide B muestra una base que '+describeBase(b.baseRatio)+', '+fmt(b.shares.older)+' % de 65+ y alcanza su mayor proporción entre los intervalos de cinco años en '+b.peak.label+' ('+fmt(b.peak.share)+' %). '+
- 'La tipología orientativa es «'+a.shape.type+'» para A y «'+b.shape.type+'» para B. Estas etiquetas resumen la forma, no equivalen a categorías estadísticas oficiales.';
+ 'La tipología orientativa es «'+a.shape.type+'» para A y «'+b.shape.type+'» para B. Estas etiquetas resumen la forma, no equivalen a categorías estadísticas oficiales. '+
+  'Patrones complementarios en A: '+(a.shape.patterns.length?a.shape.patterns.map(p=>p.label+' ('+p.evidence+')').join('; '):'ninguno bajo los criterios exploratorios')+'. '+
+  'En B: '+(b.shape.patterns.length?b.shape.patterns.map(p=>p.label+' ('+p.evidence+')').join('; '):'ninguno bajo los criterios exploratorios')+'. Los patrones descriptivos pueden coexistir y no demuestran mecanismos causales.';
 
  const broad='En A, la distribución por grandes grupos es '+ages(a)+'. En B es '+ages(b)+'. '+
   'Al restar A menos B, la diferencia en el peso de menores de 15 años es '+phrase(delta.youth)+', la de edades 15–64 es '+phrase(delta.working)+' y la de 65 años o más es '+phrase(delta.older)+'. '+
