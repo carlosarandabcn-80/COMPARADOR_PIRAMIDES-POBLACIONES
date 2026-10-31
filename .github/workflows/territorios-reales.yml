@@ -1,0 +1,18 @@
+name: Comprobación de fuentes INE territoriales
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  datos-territoriales:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validar cohortes de Cataluña, Barcelona y L'Hospitalet desde INE
+        run: node scripts/verificar-territorios.mjs
