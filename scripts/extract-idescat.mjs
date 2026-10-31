@@ -13,9 +13,9 @@ for(const row of rows.slice(1)){
  if(municipio==='Barcelona')code='BCN_M';
  else if(/hospitalet de llobregat/i.test(municipio))code='HOSP_M';
  if(!code)continue;
- const normalized=edad.toLowerCase().trim();
+ const normalized=edad.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
  const quin=normalized.match(/de\s+(\d+)\s+a\s+(\d+)\s+a[nñ]os/);
- const open=normalized.match(/(100)\s+(?:y\s+mas|a[nñ]os\s+y\s+mas|o\s+mas)/);
+ const open=normalized.match(/\b(100)\s+(?:anos\s+)?(?:o|y)\s+mas/);
  const start=quin?Number(quin[1]):open?100:null;
  const end=quin?Number(quin[2]):open?120:null;
  if(start===null)continue;
