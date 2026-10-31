@@ -56,3 +56,14 @@ La licencia del software nuevo se especifica en `LICENSE`; los derechos de fuent
 
 ## Lectura comparada ampliada (octubre de 2026)
 La aplicación incorpora una lectura determinista y reproducible con nueve apartados: identificación, morfología, composición por edad, mayores diferencias quinquenales, distribución por sexo en mayores, índices, comparabilidad temporal/territorial, marco de Estructura Social y síntesis. Se ofrece además una versión abreviada de estudio y una matriz accesible con los 18 grupos. Las diferencias de porcentajes se expresan en puntos porcentuales; la evolución del volumen solo se describe cuando coinciden territorio y fuente y cambian fechas. El nuevo método no infiere causas de una muesca ni convierte diferencias entre fuentes en cambios demográficos. Véase [Protocolo de lectura comparada académica](lectura_comparada_academica.md).
+
+## Ampliación de tipología y análisis (31 de octubre de 2026)
+La biblioteca visible consta de 12 perfiles, agrupados en 3 **familias morfológicas** y 9 **subtipos/patrones adicionales**. Cada ficha identifica su condición conceptual, definición y límites. Los dibujos SVG son ejemplos esquemáticos; solo el área de comparación representa poblaciones observadas.
+
+**Reconocimiento:** se calcula la relación de efectivos medios de 0–14 frente a 30–44 (ambos tienen tres intervalos quinquenales); expansiva compatible cuando relación ≥1,25 y 65+ <15 %, regresiva compatible cuando ≤0,80, estacionaria/transición entre ambos. Como marcadores separados se utilizan 65+ ≥25 %, base muy estrecha (<0,55), salientes ≥18 % y muescas ≥18 % respecto a la media de tramos contiguos cerrados, concentración o déficit de 20–39 frente a 40–59 y asimetría femenina 65+ (≥60 % o ≤40 %). **Todos estos umbrales son decisiones didácticas operativas, no estándares oficiales ni diagnósticos validados.** Un patrón puede coexistir con cualquier familia.
+
+Las tres diferencias principales entre poblaciones A/B se calculan sobre porcentajes de cada territorio y abarcan únicamente las 17 clases quinquenales cerradas; el 85+ sigue en los totales y tablas, pero se excluye del ranking por anchura desigual.
+
+Se añaden conectores a INE 59238 (comunidades), 59589 (provincias) y 69129 (censo municipal de la provincia de Barcelona). Para cada operación se seleccionan edades por sexo y año y se exige integridad de los 18 grupos; los años de cobertura y el servicio deben verificarse mediante las comprobaciones en vivo. La ausencia de dato bloquea el gráfico, sin interpolación ni ceros supuestos.
+
+**Fuentes:** https://www.ine.es/jaxiT3/Tabla.htm?t=59238 · https://www.ine.es/jaxiT3/Tabla.htm?t=59589 · https://www.ine.es/jaxiT3/Tabla.htm?t=69129 · https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table · Tezanos (2004), https://dialnet.unirioja.es/descarga/articulo/1036609.pdf .
