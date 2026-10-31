@@ -14,3 +14,5 @@ jobs:
         with:
           node-version: '22'
       - run: node scripts/inspect-idescat.mjs
+      - name: Extraer cohortes de Barcelona y L'Hospitalet
+        run: node scripts/extract-idescat.mjs
