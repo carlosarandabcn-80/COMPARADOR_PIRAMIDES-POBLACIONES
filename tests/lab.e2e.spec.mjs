@@ -37,7 +37,7 @@ test('tipologías docentes, dos pirámides reales y comparación',async({page})=
  await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
  await page.goto('/');
  await expect(page.getByRole('heading',{name:'Tipos de pirámides poblacionales'})).toBeVisible();
- await expect(page.locator('.type-card')).toHaveCount(3);
+ await expect(page.locator('.type-card')).toHaveCount(12);
  await page.locator('#formA button').click();await page.locator('#formB button').click();
  await expect(page.locator('#chartA svg')).toBeVisible();
  await expect(page.locator('#chartB svg')).toBeVisible();
@@ -139,4 +139,48 @@ test('lectura comparada académica: nueve apartados, cohortes y síntesis',async
  expect(txt).toContain('LECTURA COMPARADA');
  expect(txt).toContain('Morfología: base, tronco y cúspide');
  expect(txt).toContain('GRUPOS DE EDAD (17 QUINQUENALES Y 85+ ABIERTO)');
+});
+
+function territoryFixture(territory,year,grouped=false){
+ const rows=[],ages=grouped?[...Array.from({length:20},(_,i)=>'De '+i*5+' a '+(i*5+4)+' años'),'De 100 y más años']:
+  [...Array.from({length:100},(_,i)=>i+' años'),'100 y más años'];
+ for(const [sex,extra] of [['Hombres',0],['Mujeres',30]]){
+  let sum=0;
+  for(let i=0;i<ages.length;i++){
+   const v=100+i+extra;sum+=v;
+   rows.push({Nombre:territory+'. '+ages[i]+'. '+sex+'. Población. Número.',Data:[{Anyo:year,Valor:v}]});
+  }
+  rows.push({Nombre:territory+'. Todas las edades. '+sex+'. Población. Número.',Data:[{Anyo:year,Valor:sum}]});
+ }
+ return rows;
+}
+test('12 modelos, INE Cataluña y municipios y destaque conjunto de cohortes',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>{
+  const url=route.request().url(),year=Number(url.match(/date=(\d{4})0101/)?.[1]||2025);
+  let payload;
+  if(url.includes('/59238?'))payload=territoryFixture('Cataluña',year);
+  else if(url.includes('/59589?'))payload=territoryFixture('Barcelona',year);
+  else if(url.includes('/69129?'))payload=territoryFixture('08019 Barcelona',year,true);
+  else payload=ineFixture(url);
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(payload)});
+ });
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
+ await page.goto('/');
+ await expect(page.locator('.type-card')).toHaveCount(12);
+ await page.locator('#formA [name=place]').selectOption('CT');
+ await page.locator('#formA [name=year]').selectOption('2025');
+ await page.locator('#formA button').click();
+ await expect(page.locator('#metaA')).toContainText('59238');
+ await expect(page.locator('#metaA')).toContainText('Cataluña');
+ await page.locator('#formA [name=place]').selectOption('BCN_M');
+ await page.locator('#formA [name=year]').selectOption('2025');
+ await page.locator('#formA button').click();
+ await expect(page.locator('#metaA')).toContainText('69129');
+ await expect(page.locator('#tableA tbody tr')).toHaveCount(18);
+ await page.locator('#focus').selectOption('diff');
+ await expect(page.locator('#analyze')).toBeEnabled();
+ await page.locator('#analyze').click();
+ await expect(page.locator('#results')).toContainText('Tres cohortes con mayor diferencia');
+ const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+ expect(result.violations).toEqual([]);
 });
