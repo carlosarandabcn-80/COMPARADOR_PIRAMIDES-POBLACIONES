@@ -1,10 +1,12 @@
 /* Caché de recursos estáticos del comparador. Nunca devuelve HTML en lugar de JSON/JS. */
-const CACHE_NAME = 'piramides-poblacionales-v6';
+const CACHE_NAME = 'piramides-poblacionales-v7';
 const CORE_ASSETS = [
   './',
   './index.html',
   './lab/comparison-ui.mjs',
   './lab/comparison-core.mjs',
+  './lab/morphology.mjs',
+  './lab/academic-reading.mjs',
   './lab/comparison.css',
   './manifest.webmanifest',
   './assets/favicon.svg',
