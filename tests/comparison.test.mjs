@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BANDS,check,indicators,status,classify,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,serializeCSV} from '../lab/comparison-core.mjs';
+import {BANDS,check,indicators,status,classify,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,serializeCSV} from '../lab/comparison-core.mjs';
+import {MODELS,recognizeMorphology} from '../lab/morphology.mjs';
 const make=(provider='Eurostat',year=2025)=>check({meta:{provider,kind:'oficial',place:'España',unit:'personas',year,referenceDate:year+'-01-01',sourceUrl:'https://example.org',updatedAt:'test',note:''},cohorts:BANDS.map((b,i)=>({...b,m:100-i,f:90-i}))});
 function sampleGrouped(geo='DE',year=2009){
  const codes=['TOTAL',...BANDS.map((b,i)=>i===0?'Y_LT5':i===17?'Y_GE85':'Y'+(i*5)+'-'+(i*5+4)),'UNK'];
@@ -50,4 +51,51 @@ test('INE mantiene todas las edades exportadas y rechaza series vacías',()=>{
  assert.equal(serializeCSV(make('INE')).split('\n').length,20);
  assert.throws(()=>parseINE([],2025),/falta edad/);
  assert.equal(ineURL(2001).includes('20010101:20010101'),true);
+});
+
+function territoryFixture(code,year,omit=null){
+ const title=code==='CT'?'Cataluña':code==='BCN_P'?'Barcelona':code==='BCN_M'?'08019 Barcelona':"08101 L'Hospitalet de Llobregat";
+ const grouped=code.endsWith('_M'),a=[];
+ let men=0,women=0;
+ const ages=grouped?[...Array.from({length:20},(_,i)=>'De '+i*5+' a '+(i*5+4)+' años'),'De 100 y más años']:
+  [...Array.from({length:100},(_,i)=>i+' años'),'100 y más años'];
+ for(const [k,sex] of [['m','Hombres'],['f','Mujeres']]){
+  let total=0;
+  ages.forEach((label,i)=>{
+   const v=100+i+(k==='f'?20:0);total+=v;
+   if(label===omit)return;
+   a.push({Nombre:title+'. '+label+'. '+sex+'. Población. Número.',Data:[{Anyo:year,Valor:v}]});
+  });
+  if(k==='m')men=total;else women=total;
+  a.push({Nombre:title+'. Todas las edades. '+sex+'. Población. Número.',Data:[{Anyo:year,Valor:total}]});
+ }
+ return a;
+}
+test('biblioteca de doce modelos distingue tres familias y nueve descriptores',()=>{
+ assert.equal(MODELS.length,12);
+ assert.equal(MODELS.filter(x=>x.kind==='Familia básica').length,3);
+ assert.equal(new Set(MODELS.map(x=>x.id)).size,12);
+ assert.ok(MODELS.every(x=>x.weights.length===18&&x.detail&&x.limit));
+});
+test('reconocimiento morfológico identifica patrones, sin diagnosticar causas',()=>{
+ const cohorts=BANDS.map((b,i)=>({...b,m:i===8?1000:200,f:i===8?1400:220}));
+ const r=recognizeMorphology(cohorts);
+ assert.equal(typeof r.family,'string');assert.ok(r.patterns.some(p=>p.id==='abultamiento'));
+ assert.ok(r.patterns.every(p=>p.evidence&&!/migraci[oó]n.*demostr/i.test(p.evidence)));
+});
+test('INE territorial: localidades y fechas con cohortes completas',()=>{
+ for(const code of ['CT','BCN_P','BCN_M','HOSP_M']){
+  const year=2025,tab=INE_TERRITORIES[code].table;
+  assert.ok(ineTerritoryURL(code,year).includes('/'+tab+'?'));
+  const d=parseINETerritory(territoryFixture(code,year),code,year);
+  assert.equal(d.cohorts.length,18);assert.equal(d.meta.table,tab);
+  assert.equal(d.meta.place,INE_TERRITORIES[code].title);
+ }
+ assert.throws(()=>ineTerritoryURL('BCN_M',2026));
+});
+test('INE territorial: faltantes, territorios erróneos y duplicados bloqueados',()=>{
+ assert.throws(()=>parseINETerritory(territoryFixture('CT',2025,'3 años'),'CT',2025),/falta/);
+ assert.throws(()=>parseINETerritory(territoryFixture('CT',2025),'BCN_P',2025),/falta/);
+ const a=territoryFixture('BCN_M',2025);a.push(a[0]);
+ assert.throws(()=>parseINETerritory(a,'BCN_M',2025),/duplicada/);
 });
