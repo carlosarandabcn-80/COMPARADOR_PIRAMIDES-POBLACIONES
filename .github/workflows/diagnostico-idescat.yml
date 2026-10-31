@@ -1,7 +1,5 @@
 name: Diagnóstico de fuente municipal Idescat
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
