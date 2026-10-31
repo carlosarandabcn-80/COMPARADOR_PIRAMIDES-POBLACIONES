@@ -181,13 +181,20 @@ function download(name,content,mime){
  const url=URL.createObjectURL(new Blob([content],{type:mime})),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800);
 }
 function types(){
- const weights={expansiva:[.98,.93,.88,.83,.78,.69,.61,.52,.43,.35,.28,.22,.16,.12,.09,.06,.04,.02],
- estacionaria:[.76,.78,.79,.80,.78,.77,.76,.77,.77,.76,.75,.72,.68,.57,.44,.32,.21,.13],
- regresiva:[.33,.38,.45,.52,.61,.70,.81,.93,1,.99,.91,.83,.71,.63,.57,.44,.36,.30]};
- for(const element of document.querySelectorAll('.type-figure')){
- const vals=weights[element.dataset.model],rects=vals.map((value,i)=>{const width=value*100,y=7+(17-i)*7.7;return '<rect x="'+(130-width)+'" y="'+y+'" width="'+width+'" height="6" fill="#61b2d9"/><rect x="130" y="'+y+'" width="'+width+'" height="6" fill="#e28aa7"/>';}).join('');
- element.innerHTML='<svg viewBox="0 0 260 155" role="presentation" focusable="false"><line x1="130" x2="130" y1="0" y2="155" stroke="#d6ecf1" opacity=".6"/>'+rects+'</svg>';
- }}
+ const container=$('typeCards');
+ container.innerHTML=MODELS.map(m=>'<article class="type-card"><div class="type-figure" data-model="'+esc(m.id)+'" aria-hidden="true"></div>'+
+  '<div class="type-content"><p class="model-kind">'+esc(m.kind)+'</p><h3>'+esc(m.title)+'</h3><p>'+esc(m.detail)+'</p>'+
+  '<p class="qualification">'+esc(m.limit)+'</p></div></article>').join('');
+ for(const element of container.querySelectorAll('.type-figure')){
+  const model=MODELS.find(m=>m.id===element.dataset.model);
+  const rects=model.weights.map((v,i)=>{
+   const y=7+(17-i)*7.7,left=v*100,right=v*100*(model.id==='asimetria'?(i>=13?1.45:1.08):1);
+   return '<rect x="'+(130-left)+'" y="'+y+'" width="'+left+'" height="6" fill="#61b2d9"/>'+
+    '<rect x="130" y="'+y+'" width="'+right+'" height="6" fill="#e28aa7"/>';
+  }).join('');
+  element.innerHTML='<svg viewBox="0 0 280 155" role="presentation" focusable="false"><line x1="130" x2="130" y1="0" y2="155" stroke="#d6ecf1" opacity=".6"/>'+rects+'</svg>';
+ }
+}
 function restoreForm(side){
  const f=$('form'+side),provider=select(f,'provider'),country=select(f,'place'),year=select(f,'year');
  const source=provider.value,geography=country.value,date=year.value;
@@ -199,15 +206,26 @@ function init(){
  types();select($('formA'),'provider').value='ine';setupForm('A',2001);setupForm('B',2025);
  $('view').addEventListener('change',refreshCharts);
  $('focus').addEventListener('change',refreshCharts);
- $('swap').addEventListener('click',()=>{
-  const formA=$('formA'),formB=$('formB');
-  const originalA=state.A,originalB=state.B;
-  const left={p:select(formA,'provider').value,l:select(formA,'place').value,y:select(formA,'year').value};
-  const right={p:select(formB,'provider').value,l:select(formB,'place').value,y:select(formB,'year').value};
-  const set=(f,v)=>{select(f,'provider').value=v.p;select(f,'provider').dispatchEvent(new Event('change'));select(f,'place').value=v.l;select(f,'year').value=v.y;};
-  set(formA,right);set(formB,left);
-  [state.A,state.B]=[originalB,originalA];
-  if(state.A)setStatus('A','Datos oficiales intercambiados.');if(state.B)setStatus('B','Datos oficiales intercambiados.');
+ $('swap').addEventListener('click',async()=>{
+  const token=++swapSerial,formA=$('formA'),formB=$('formB'),oldA=state.A,oldB=state.B;
+  const snapshot=form=>({p:select(form,'provider').value,l:select(form,'place').value,y:select(form,'year').value});
+  const left=snapshot(formA),right=snapshot(formB);
+  const apply=(side,v)=>{
+   const f=$('form'+side);
+   select(f,'provider').value=v.p;select(f,'provider').dispatchEvent(new Event('change'));
+   select(f,'place').value=v.l;select(f,'place').dispatchEvent(new Event('change'));
+   const y=select(f,'year');if([...y.options].some(o=>o.value===v.y))y.value=v.y;
+   return Promise.resolve(state.catalogPromise[side]).then(()=>{
+    if(token!==swapSerial||select(f,'provider').value!==v.p||select(f,'place').value!==v.l)return false;
+    if(![...y.options].some(o=>o.value===v.y))return false;
+    y.value=v.y;return true;
+   });
+  };
+  const res=await Promise.all([apply('A',right),apply('B',left)]);
+  if(token!==swapSerial||res.some(v=>!v))return;
+  state.A=oldB;state.B=oldA;
+  if(state.A)setStatus('A','Datos oficiales intercambiados.');
+  if(state.B)setStatus('B','Datos oficiales intercambiados.');
   refreshCharts();resultReset();updateButtons();
  });
  $('analyze').addEventListener('click',showComparison);
