@@ -16,7 +16,7 @@ function setupForm(side,defYear){
  year.replaceChildren();
  if(idescat)year.add(new Option('2025','2025'));
  else for(let y=(euro?2025:INE_TERRITORIES.ES.end);y>=(euro?1960:INE_TERRITORIES.ES.start);y--)year.add(new Option(String(y),String(y)));
- year.value=String(defYear);clear(side);state.catalogVersion[side]++;state.catalogPromise[side]=euro?ensureYears(side):Promise.resolve();};
+ year.value=[...year.options].some(o=>o.value===String(defYear))?String(defYear):(year.options[0]?.value||'');clear(side);state.catalogVersion[side]++;state.catalogPromise[side]=euro?ensureYears(side):Promise.resolve();};
  provider.addEventListener('change',refresh);
  place.addEventListener('change',()=>{
  clear(side);
