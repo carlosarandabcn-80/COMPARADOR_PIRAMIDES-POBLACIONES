@@ -1,18 +1,30 @@
-import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,serializeCSV} from './comparison-core.mjs';
+import {BANDS,COUNTRIES,SOURCES,check,indicators,status,describe,compare,eurostatURL,fromEurostat,ineURL,parseINE,INE_TERRITORIES,ineTerritoryURL,parseINETerritory,serializeCSV} from './comparison-core.mjs';
+import {MODELS} from './morphology.mjs';
 import {academicComparison} from './academic-reading.mjs';
 const $=id=>document.getElementById(id),format=new Intl.NumberFormat('es-ES',{maximumFractionDigits:2}),n=x=>x===null?'No calculable':format.format(x);
 const esc=s=>String(s).replace(/[&<>"']/g,v=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[v]));
 const state={A:null,B:null,loading:{A:false,B:false},revision:{A:0,B:0},controllers:{A:null,B:null},catalogVersion:{A:0,B:0},catalogPromise:{A:null,B:null}};
 const eurostatArchives=new Map();
+let swapSerial=0;
+const INE_PLACES=Object.fromEntries(Object.entries(INE_TERRITORIES).map(([key,v])=>[key,v.title]));
 const labels=[['pYouth','0–14 años','%'],['pActive','15–64 años','%'],['pOld','65+ años','%'],['ageing','Índice envejecimiento','65+/0–14 × 100'],['dependency','Dependencia demográfica','(0–14 + 65+) / 15–64 × 100'],['total','Población total','personas']];
 const select=(form,key)=>form.elements.namedItem(key);
 function setupForm(side,defYear){
  const f=$('form'+side),provider=select(f,'provider'),place=select(f,'place'),year=select(f,'year');
- const refresh=()=>{const euro=provider.value==='eurostat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:{ES:'España'})){const opt=new Option(name,code);place.add(opt);}
- place.value='ES';year.replaceChildren();for(let y=(euro?2025:2026);y>=(euro?1960:1971);y--)year.add(new Option(String(y),String(y)));
+ const refresh=()=>{const euro=provider.value==='eurostat';place.replaceChildren();for(const [code,name] of Object.entries(euro?COUNTRIES:INE_PLACES)){const opt=new Option(name,code);place.add(opt);}
+ place.value='ES';year.replaceChildren();for(let y=(euro?2025:INE_TERRITORIES.ES.end);y>=(euro?1960:INE_TERRITORIES.ES.start);y--)year.add(new Option(String(y),String(y)));
  year.value=String(defYear);clear(side);state.catalogVersion[side]++;state.catalogPromise[side]=euro?ensureYears(side):Promise.resolve();};
  provider.addEventListener('change',refresh);
- place.addEventListener('change',()=>{clear(side);state.catalogPromise[side]=ensureYears(side);});
+ place.addEventListener('change',()=>{
+ clear(side);
+ if(provider.value==='ine'){
+  state.catalogVersion[side]++;
+  const t=INE_TERRITORIES[place.value];
+  year.replaceChildren(...Array.from({length:t.end-t.start+1},(_,i)=>new Option(String(t.end-i),String(t.end-i))));
+  state.catalogPromise[side]=Promise.resolve();
+  setStatus(side,'Tabla territorial INE '+t.table+' · '+t.title+'. Disponibilidad sujeta a la API oficial.');
+ }else state.catalogPromise[side]=ensureYears(side);
+});
  year.addEventListener('change',()=>clear(side));
  f.addEventListener('submit',e=>{e.preventDefault();load(side);});
  refresh();
@@ -74,12 +86,20 @@ async function load(side){
  try{
   let dataset;
   if(provider==='eurostat')dataset=fromEurostat(await (eurostatArchives.get(place) || getJSON(eurostatURL(place,year),35000,controller.signal)),place,year);
-  else dataset=parseINE(await getJSON(ineURL(year),90000,controller.signal),year);
+  else if(place==='ES')dataset=parseINE(await getJSON(ineURL(year),90000,controller.signal),year);
+  else dataset=parseINETerritory(await getJSON(ineTerritoryURL(place,year),90000,controller.signal),place,year);
   if(revision!==state.revision[side])return;
   state[side]=dataset;setStatus(side,'Datos oficiales cargados y validados. '+dataset.meta.provider+' · '+dataset.meta.place+' · '+year+'.');
   refreshCharts();resultReset();updateButtons();
  }catch(error){if(revision===state.revision[side])setStatus(side,'No se han podido obtener datos válidos: '+(error.name==='AbortError'?'La consulta ha superado el tiempo disponible.':error.message)+'. Comprueba la fuente y vuelve a intentarlo. Nunca se sustituyen los datos por modelos ficticios.',true);}
  finally{if(revision===state.revision[side]){state.loading[side]=false;state.controllers[side]=null;button.disabled=false;}}
+}
+function topDifferences(){
+ if(!state.A||!state.B)return [];
+ return Array.from({length:17},(_,i)=>({
+ i,delta:Math.abs(100*(state.A.cohorts[i].m+state.A.cohorts[i].f)/state.A.total-
+ 100*(state.B.cohorts[i].m+state.B.cohorts[i].f)/state.B.total)
+ })).sort((a,b)=>b.delta-a.delta||a.i-b.i).slice(0,3).map(v=>v.i);
 }
 function maxShared(scale){
  const arr=[state.A,state.B].filter(Boolean),values=arr.flatMap(d=>d.cohorts.flatMap(b=>scale==='percent'?[b.m/d.total*100,b.f/d.total*100]:[b.m,b.f]));
@@ -87,7 +107,8 @@ function maxShared(scale){
 }
 function chart(d,side,scale,focus,max){
  const {total}=d,mid=290,span=211,top=30,row=23.4;
- const active=i=>focus==='all'||(focus==='young'&&i<3)||(focus==='adult'&&i>=3&&i<13)||(focus==='old'&&i>=13);
+ const differences=focus==='diff'&&state.A&&state.B?topDifferences():[];
+ const active=i=>focus==='all'||(focus==='young'&&i<3)||(focus==='adult'&&i>=3&&i<13)||(focus==='old'&&i>=13)||(focus==='diff'&&differences.includes(i));
  const rects=d.cohorts.map((v,i)=>{const a=scale==='percent'?v.m*100/total:v.m,b=scale==='percent'?v.f*100/total:v.f,
   mw=span*a/max,fw=span*b/max,y=top+(17-i)*row;
   return '<rect x="'+(mid-mw)+'" y="'+y+'" width="'+mw+'" height="17" class="bar-m'+(active(i)?'':' dim')+'"><title>'+esc(v.label)+' · hombres '+n(v.m)+'</title></rect>'+
@@ -98,7 +119,7 @@ function chart(d,side,scale,focus,max){
 }
 function renderMeta(d,side){
  const m=d.meta,slot=$('meta'+side);
- const p=document.createElement('p');p.textContent='Fuente: '+m.provider+' · '+m.place+' · '+m.year+' · referencia '+m.referenceDate+' · unidad: personas · actualización: '+m.updatedAt;
+ const p=document.createElement('p');p.textContent='Fuente: '+m.provider+' · tabla '+(m.table||'consultar ficha')+' · '+m.place+' · '+m.year+' · referencia '+m.referenceDate+' · unidad: personas · actualización: '+m.updatedAt;
  const source=document.createElement('p'),link=document.createElement('a');link.href=m.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Ficha estadística y metadatos de origen ↗';source.append(link);
  const note=document.createElement('p');note.textContent=m.note||'Datos oficiales, comprobar notas metodológicas.';
  slot.replaceChildren(p,source,note);
@@ -132,7 +153,10 @@ function showComparison(){
  '</tbody></table></div></details>';
  const cautions='<div class="reading-notes" aria-label="Limitaciones metodológicas"><h4>Alcance del análisis</h4>'+
  academic.caution.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div>';
- $('results').innerHTML='<h3>Comparación de estructuras poblacionales</h3>'+table+reading+detail+cautions;
+ const highlights='<div class="reading-notes"><h4>Tres cohortes con mayor diferencia (intervalos quinquenales cerrados)</h4><p>'+
+  topDifferences().map(i=>{const r=c.rows[i];return esc(r.label)+' ('+(r.delta>0?'+':'')+n(r.delta)+' puntos porcentuales A−B)';}).join(' · ')+
+  '. Utiliza el filtro «Diferencias A/B» para destacarlas simultáneamente en ambas pirámides.</p></div>';
+ $('results').innerHTML='<h3>Comparación de estructuras poblacionales</h3>'+table+highlights+reading+detail+cautions;
 }
 function exportText(){
  const data=comparisonReadout();if(!data)return '';
