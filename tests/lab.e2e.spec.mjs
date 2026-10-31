@@ -168,14 +168,16 @@ test('12 modelos, INE Cataluña y municipios y destaque conjunto de cohortes',as
  await page.goto('/');
  await expect(page.locator('.type-card')).toHaveCount(12);
  await page.locator('#formA [name=place]').selectOption('CT');
- await page.locator('#formA [name=year]').selectOption('2025');
+ await page.locator('#formA [name=year]').selectOption('2026');
  await page.locator('#formA button').click();
  await expect(page.locator('#metaA')).toContainText('59238');
  await expect(page.locator('#metaA')).toContainText('Cataluña');
+ await page.locator('#formA [name=provider]').selectOption('idescat');
  await page.locator('#formA [name=place]').selectOption('BCN_M');
  await page.locator('#formA [name=year]').selectOption('2025');
  await page.locator('#formA button').click();
- await expect(page.locator('#metaA')).toContainText('69129');
+ await expect(page.locator('#metaA')).toContainText('Idescat');
+ await expect(page.locator('#statsA')).toContainText('1.713.247');
  await expect(page.locator('#tableA tbody tr')).toHaveCount(18);
  await page.locator('#focus').selectOption('diff');
  await expect(page.locator('#analyze')).toBeEnabled();
