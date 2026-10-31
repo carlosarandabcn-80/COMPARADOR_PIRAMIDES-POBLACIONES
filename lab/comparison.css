@@ -20,3 +20,8 @@
 .reading-notes p{margin:8px 0;font-size:.85rem;line-height:1.6}
 @media(max-width:860px){.academic-reading{grid-template-columns:1fr}.academic-section:first-child,.academic-section:last-child{grid-column:auto}}
 @media print{.academic-reading{display:block}.academic-section{break-inside:avoid;border:0;border-bottom:1px solid #aaa;padding:10px 0}.academic-section:first-child,.academic-section:last-child{background:white}.academic-head{margin-top:14px}.reading-choice{display:none}.reading-notes{background:white}}
+
+/* Biblioteca de doce modelos: familias y patrones siempre identificados por texto. */
+.model-kind{display:inline-block;font-size:.76rem!important;text-transform:uppercase;letter-spacing:.08em;font-weight:750;color:#236c68!important;margin-bottom:6px!important}
+.type-card:focus-within{outline:3px solid var(--focus);outline-offset:3px}
+@media print{#tipos{display:none}.reading-notes{break-inside:avoid}}
