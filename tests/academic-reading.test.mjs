@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {BANDS,check} from '../lab/comparison-core.mjs';
+import {BANDS,check,describe} from '../lab/comparison-core.mjs';
 import {profile,academicComparison} from '../lab/academic-reading.mjs';
 
 function dataset(year=2001,place='España',provider='Eurostat',mode='older'){
@@ -70,6 +70,9 @@ test('mismo territorio, año y fuente se rotula como control, no cambio',()=>{
  assert.equal(r.kind,'misma-seleccion');
  assert.ok(r.sections.find(s=>s.id==='conclusion').text.includes('coincidencia'));
  assert.equal(r.delta.youth,0);
+ assert.equal(r.cohorts.largest,null);
+ assert.deepEqual(r.cohorts.largestThree,[]);
+ assert.match(r.sections.find(s=>s.id==='conclusion').text,/0,00 puntos porcentuales/);
 });
 test('fuentes con unidades incompatibles no pueden compararse',()=>{
  const a=dataset(),b=dataset();b.meta.unit='miles';
@@ -80,6 +83,7 @@ test('la banda abierta 85+ no se interpreta como cohorte quinquenal ni domina el
  const a=dataset(2001),b=dataset(2025,'España','Eurostat','young');
  for(const d of [a,b]){d.cohorts[17].m=1_000_000;d.cohorts[17].f=2_000_000;}
  const p=profile(a),r=academicComparison(a,b);
+ assert.doesNotMatch(describe(a).paragraphs[1],/más numeroso es 85\+/);
  assert.notEqual(p.peak.label,'85+');
  assert.notEqual(r.cohorts.largest.label,'85+');
  assert.ok(r.cohorts.largestThree.every(x=>x.label!=='85+'));

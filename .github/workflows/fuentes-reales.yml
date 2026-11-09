@@ -13,5 +13,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verificar INE 2001/2025 y Eurostat 2025 mediante API oficiales
+      - name: Verificar series históricas y actuales del INE y Eurostat
         run: node scripts/verificar-fuentes.mjs

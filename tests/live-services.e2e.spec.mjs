@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 test.skip(!process.env.RUN_LIVE_EXTERNAL,'Prueba real de red: solo se ejecuta bajo demanda en flujo independiente.');
+test.describe.configure({timeout:120000});
 test('conexión real del navegador a Eurostat (Alemania 2009) y al INE (2001)',async({page})=>{
  await page.goto('/');
  await page.locator('#formA [name=provider]').selectOption('eurostat');
@@ -16,4 +17,21 @@ test('conexión real del navegador a Eurostat (Alemania 2009) y al INE (2001)',a
  await expect(page.locator('#tableB tbody tr')).toHaveCount(18);
  await page.locator('#analyze').click();
  await expect(page.locator('#results')).toContainText('Comparación de estructuras poblacionales');
+});
+
+test('España 1974 y 1975 en el navegador con el grupo 85+ oficial del INE',async({page})=>{
+ await page.goto('/#comparador');
+ await page.locator('#formB [name=provider]').selectOption('ine');
+ for(const [side,year] of [['A','1974'],['B','1975']]){
+  await page.locator('#form'+side+' [name=year]').selectOption(year);
+  await page.locator('#form'+side+' button').click();
+ }
+ await expect(page.locator('#statusA')).toContainText('Datos oficiales cargados',{timeout:90000});
+ await expect(page.locator('#statusB')).toContainText('Datos oficiales cargados',{timeout:90000});
+ await expect(page.locator('#tableA tbody tr')).toHaveCount(18);
+ await expect(page.locator('#tableB tbody tr')).toHaveCount(18);
+ await expect(page.locator('#tableA tbody tr').last().locator('td').last()).toHaveText('199.335');
+ await expect(page.locator('#tableB tbody tr').last().locator('td').last()).toHaveText('201.172');
+ await page.locator('#analyze').click();
+ await expect(page.locator('#results')).toContainText('evolución entre 1974 y 1975');
 });
