@@ -14,5 +14,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validar cohortes de Cataluña, Barcelona y L'Hospitalet desde INE
+      - name: Validar las comunidades y ciudades autónomas y Barcelona provincia
         run: node scripts/verificar-territorios.mjs

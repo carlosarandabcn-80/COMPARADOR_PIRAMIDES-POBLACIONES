@@ -1,5 +1,5 @@
 /* Caché de recursos estáticos del comparador. Nunca devuelve HTML en lugar de JSON/JS. */
-const CACHE_NAME = 'piramides-poblacionales-v8';
+const CACHE_NAME = 'piramides-poblacionales-v9';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -18,7 +18,7 @@ const APP_SCOPE = new URL(self.registration.scope);
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(CORE_ASSETS))
+      .then(cache => cache.addAll(CORE_ASSETS.map(asset => new Request(asset, {cache: 'reload'}))))
       .then(() => self.skipWaiting())
   );
 });

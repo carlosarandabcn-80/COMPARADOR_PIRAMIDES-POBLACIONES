@@ -1,14 +1,18 @@
 /* Estructura Social · UNIR. Núcleo de pirámides reales, sin fuentes sintéticas. */
 import {recognizeMorphology} from './morphology.mjs';
 export const BANDS=Object.freeze(Array.from({length:18},(_,i)=>({label:i===17?'85+':i*5+'–'+(i*5+4),start:i*5,end:i===17?null:i*5+4})));
+export const INE_TABLE='56934';
+const INE_RECENT_TABLE='59583';
+const INE_LAST_DEFINITIVE_YEAR=2025;
 const fail=s=>{throw new Error(s)};
+const decimals=new Intl.NumberFormat('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
 export const SOURCES={
  eurostat:{name:'Eurostat',table:'demo_pjangroup',label:'Population on 1 January by age group and sex',url:'https://ec.europa.eu/eurostat/databrowser/view/demo_pjangroup/default/table?lang=en'},
  ine:{name:'Instituto Nacional de Estadística',table:'56934',label:'Estadística Continua de Población: población residente por fecha, sexo y edad (desde 1971), ámbito nacional',url:'https://www.ine.es/jaxiT3/Tabla.htm?t=56934'},
   idescat:{name:'Idescat',table:'censph_539_mun_2025_pc',label:'Censo anual de población 2025, municipios por sexo y edad quinquenal',url:'https://www.idescat.cat/dades/obertes/?lang=es'}
 };
 export const INE_TERRITORIES=Object.freeze({
- ES:{title:'España',table:'56934',level:'nacional',start:1971,end:2026},
+ ES:{title:'España',table:INE_TABLE,level:'nacional',start:1971,end:2026},
  AN:{title:'Andalucía',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
  AR:{title:'Aragón',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
  AS:{title:'Asturias',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
@@ -28,7 +32,7 @@ export const INE_TERRITORIES=Object.freeze({
  RI:{title:'La Rioja',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
  CE:{title:'Ceuta',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
  ML:{title:'Melilla',table:'59238',level:'comunidad autónoma',start:2026,end:2026},
- BCN_P:{title:'Barcelona (provincia)',table:'59589',level:'provincia',start:2026,end:2026}
+ BCN_P:{title:'Barcelona (provincia)',table:'59589',level:'provincia',start:2026,end:2026,filter:'115:9'}
 });
 export const IDESCAT_TERRITORIES=Object.freeze({
  BCN_M:'Barcelona (municipio)',HOSP_M:"L'Hospitalet de Llobregat (municipio)"
@@ -45,8 +49,8 @@ export function check(dataset){
 }
 export function indicators(data){
  const d=check(data),sum=(a,b,sex)=>d.cohorts.slice(a,b).reduce((r,c)=>r+(sex?c[sex]:c.m+c.f),0);
- const pct=n=>Math.round(n/d.total*1e6)/1e4;
- const ratio=(a,b)=>b===0?null:Math.round(a/b*1e4)/1e4;
+ const pct=n=>100*n/d.total;
+ const ratio=(a,b)=>b===0?null:a/b;
  const youth=sum(0,3),active=sum(3,13),old=sum(13,18),women=sum(0,18,'f'),men=sum(0,18,'m');
  return {total:d.total,men,women,youth,active,old,pYouth:pct(youth),pOld:pct(old),pActive:pct(active),
  dependency:ratio((youth+old)*100,active),ageing:ratio(old*100,youth),sexRatio:ratio(men*100,women),
@@ -67,25 +71,25 @@ export function classify(data){
 }
 export function describe(d){
  const x=check(d),i=indicators(x),c=classify(x);
- const top=x.cohorts.map(b=>({label:b.label,n:b.m+b.f})).sort((a,b)=>b.n-a.n)[0];
+ const top=x.cohorts.slice(0,-1).reduce((peak,b)=>b.m+b.f>peak.m+peak.f?b:peak);
  return {title:x.meta.provider+' · '+x.meta.place+' · '+x.meta.year,
  paragraphs:[
   'Esta pirámide representa la población residente por edad y sexo según '+x.meta.provider+' a '+x.meta.referenceDate+'. El total de personas recogidas en los grupos representados es '+i.total.toLocaleString('es-ES')+'.',
-  'La población de 0–14 años supone el '+i.pYouth.toFixed(2)+' %, la de 15–64 el '+i.pActive.toFixed(2)+' % y la de 65 años o más el '+i.pOld.toFixed(2)+' %. El tramo quinquenal más numeroso es '+top.label+'.',
+  'La población de 0–14 años supone el '+decimals.format(i.pYouth)+' %, la de 15–64 el '+decimals.format(i.pActive)+' % y la de 65 años o más el '+decimals.format(i.pOld)+' %. El tramo quinquenal más numeroso es '+top.label+'.',
   'En términos morfológicos, la distribución es '+c.type.toLowerCase()+'. '+c.explain+' Patrones complementarios: '+(c.patterns.length?c.patterns.map(p=>p.label+' ('+p.evidence+')').join('; '):'sin patrones adicionales destacados por las reglas exploratorias')+'.',
-  'La razón de dependencia demográfica total alcanza '+(i.dependency===null?'un valor no calculable':i.dependency.toFixed(2)+' personas por cada 100 de 15–64 años')+' y el índice de envejecimiento '+(i.ageing===null?'no es calculable': 'es '+i.ageing.toFixed(2)+' personas de 65+ por cada 100 menores de 15')+'.',
+  'La razón de dependencia demográfica total alcanza '+(i.dependency===null?'un valor no calculable':decimals.format(i.dependency)+' personas por cada 100 de 15–64 años')+' y el índice de envejecimiento '+(i.ageing===null?'no es calculable': 'es '+decimals.format(i.ageing)+' personas de 65+ por cada 100 menores de 15')+'.',
   'Esta lectura describe una distribución de efectivos, no acredita por sí sola una causa específica ni permite equiparar dependencia demográfica con dependencia funcional. '+c.warning
  ]};
 }
 export function compare(a,b){
  const s=status(a,b);if(!s.ok)fail(s.message);
- const x=indicators(a),y=indicators(b),delta=(a,b)=>Math.round((a-b)*1e4)/1e4;
- const rows=[['Población total',x.total,y.total,'personas'],['0–14 años',x.pYouth,y.pYouth,'puntos porcentuales'],['15–64 años',x.pActive,y.pActive,'puntos porcentuales'],['65+ años',x.pOld,y.pOld,'puntos porcentuales'],['Índice de envejecimiento',x.ageing,y.ageing,'puntos de índice'],['Dependencia demográfica total',x.dependency,y.dependency,'por cada 100 de 15–64']];
- const content=rows.map(([label,v1,v2,unit])=>({label,a:v1,b:v2,delta:v1===null||v2===null?null:delta(v1,v2),unit}));
+ const x=indicators(a),y=indicators(b);
+ const rows=[['Población representada',x.total,y.total,'personas'],['0–14 años',x.pYouth,y.pYouth,'puntos porcentuales'],['15–64 años',x.pActive,y.pActive,'puntos porcentuales'],['65+ años',x.pOld,y.pOld,'puntos porcentuales'],['Índice de envejecimiento',x.ageing,y.ageing,'puntos de índice'],['Dependencia demográfica total',x.dependency,y.dependency,'por cada 100 de 15–64']];
+ const content=rows.map(([label,v1,v2,unit])=>({label,a:v1,b:v2,delta:v1===null||v2===null?null:v1-v2,unit}));
  const notes=[s.message,'La comparación proporcional permite contrastar estructuras con tamaños poblacionales diferentes; el tamaño absoluto debe interpretarse por separado.'];
  if(a.meta.year!==b.meta.year)notes.push('Los periodos son distintos: una diferencia transversal no prueba una causa ni describe un flujo migratorio.');
- if(a.meta.provider!==b.meta.provider)notes.push('Atención a la población de referencia y posibles revisiones del INE y Eurostat: diferencias no son automáticamente errores.');
- return {rows:content,notes,description:'La proporción de menores de 15 años es '+x.pYouth.toFixed(2)+' % en '+a.meta.place+' ('+a.meta.year+') y '+y.pYouth.toFixed(2)+' % en '+b.meta.place+' ('+b.meta.year+'). La proporción de 65 años o más es '+x.pOld.toFixed(2)+' % y '+y.pOld.toFixed(2)+' %, respectivamente. La diferencia entre el peso de población mayor es de '+delta(x.pOld,y.pOld).toFixed(2)+' puntos porcentuales (A menos B). '+notes.join(' ')};
+ if(a.meta.provider!==b.meta.provider)notes.push('Comprueba la población de referencia y las posibles revisiones de cada fuente antes de interpretar las diferencias.');
+ return {rows:content,notes,description:'La proporción de menores de 15 años es '+decimals.format(x.pYouth)+' % en '+a.meta.place+' ('+a.meta.year+') y '+decimals.format(y.pYouth)+' % en '+b.meta.place+' ('+b.meta.year+'). La proporción de 65 años o más es '+decimals.format(x.pOld)+' % y '+decimals.format(y.pOld)+' %, respectivamente. La diferencia entre el peso de población mayor es de '+decimals.format(x.pOld-y.pOld)+' puntos porcentuales (A menos B). '+notes.join(' ')};
 }
 export function eurostatURL(geo,year){
  if(!Object.hasOwn(COUNTRIES,geo)||!Number.isInteger(year)||year<1960||year>2025)fail('País o año de Eurostat no permitido.');
@@ -137,56 +141,27 @@ export function fromEurostat(json,geo,year){
  if(json.status && Object.keys(json.status).length)notes.push('La fuente contiene banderas de calidad (revisar estimaciones, provisionalidad y rupturas de serie en Eurostat).');
  return check({meta:{provider:'Eurostat',kind:'oficial',table:'demo_pjangroup',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),note:notes.join(' ')},cohorts});
 }
-export const INE_TABLE='56934';
-export function ineURL(year){
- if(!Number.isInteger(year)||year<1971||year>2026)fail('Año INE fuera del periodo permitido.');
- return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+INE_TABLE+'?date='+year+'0101:'+year+'0101&tip=A';
-}
-export function parseINE(json,year){
- if(!Array.isArray(json))fail('La respuesta del INE no contiene series de datos.');
- const rows={m:new Map(),f:new Map()};
- for(const series of json){
-   if(typeof series?.Nombre!=='string'||!Array.isArray(series.Data))continue;
-   const name=series.Nombre.replace(/\s+/g,' ').trim(),norm=name.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-   // El formato de las series debe indicar el sexo inequívocamente y no mezclar territorios o nacionalidades.
-   const isM=/\bhombres?\b|\bvarones?\b/.test(norm),isF=/\bmujeres?\b/.test(norm);
-   if(isM===isF)continue;
-   if(/espanola|extranjera|nacionalidad|comunidad|provincia/.test(norm))continue;
-   const age=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*anos?(?:\b|$)/);
-   const open=norm.match(/(?:^|[ ,.:;])(\d{1,3})\s*y\s*mas(?:\b|$)/);
-   if(!age&&!open)continue;
-   // INE publica un agregado oficial 100+ además de edades individuales.
-   // Se utiliza 100+ como cierre del intervalo y se ignoran edades 100,101...
-   if(open&&Number(open[1])!==100)continue;
-   const a=open?100:Number(age[1]);if(a>100 || (a===100&&!open))continue;
-   const record=series.Data.find(item=>{const d=String(item?.Anyo??item?.Año??item?.NombrePeriodo??'');return d===String(year)||d.includes(String(year));});
-   if(!record||!safe(record.Valor))continue;
-   const target=isM?rows.m:rows.f;
-   if(target.has(a))fail('INE: registros duplicados para la edad '+a+'. No se puede atribuir una sola serie.');
-   target.set(a,record.Valor);
- }
- const cohorts=BANDS.map((b,i)=>{
-   const get=sex=>{let out=0;for(let age=b.start;age<=(i===17?100:b.end);age++){const v=rows[sex].get(age);if(!safe(v))fail('INE: falta edad '+age+' ('+sex+'). La estructura del API puede haber cambiado.');out+=v;}return out;};
-   return {...b,m:get('m'),f:get('f')};
- });
- const total=cohorts.reduce((sum,b)=>sum+b.m+b.f,0);
- const officialTotal=json.find(s=>/total nacional\. todas las edades\. total\./i.test(s.Nombre||''))?.Data?.find(x=>x.Anyo===year)?.Valor;
- const discrepancy=safe(officialTotal)?total-officialTotal:null;
- if(discrepancy!==null&&Math.abs(discrepancy)>Math.max(5,Math.ceil(officialTotal/1000000)))fail('INE: diferencia excesiva entre edades ('+total+') y total oficial ('+officialTotal+').');
- return check({meta:{provider:'INE',kind:'oficial',unit:'personas',place:'España',year,referenceDate:year+'-01-01',updatedAt:'Consultar ficha INE',sourceUrl:SOURCES.ine.url,apiUrl:ineURL(year),note:'Estadística Continua de Población (cifras a 1 de enero). '+(discrepancy?'La suma de cohortes difiere en '+discrepancy+' personas del total publicado; se conservan los valores originales sin ajuste ni imputación. ':'')+'Revisar las notas de continuidad metodológica desde 1971.'},cohorts});
+function ineTable(code,year){
+ if(!Object.hasOwn(INE_TERRITORIES,code))fail('Territorio del INE no permitido.');
+ const territory=INE_TERRITORIES[code];
+ if(!Number.isInteger(year)||year<territory.start||year>territory.end)fail('Año del INE fuera del periodo disponible para '+territory.title+'.');
+ return code==='ES'&&year>INE_LAST_DEFINITIVE_YEAR?INE_RECENT_TABLE:territory.table;
 }
 
-/** INE: tres escalas territoriales y censo municipal para dos ciudades seleccionadas.
- * Las consultas pueden devolver errores de red/CORS y se rechazan las cohortes incompletas.
- * No se agregan territorios ni se confunden provincias y municipios homónimos.
- */
-export function ineTerritoryURL(code,year){
- const t=INE_TERRITORIES[code];
- if(!t||!Number.isInteger(year)||year<t.start||year>t.end)fail('Territorio o año del INE no permitido.');
- return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+t.table+'?date='+year+'0101:'+year+'0101&tip=A';
+export function ineURL(year){
+ return ineTerritoryURL('ES',year);
 }
+
+export function ineTerritoryURL(code,year){
+ const table=ineTable(code,year),filter=INE_TERRITORIES[code].filter;
+ const date=year+'0101';
+ // La tabla provincial completa supera el límite de volumen del INE.
+ return 'https://servicios.ine.es/wstempus/js/es/DATOS_TABLA/'+table+'?date='+date+':'+date+'&tip=A'+(filter?'&tv='+filter:'');
+}
+
 const strip=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
 const GEO_MATCH=Object.freeze({
+ ES:/^total nacional$/,
  AN:/\bandalucia\b/,AR:/\baragon\b/,AS:/\basturias\b/,IB:/\bbalears\b|\bbaleares\b/,
  CN:/\bcanarias\b/,CB:/\bcantabria\b/,CL:/\bcastilla y leon\b/,
  CM:/\bcastilla.{0,4}la mancha\b/,CT:/\bcataluna\b|\bcatalunya\b/,
@@ -194,57 +169,83 @@ const GEO_MATCH=Object.freeze({
  MD:/\bmadrid\b/,MC:/\bmurcia\b/,NC:/\bnavarra\b/,PV:/\bpais vasco\b|\beuskadi\b/,
  RI:/\brioja\b/,CE:/\bceuta\b/,ML:/\bmelilla\b/,BCN_P:/\bbarcelona\b/
 });
-const geoMatch=(text,code)=>GEO_MATCH[code]?.test(text)??false;
+export function parseINE(json,year){
+ return parseINEAgeSeries(json,'ES',year);
+}
+
 export function parseINETerritory(json,code,year){
+ if(code==='ES')fail('Ámbito territorial inválido.');
+ return parseINEAgeSeries(json,code,year);
+}
+
+function parseINEAgeSeries(json,code,year){
+ const table=ineTable(code,year),referenceDate=year+'-01-01';
  const terr=INE_TERRITORIES[code];
- if(!terr||code==='ES'||!Number.isInteger(year)||year<terr.start||year>terr.end)fail('Ámbito territorial inválido');
- if(!Array.isArray(json)||!json.length)fail('INE territorial: respuesta inexistente o vacía.');
- const grouped=terr.level==='municipio',rows={m:new Map(),f:new Map()},totalPublished={};
+ if(!Array.isArray(json))fail('El INE no devolvió las series de '+terr.title+'.');
+ const rows={m:new Map(),f:new Map(),total:new Map()};
+ const sexLabels={m:'hombres',f:'mujeres',total:'ambos sexos'};
+ let provisional=false;
  for(const series of json){
   if(typeof series?.Nombre!=='string'||!Array.isArray(series.Data))continue;
   const name=strip(series.Nombre);
-  if(!geoMatch(name,code)||/nacionalidad|espanola|extranjera|pais de nacimiento/.test(name))continue;
-  const isM=/\bhombres?\b|\bvarones?\b/.test(name),isF=/\bmujeres?\b/.test(name);
-  if(isM===isF)continue;
-  const sex=isM?'m':'f';
-  const record=series.Data.find(v=>Number(v?.Anyo??v?.Año)===year && Number.isSafeInteger(v.Valor)&&v.Valor>=0);
-  if(!record)continue;
-  if(/todas las edades|total edades/.test(name)){totalPublished[sex]=record.Valor;continue;}
-  const quin=name.match(/(?:de\s*)?(\d{1,3})\s*(?:a|\-|–)\s*(\d{1,3})\s*anos?/);
-  const open=name.match(/(?:de\s*)?(\d{1,3})\s*y\s*mas\s*anos?/);
-  const single=name.match(/(?:^|[ ,.:;])(\d{1,3})\s*anos?(?:\b|$)/);
-  let age,ending;
-  if(grouped){
-   if(quin){age=Number(quin[1]);ending=Number(quin[2]);}
-   else if(open){age=Number(open[1]);ending=120;}
-   else continue;
-   if(!((age%5===0&&ending===age+4&&age<=95)||(age===100&&ending===120)))continue;
-  }else{
-   if(open){age=Number(open[1]);ending=120;if(age!==100)continue;}
-   else if(single){age=Number(single[1]);ending=age;if(age>99)continue;}
-   else continue;
+  const fields=name.split('.').map(s=>s.trim());
+  if(!fields.some(s=>GEO_MATCH[code].test(s))||/nacionalidad|espanola|extranjera|pais de nacimiento/.test(name))continue;
+  const isM=fields.some(s=>/^(hombres?|varon(?:es)?)$/.test(s));
+  const isF=fields.some(s=>/^mujer(?:es)?$/.test(s));
+  if(isM&&isF)continue;
+  const sex=isM?'m':isF?'f':'total';
+  const allAges=fields.some(s=>s==='todas las edades'||s==='total edades');
+  if(sex==='total'&&(!allAges||!fields.includes('total')))continue;
+  const age=fields.find(s=>/^(?:de )?(?:\d{1,2} anos?|(?:85|100) y mas anos?)$/.test(s));
+  if(!allAges&&!age)continue;
+  const key=allAges?'total':parseInt(age.replace(/^de /,''),10)+(age.includes('y mas')?'+':'');
+  for(const record of series.Data){
+   if(!safe(record?.Valor))continue;
+   // La fecha local publicada distingue enero de otros cortes del mismo año.
+   const matches=record.Fecha==null
+    ? Number(record.Anyo??record.Año)===year&&(!record.T3_Periodo||strip(record.T3_Periodo)==='1 de enero de')
+    : typeof record.Fecha==='string'&&record.Fecha.split('T')[0]===referenceDate;
+   if(!matches)continue;
+   if(rows[sex].has(key))fail('Serie INE duplicada para '+terr.title+', '+key+' ('+sexLabels[sex]+').');
+   rows[sex].set(key,record.Valor);
+   if(strip(record.T3_TipoDato)==='provisional')provisional=true;
   }
-  const key=age+'-'+ending;
-  if(rows[sex].has(key))fail('INE territorial: serie duplicada para '+terr.title+', '+key+' ('+sex+').');
-  rows[sex].set(key,record.Valor);
  }
- const get=(sex,i)=>{
-  const b=BANDS[i],start=b.start,end=i===17?100:b.end,intervals=grouped?
-    Array.from({length:i===17?4:1},(_,j)=>i===17?(85+j*5)+'-'+(i===17&&j===3?120:89+j*5):start+'-'+end):
-    Array.from({length:end-start+1},(_,j)=>{const a=start+j;return a===100?'100-120':a+'-'+a;});
-  let value=0;
-  for(const k of intervals){const v=rows[sex].get(k);if(!Number.isSafeInteger(v)||v<0)fail('INE territorial: falta '+k+' ('+sex+') para '+terr.title+' '+year+'. Sin imputación.');value+=v;}
+ const required=(sex,age)=>{
+  const value=rows[sex].get(String(age));
+  if(value===undefined)fail('En el INE falta edad '+age+' ('+sexLabels[sex]+') para '+terr.title+' '+year+'.');
   return value;
  };
- const cohorts=BANDS.map((b,i)=>({...b,m:get('m',i),f:get('f',i)}));
- const total=cohorts.reduce((s,b)=>s+b.m+b.f,0);
- if(!Number.isSafeInteger(total)||total<=0)fail('INE territorial: total inválido.');
- const official=(totalPublished.m??0)+(totalPublished.f??0),hasTotal=Number.isSafeInteger(totalPublished.m)&&Number.isSafeInteger(totalPublished.f);
- if(hasTotal&&Math.abs(total-official)>Math.max(5,Math.ceil(official/1000000)))fail('INE territorial: las cohortes no concilian con el total oficial.');
- const note='INE, '+terr.level+'. '+(hasTotal?'Totales por sexo contrastados. ':'Total obtenido de cohortes; verificar total publicado en ficha. ')+
-  'Cobertura histórica y revisiones propias de la tabla '+terr.table+'. Los datos del año en curso pueden ser provisionales.';
- return check({meta:{provider:'INE',kind:'oficial',unit:'personas',table:terr.table,place:terr.title,year,referenceDate:year+'-01-01',
-  updatedAt:'Consultar ficha INE',sourceUrl:'https://www.ine.es/jaxiT3/Tabla.htm?t='+terr.table,apiUrl:ineTerritoryURL(code,year),note},cohorts});
+ const sumBand=(sex,band)=>{
+  const open=band.end===null;
+  if(open&&rows[sex].has('85+'))return rows[sex].get('85+');
+  let sum=open?required(sex,'100+'):0;
+  for(let age=band.start;age<=(band.end??99);age++)sum+=required(sex,age);
+  return sum;
+ };
+ const cohorts=BANDS.map(b=>({...b,m:sumBand('m',b),f:sumBand('f',b)}));
+ const men=cohorts.reduce((sum,b)=>sum+b.m,0),women=cohorts.reduce((sum,b)=>sum+b.f,0);
+ const total=men+women;
+ const publishedMen=rows.m.get('total'),publishedWomen=rows.f.get('total');
+ const publishedTotal=rows.total.get('total')??
+  (publishedMen!==undefined&&publishedWomen!==undefined?publishedMen+publishedWomen:undefined);
+ if(publishedTotal===undefined)fail('Falta el total publicado por el INE para comprobar la serie.');
+ const totals=[[men,publishedMen,'hombres'],[women,publishedWomen,'mujeres'],[total,publishedTotal,'ambos sexos']];
+ const differences=[];
+ for(const [observed,published,label] of totals){
+  if(published===undefined)continue;
+  const delta=observed-published;
+  // Las cifras históricas se publican como enteros y pueden discrepar al sumar las edades.
+  if(Math.abs(delta)>Math.max(5,Math.ceil(published/1000000)))fail('El total de '+label+' difiere del publicado por el INE para '+terr.title+' '+year+'.');
+  if(delta!==0)differences.push(label+' '+(delta>0?'+':'')+delta);
+ }
+ const notes=['Estadística Continua de Población, '+terr.level+', a 1 de enero.'];
+ if(provisional)notes.push('Cifras provisionales del INE, sujetas a revisión.');
+ if(rows.m.has('85+')&&rows.f.has('85+'))notes.push('Grupo de 85 años y más publicado directamente por el INE.');
+ if(differences.length)notes.push('Total de referencia del INE de '+publishedTotal.toLocaleString('es-ES')+' personas. Diferencias al sumar las edades ('+differences.join(', ')+'). Los porcentajes usan la suma de los grupos representados.');
+ return check({cohorts,meta:{provider:'INE',kind:'oficial',unit:'personas',table,place:terr.title,year,referenceDate,
+  updatedAt:'Consultar ficha INE',sourceUrl:'https://www.ine.es/jaxiT3/Tabla.htm?t='+table,apiUrl:ineTerritoryURL(code,year),
+  publishedTotal,provisional,note:notes.join(' ')}});
 }
 
 

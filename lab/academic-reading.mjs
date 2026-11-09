@@ -52,15 +52,17 @@ function comparisonKind(a,b){
  if(!sameTerritory&&sameYear)return 'territorial';
  return 'mixta-tiempo-territorio';
 }
-function compareCohorts(a,b){
+export function compareCohorts(a,b){
  const rows=a.cohorts.map((c,i)=>{
   const other=b.cohorts[i];
-  return {label:c.label,a:c.share,b:other.share,delta:c.share-other.share,
-   menA:c.maleShare,menB:other.maleShare,womenA:c.femaleShare,womenB:other.femaleShare};
+  const shareA=percent(c.m+c.f,a.total),shareB=percent(other.m+other.f,b.total);
+  return {label:c.label,a:shareA,b:shareB,delta:shareA-shareB,
+   menA:percent(c.m,a.total),menB:percent(other.m,b.total),womenA:percent(c.f,a.total),womenB:percent(other.f,b.total)};
  });
  // 85+ figura en la tabla, pero no puede competir con intervalos de cinco años.
- const sorted=[...rows.slice(0,17)].sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)||BANDS.findIndex(b=>b.label===x.label)-BANDS.findIndex(b=>b.label===y.label));
- return {rows,largest:sorted[0],largestThree:sorted.slice(0,3),positive:[...rows.slice(0,17)].sort((x,y)=>y.delta-x.delta)[0],negative:[...rows.slice(0,17)].sort((x,y)=>x.delta-y.delta)[0]};
+ const largestThree=rows.slice(0,-1).filter(row=>Math.abs(row.delta)>=0.005)
+  .sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)).slice(0,3);
+ return {rows,largest:largestThree[0]??null,largestThree};
 }
 const cutoff=(num,unit,plus='mayor',minus='menor')=>{
  if(Math.abs(num)<0.005)return 'presentan valores prácticamente iguales';
@@ -85,8 +87,8 @@ export function academicComparison(first,second){
  };
  const sameObservations=kind==='misma-seleccion';
  const firstLabel=metaLabel(a),secondLabel=metaLabel(b);
- const anchor='La muestra A ('+firstLabel+') incluye '+whole(a.total)+' personas de edad conocida y la B ('+secondLabel+'), '+whole(b.total)+'. '+
-  'Ambas se representan en 18 intervalos quinquenales, con grupo abierto de 85 años o más y porcentajes calculados sobre el total de cada población.';
+ const anchor='La serie A ('+firstLabel+') representa '+whole(a.total)+' personas de edad conocida y la B ('+secondLabel+'), '+whole(b.total)+'. '+
+  'Cada pirámide agrupa 17 intervalos de cinco años y un grupo abierto de 85 años o más. Los porcentajes se calculan sobre el total representado en cada pirámide.';
  const captionType=kind==='temporal'?'Dos observaciones temporales del mismo territorio y fuente.':
   kind==='territorial'?'Dos territorios observados en el mismo año.':
   kind==='fuentes'?'Mismo territorio y año, pero operaciones estadísticas distintas.':
@@ -102,11 +104,12 @@ export function academicComparison(first,second){
  const broad='En A, la distribución por grandes grupos es '+ages(a)+'. En B es '+ages(b)+'. '+
   'Al restar A menos B, la diferencia en el peso de menores de 15 años es '+phrase(delta.youth)+', la de edades 15–64 es '+phrase(delta.working)+' y la de 65 años o más es '+phrase(delta.older)+'. '+
   'Se expresan en puntos porcentuales, de modo que la comparación de estructuras no depende del volumen absoluto de cada territorio.';
- const detail=Math.abs(c.largest.delta)<0.005
-  ?'Los 17 grupos quinquenales cerrados (0–4 a 80–84) presentan porcentajes equivalentes al redondear a dos decimales. No se identifica una banda quinquenal cerrada con diferencia material en la distribución comparada. La categoría abierta 85+ se compara por separado y la coincidencia de porcentajes no implica igualdad de efectivos absolutos.'
-  :'La mayor separación entre intervalos quinquenales cerrados corresponde a '+c.largest.label+': en A representa '+fmt(c.largest.a)+' % y en B '+fmt(c.largest.b)+' %, diferencia '+phrase(c.largest.delta)+
-  '. Los otros dos contrastes más acusados se localizan en '+c.largestThree.slice(1).map(r=>r.label+' ('+phrase(r.delta)+')').join(' y ')+'. '+
-  'El signo refleja A menos B, no crecimiento o decrecimiento de una misma generación. '+
+ const otherDifferences=c.largestThree.slice(1).map(r=>r.label+' ('+phrase(r.delta)+')');
+ const detail=!c.largest
+  ?'Las diferencias de los 17 intervalos quinquenales cerrados redondean a 0,00 puntos porcentuales. Consulta la fila 85+ por separado y compara los efectivos si te interesa el tamaño de las poblaciones.'
+  :'La mayor separación entre intervalos quinquenales cerrados corresponde a '+c.largest.label+'. En A representa '+fmt(c.largest.a)+' % y en B '+fmt(c.largest.b)+' %, con una diferencia de '+phrase(c.largest.delta)+'. '+
+  (otherDifferences.length?'Le siguen '+otherDifferences.join(' y ')+'. ':'')+
+  'El signo indica cuál de las dos poblaciones tiene mayor peso en esa edad al calcular A menos B. '+
   'El grupo abierto 85+ se incluye en los indicadores y en la tabla, pero no se clasifica junto con bandas de cinco años. Una irregularidad o «muesca» puede motivar una hipótesis histórica, pero necesita datos externos de nacimientos, defunciones o migraciones para explicarse.';
 
  const gender='En el tramo de 65 años o más, la proporción femenina dentro del propio grupo es '+qualify(a.shares.olderWomen)+' en A y '+qualify(b.shares.olderWomen)+' en B, una diferencia de '+phrase(delta.femaleOlder)+'. '+
@@ -124,7 +127,7 @@ export function academicComparison(first,second){
   const deltaTotal=100*(later.total-earlier.total)/earlier.total,pp=diff(later.shares.older,earlier.shares.older);
   interpretation='Como las dos observaciones corresponden a '+a.meta.place+' y proceden de '+a.meta.provider+', cabe describir una evolución entre '+earlier.meta.year+' y '+later.meta.year+'. '+
     'El volumen registrado '+(Math.abs(deltaTotal)<0.005?'permanece prácticamente constante':deltaTotal>0?'aumenta':'disminuye')+
-    ' ('+signed(deltaTotal)+' % respecto al año inicial), mientras que el peso de 65+ '+(Math.abs(pp)<0.005?'se mantiene prácticamente igual':pp>0?'aumenta':'disminuye')+' '+fmt(Math.abs(pp))+' puntos porcentuales. '+
+    ' ('+signed(deltaTotal)+' % respecto al año inicial). El peso de 65+ '+(Math.abs(pp)<0.005?'se mantiene prácticamente igual':(pp>0?'aumenta ':'disminuye ')+fmt(Math.abs(pp))+' puntos porcentuales')+'. '+
     'Es una comparación de distribuciones transversales en dos fechas, no un seguimiento de personas ni de las mismas cohortes de nacimiento. '+
     'Las causas del cambio deben contrastarse con series de fecundidad, mortalidad, migración y posibles revisiones metodológicas.';
   break;
@@ -158,11 +161,13 @@ export function academicComparison(first,second){
   delta.older< -0.005&&delta.youth>0.005?'B muestra una estructura relativamente más envejecida (más peso de 65+ y menos de menores de 15) que A. ':
   'Las variaciones en la base y la cúspide no indican una contraposición única entre población joven y envejecida. ';
  const verdict='En síntesis, A presenta '+change(a,b,'youth')+' de 0–14 años y '+change(a,b,'older')+' de 65 años o más respecto de B. '+structureContrast+
-   'La mayor diferencia entre grupos quinquenales cerrados se sitúa en '+c.largest.label+' ('+phrase(c.largest.delta)+'). '+
+   (c.largest?'La mayor diferencia entre grupos quinquenales cerrados se sitúa en '+c.largest.label+' ('+phrase(c.largest.delta)+'). ':
+    'Las diferencias quinquenales cerradas redondean a 0,00 puntos porcentuales. ')+
    (sameObservations?'La coincidencia de fuente, fecha y territorio impide hablar de una transformación entre ambos gráficos.':
    'La lectura es descriptiva y debe mantenerse condicionada por la comparabilidad de fuentes, fechas y territorios.') ;
  const sections=[
-  {id:'identificacion',title:'1. Identificación y comparabilidad',text:anchor+' '+captionType},
+  {id:'identificacion',title:'1. Identificación y comparabilidad',text:anchor+' '+captionType+
+   (a.meta.provisional||b.meta.provisional?' El INE clasifica como provisionales las cifras de '+(a.meta.provisional&&b.meta.provisional?'A y B':a.meta.provisional?'A':'B')+'.':'')},
   {id:'morfologia',title:'2. Morfología: base, tronco y cúspide',text:individual},
   {id:'edades',title:'3. Composición por grandes edades',text:broad},
   {id:'cohortes',title:'4. Cohortes: mayores divergencias',text:detail},

@@ -25,9 +25,10 @@ function eurostatFixture(url){
 }
 function ineFixture(url){
  const match=url.match(/date=(\d{4})0101/),year=Number(match?.[1]||2025),arr=[];
+ const openAge=year<1981?85:100;
  let total=0;
- for(let a=0;a<=99;a++){for(const [sex,value] of [['Hombres',1000+a],['Mujeres',1200+a]]){arr.push({Nombre:'Total Nacional. '+a+' años. '+sex+'. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}}
- for(const [sex,value] of [['Hombres',10000],['Mujeres',12000]]){arr.push({Nombre:sex+'. 100 y más años. Total Nacional. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}
+ for(let a=0;a<openAge;a++){for(const [sex,value] of [['Hombres',1000+a],['Mujeres',1200+a]]){arr.push({Nombre:'Total Nacional. '+a+' años. '+sex+'. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}}
+ for(const [sex,value] of [['Hombres',10000+year],['Mujeres',12000+year]]){arr.push({Nombre:sex+'. '+openAge+' y más años. Total Nacional. Población. Número. ',Data:[{Anyo:year,Valor:value}]});total+=value;}
  arr.push({Nombre:'Total Nacional. Todas las edades. Total. Población. Número. ',Data:[{Anyo:year,Valor:total}]});
  return arr;
 }
@@ -73,16 +74,50 @@ test('Alemania 2009: carga directa Eurostat con grupos quinquenales oficiales',a
  await expect(page.locator('#metaA')).toContainText('Alemania');
  await expect(page.locator('#metaA')).toContainText('2009');
 });
-test('cambio de país durante una consulta lenta no muestra resultados obsoletos',async({page})=>{
+test('cambiar de Eurostat a Idescat durante el catálogo mantiene territorio, año y fuente sincronizados',async({page})=>{
  await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
- await page.route('**/ec.europa.eu/eurostat/api/**',async route=>{await new Promise(r=>setTimeout(r,300));try{await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))});}catch{}});
- await page.goto('/');
- await page.locator('#formB [name=place]').selectOption('DE');
- await expect(page.locator('#chartB svg')).toHaveCount(0);
- await page.locator('#formB button').click();
- await expect(page.locator('#metaB')).toContainText('Alemania');
+ let release;
+ const pending=new Promise(resolve=>{release=resolve;});
+ await page.route('**/ec.europa.eu/eurostat/api/**',async route=>{
+  await pending;
+  await route.fulfill({json:eurostatFixture(route.request().url())});
+ });
+ try{
+  await page.goto('/');
+  await expect(page.locator('#formB [name=year]')).toBeDisabled();
+  await page.locator('#formB [name=provider]').selectOption('idescat');
+  await expect(page.locator('#formB [name=place]')).toHaveValue('BCN_M');
+  await expect(page.locator('#formB [name=year]')).toHaveValue('2025');
+  await expect(page.locator('#formB [name=year]')).toBeEnabled();
+  await page.locator('#formB button').click();
+  const response=page.waitForResponse('**/ec.europa.eu/eurostat/api/**');
+  release();
+  await response;
+  await expect(page.locator('#metaB')).toContainText('Idescat');
+  await expect(page.locator('#formB [name=year] option')).toHaveCount(1);
+ }finally{release();}
 });
 
+test('INE 1974 y 1975 conserva el grupo 85+ al comparar e intercambiar A y B',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({json:ineFixture(route.request().url())}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({json:eurostatFixture(route.request().url())}));
+ await page.goto('/#comparador');
+ await page.locator('#formB [name=provider]').selectOption('ine');
+ await page.locator('#formA [name=year]').selectOption('1974');
+ await page.locator('#formB [name=year]').selectOption('1975');
+ await page.locator('#formA button').click();
+ await page.locator('#formB button').click();
+ await expect(page.locator('#tableA tbody tr').last()).toContainText('85+');
+ await expect(page.locator('#tableA tbody tr').last()).toContainText('11.974');
+ await expect(page.locator('#tableB tbody tr').last()).toContainText('11.975');
+ await page.locator('#analyze').click();
+ await expect(page.locator('#results')).toContainText('evolución entre 1974 y 1975');
+ await page.locator('#swap').click();
+ await expect(page.locator('#formA [name=year]')).toHaveValue('1975');
+ await expect(page.locator('#tableA tbody tr').last()).toContainText('11.975');
+ await expect(page.locator('#formB [name=year]')).toHaveValue('1974');
+ await expect(page.locator('#analyze')).toBeEnabled();
+});
 
 test('exportaciones de la comparación real incluyen procedencia y series completas',async({page})=>{
  await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
@@ -100,6 +135,20 @@ test('exportaciones de la comparación real incluyen procedencia y series comple
  expect(body).toContain('Piramide;Fuente;Territorio;Año;Edad;Hombres;Mujeres');
  expect(body.split('\n').filter(row=>row.startsWith('A;')).length).toBe(18);
  expect(body.split('\n').filter(row=>row.startsWith('B;')).length).toBe(18);
+ await page.locator('#tableA').locator('..').locator('summary').click();
+ await page.keyboard.press('Tab');
+ await expect(page.locator('#tableA')).toBeFocused();
+ const print=await page.evaluate(()=>{
+  let visibleRows;
+  window.print=()=>{
+   window.dispatchEvent(new Event('beforeprint'));
+   visibleRows=document.querySelectorAll('#comparador details[open] tbody tr').length;
+   window.dispatchEvent(new Event('afterprint'));
+  };
+  document.querySelector('#print').click();
+  return {visibleRows,openDetails:document.querySelectorAll('#comparador details[open]').length};
+ });
+ expect(print).toEqual({visibleRows:54,openDetails:1});
  const axe=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
  expect(axe.violations).toEqual([]);
 });
@@ -182,7 +231,9 @@ test('12 modelos, INE Cataluña y municipios y destaque conjunto de cohortes',as
  await page.locator('#focus').selectOption('diff');
  await expect(page.locator('#analyze')).toBeEnabled();
  await page.locator('#analyze').click();
- await expect(page.locator('#results')).toContainText('Tres cohortes con mayor diferencia');
+ await expect(page.locator('#results')).toContainText('Cohortes con mayor diferencia');
+ await expect(page.locator('#chartA .bar-m:not(.dim)')).toHaveCount(3);
+ await expect(page.locator('#chartB .bar-m:not(.dim)')).toHaveCount(3);
  const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
  expect(result.violations).toEqual([]);
 });
