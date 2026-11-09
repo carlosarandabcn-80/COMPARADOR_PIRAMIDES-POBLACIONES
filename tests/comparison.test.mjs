@@ -43,6 +43,40 @@ test('Alemania 2009: 85+ agregado Y_GE85, sin exigir edad 95 inexistente',()=>{
  assert.equal(d.meta.provider,'Eurostat');assert.equal(d.meta.table,'demo_pjangroup');assert.equal(d.cohorts[17].m,1018);
  assert.equal(d.total,18*1900+2*171);
 });
+test('Eurostat identifica avisos del periodo seleccionado y rupturas intermedias',()=>{
+ const json=sampleGrouped('DE',2023),periods=[2022,2023,2024];
+ json.size[5]=periods.length;
+ json.dimension.time.category.index=Object.fromEntries(periods.map((year,index)=>[year,index]));
+ json.value=Object.fromEntries(Object.entries(json.value).flatMap(([position,value])=>
+  periods.map((_,index)=>[Number(position)*periods.length+index,value])));
+ const menUnderFive=json.dimension.age.category.index.Y_LT5+json.size[3];
+ // La marca en la serie de ambos sexos queda fuera de las observaciones representadas.
+ json.value[0]=100;
+ json.status={0:'b', [menUnderFive*periods.length+1]:'bep'};
+ const before=fromEurostat(json,'DE',2022).meta;
+ assert.deepEqual(before.qualityWarnings,[]);
+ assert.deepEqual(before.seriesBreakYears,[2023]);
+ const during=fromEurostat(json,'DE',2023).meta;
+ assert.equal(during.seriesBreak,true);
+ assert.equal(during.provisional,true);
+ assert.equal(during.qualityWarnings.length,3);
+ assert.match(during.note,/ruptura de serie en 2023/);
+ assert.match(during.note,/datos provisionales en 2023/);
+ assert.match(during.note,/datos estimados en 2023/);
+ const after=fromEurostat(json,'DE',2024).meta;
+ assert.equal(after.seriesBreak,false);
+ assert.equal(after.provisional,false);
+ assert.deepEqual(after.qualityWarnings,[]);
+ assert.deepEqual(after.seriesBreakYears,[2023]);
+});
+test('Eurostat admite indicadores de calidad densos o uniformes en JSON-stat',()=>{
+ const json=sampleGrouped('FR',2025);
+ json.status=Array(json.size.reduce((product,size)=>product*size,1)).fill(null);
+ json.status[json.size[3]*2]='p';
+ assert.equal(fromEurostat(json,'FR',2025).meta.provisional,true);
+ json.status='b';
+ assert.deepEqual(fromEurostat(json,'FR',2025).meta.seriesBreakYears,[2025]);
+});
 test('no inventar cohortes ausentes ni conciliar totales discrepantes',()=>{
  let j=sampleGrouped();delete j.value[20+17];assert.throws(()=>fromEurostat(j,'DE',2009),/falta un dato oficial/);
  j=sampleGrouped();j.value[20]+=50;assert.throws(()=>fromEurostat(j,'DE',2009),/discrepancia/);
@@ -75,15 +109,16 @@ test('INE 1974 y 1975 usa 85+ publicado y selecciona el registro de enero',()=>{
   for(const series of rows){
    const [january]=series.Data;
    january.Fecha=year+'-01-01T00:00:00.000+01:00';
-   series.Data.unshift({...january,Fecha:year+'-07-01T00:00:00.000+02:00',Valor:january.Valor+10000});
+   series.Data.unshift({...january,Fecha:year+'-07-01T00:00:00.000+02:00',T3_TipoDato:'Provisional',Valor:january.Valor+10000});
   }
   // Un detalle solapado jamás se suma al agregado 85+.
-  rows.push({Nombre:'Total Nacional. 85 años. Hombres.',Data:[{Anyo:year,Valor:10}]});
+  rows.push({Nombre:'Total Nacional. 85 años. Hombres.',Data:[{Anyo:year,T3_TipoDato:'Provisional',Valor:10}]});
   const d=parseINE(rows,year);
   assert.deepEqual(d.cohorts.at(-1),{...BANDS.at(-1),m:185,f:205});
   assert.equal(d.cohorts[0].m,510);
   assert.equal(d.meta.referenceDate,year+'-01-01');
   assert.match(d.meta.note,/publicado directamente/);
+  assert.deepEqual(d.meta.qualityWarnings,[]);
  }
  assert.throws(()=>parseINE(territoryFixture('ES',1974,'84 años',85),1974),/falta edad 84/);
  assert.throws(()=>parseINE(territoryFixture('ES',1974,'85 y más años',85),1974),/falta edad/);
@@ -96,6 +131,7 @@ test('INE 2026 consulta la tabla nacional actual y reconstruye 85+ con 100+ como
  const d=parseINE(rows,2026);
  assert.equal(d.meta.table,'59583');
  assert.equal(d.meta.provisional,true);
+ assert.match(d.meta.qualityWarnings[0],/Cifras provisionales del INE/);
  assert.equal(d.cohorts.at(-1).m,3080);
 });
 test('biblioteca de doce modelos distingue tres familias y nueve descriptores',()=>{

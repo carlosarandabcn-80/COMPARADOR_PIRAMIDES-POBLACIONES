@@ -14,6 +14,11 @@ Aplicación web estática para **describir y comparar tipos de pirámides de pob
 - Indicadores con fórmula explícita, lectura morfológica automatizada **orientativa** basada en familia básica y patrones adicionales (con umbrales propios no oficiales) y comparación en puntos porcentuales.
 - **Lectura académica comparada de Estructura Social**: identificación de fuentes, comparación de base/tronco/cúspide, tres diferencias quinquenales principales, composición por sexo en 65+, índices, tipo de comparación temporal/territorial, límites inferenciales y conclusión. Dos niveles de extensión (completo y síntesis), matriz de 18 cohortes y exportación coherente. [Metodología](docs/lectura_comparada_academica.md).
 - Exportación de comparación TXT, ambos conjuntos a CSV e impresión/PDF desde el navegador.
+- Tabla conjunta de personas y porcentajes por edad y gráfico de diferencias por sexo con cero central. Para el mismo territorio y fuente en dos fechas, el signo indica el año posterior menos el anterior. En los contrastes territoriales se muestra A−B. La ficha superior identifica el sentido de la resta y muestra los avisos de la fuente aplicables a la selección.
+
+## Ajustes de accesibilidad
+
+El botón **Accesibilidad**, identificado con una figura humana, ofrece tamaño de texto hasta el 200 %, alto contraste, espaciado de lectura y una vista con las tablas en lugar de los gráficos. Los ajustes se guardan en el navegador y se pueden restablecer desde el mismo panel. También se admiten el zoom y los colores de alto contraste del sistema. Los enlaces de salto, los indicadores de foco y las tablas con encabezados permiten recorrer el comparador con teclado o lector de pantalla.
 
 ## Calidad de datos
 **Las pirámides de datos usan series oficiales completas y validadas.** El grupo abierto de 85 años y más se toma directamente cuando el INE lo publica, incluidos los años 1971–1980. En las tablas con edades simples, se suma de 85 a 99 y se añade 100+. Se contrastan los totales publicados, incluidos los de cada sexo cuando están disponibles. Las pequeñas diferencias históricas se indican en la ficha de la pirámide y en el TXT. Los porcentajes usan la suma de las edades representadas. Las categorías de sexo reflejan la codificación de cada fuente.

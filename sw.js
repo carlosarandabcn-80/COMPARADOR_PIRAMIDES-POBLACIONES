@@ -1,9 +1,10 @@
 /* Caché de recursos estáticos del comparador. Nunca devuelve HTML en lugar de JSON/JS. */
-const CACHE_NAME = 'piramides-poblacionales-v9';
+const CACHE_NAME = 'piramides-poblacionales-v10';
 const CORE_ASSETS = [
   './',
   './index.html',
   './lab/comparison-ui.mjs',
+  './lab/accessibility.mjs',
   './lab/comparison-core.mjs',
   './lab/morphology.mjs',
   './data/idescat-municipios-2025.json',

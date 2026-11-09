@@ -61,6 +61,63 @@ test('accesibilidad automática de la página y estados',async({page})=>{
  expect(result.violations).toEqual([]);
 });
 
+test('ajustes de lectura con teclado, reflujo, persistencia y restablecimiento',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({json:ineFixture(route.request().url())}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({json:eurostatFixture(route.request().url())}));
+ await page.setViewportSize({width:320,height:800});
+ await page.goto('/');
+ await page.keyboard.press('Tab');
+ await expect(page.getByRole('link',{name:'Saltar al contenido'})).toBeFocused();
+ await page.keyboard.press('Tab');
+ await expect(page.getByRole('link',{name:'Saltar al comparador'})).toBeFocused();
+ await page.keyboard.press('Enter');
+ await expect(page.locator('#comparador')).toBeFocused();
+ await page.getByRole('link',{name:'Ajustes de accesibilidad'}).click();
+ await expect(page.locator('#accessibility summary')).toBeFocused();
+ await page.getByLabel('Tamaño del texto').selectOption('200');
+ await page.getByLabel('Alto contraste').check();
+ await page.getByLabel('Mayor espaciado de lectura').check();
+ await expect(page.locator('body')).toHaveCSS('font-size','32px');
+ await expect(page.locator('body')).toHaveCSS('background-color','rgb(0, 0, 0)');
+ await expect(page.locator('#analyze')).toBeEnabled();
+ await page.locator('#analyze').click();
+ const layoutWidth=()=>page.evaluate(()=>document.documentElement.scrollWidth);
+ expect(await layoutWidth()).toBe(320);
+ await page.getByLabel('Mostrar tablas en lugar de gráficos').check();
+ await expect(page.locator('#chartA')).toBeHidden();
+ await expect(page.locator('#tableA table')).toBeVisible();
+ await expect(page.locator('#tableB table')).toBeVisible();
+ await expect(page.locator('.cohorts-detail table')).toBeVisible();
+ expect(await layoutWidth()).toBe(320);
+ await page.reload();
+ await expect(page.locator('body')).toHaveCSS('font-size','32px');
+ await expect(page.locator('html')).toHaveAttribute('data-tables','');
+ await page.locator('#accessibility summary').click();
+ await page.getByRole('button',{name:'Restablecer ajustes'}).click();
+ await expect(page.locator('body')).toHaveCSS('font-size','16px');
+ await expect(page.getByLabel('Alto contraste')).not.toBeChecked();
+ await expect(page.getByLabel('Mostrar tablas en lugar de gráficos')).not.toBeChecked();
+ expect(await layoutWidth()).toBe(320);
+});
+
+test('tablas y avisos son accesibles con contraste alto y colores del sistema',async({page})=>{
+ await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({json:ineFixture(route.request().url())}));
+ await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({json:eurostatFixture(route.request().url())}));
+ await page.goto('/');
+ await page.locator('#accessibility summary').click();
+ await page.getByLabel('Alto contraste').check();
+ await page.getByLabel('Mostrar tablas en lugar de gráficos').check();
+ await page.locator('#analyze').click();
+ await expect(page.locator('#results').getByRole('heading',{level:3})).toBeFocused();
+ await expect(page.locator('.cohorts-detail').getByRole('table')).toBeVisible();
+ const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
+ expect(result.violations).toEqual([]);
+ await page.getByLabel('Mostrar tablas en lugar de gráficos').uncheck();
+ await page.emulateMedia({forcedColors:'active',reducedMotion:'reduce'});
+ await expect(page.locator('#chartA svg')).toBeVisible();
+ expect(await page.locator('#chartA .bar-m').first().evaluate(element=>getComputedStyle(element).fill)).not.toBe('none');
+});
+
 test('Alemania 2009: carga directa Eurostat con grupos quinquenales oficiales',async({page})=>{
  await page.route('**/servicios.ine.es/wstempus/js/es/DATOS_TABLA/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(ineFixture(route.request().url()))}));
  await page.route('**/ec.europa.eu/eurostat/api/**',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(eurostatFixture(route.request().url()))}));
