@@ -112,6 +112,11 @@ export function fromEurostat(json,geo,year){
  }
  if(!Object.hasOwn(indices.geo,geo)||!Object.hasOwn(indices.time,String(year))||!Object.hasOwn(indices.unit,'NR')||!Object.hasOwn(indices.freq,'A'))fail('Eurostat no ofrece el país/año solicitado en personas.');
  const strides=json.size.map((_,i)=>json.size.slice(i+1).reduce((a,b)=>a*b,1));
+ const positions=[],flags=new Set();
+ const flagsAt=position=>{
+  const code=typeof json.status==='string'?json.status:json.status?.[position];
+  return typeof code==='string'?code:'';
+ };
  const cell=(age,sex)=>{
   const selected={age,sex,geo,time:String(year),unit:'NR',freq:'A'};
   let pos=0;
@@ -120,7 +125,11 @@ export function fromEurostat(json,geo,year){
    if(!Number.isSafeInteger(v)||v<0||v>=json.size[i])return null;
    pos+=v*strides[i];
   }
-  const value=json.value?.[pos];return safe(value)?value:null;
+  positions.push(pos);
+  const value=json.value?.[pos];
+  if(!safe(value))return null;
+  for(const flag of flagsAt(pos))flags.add(flag);
+  return value;
  };
  const ageCode=(i)=>i===0?'Y_LT5':i===17?'Y_GE85':'Y'+(i*5)+'-'+(i*5+4);
  const cohorts=BANDS.map((b,i)=>{
@@ -138,8 +147,20 @@ export function fromEurostat(json,geo,year){
  const unknown=(unknownM??0)+(unknownF??0);
  const notes=['Cohortes quinquenales oficiales de demo_pjangroup, sin imputación.'];
  if(unknown>0)notes.push('Se excluyen '+unknown+' personas de edad desconocida; los porcentajes se calculan sobre la población de edad conocida.');
- if(json.status && Object.keys(json.status).length)notes.push('La fuente contiene banderas de calidad (revisar estimaciones, provisionalidad y rupturas de serie en Eurostat).');
- return check({meta:{provider:'Eurostat',kind:'oficial',table:'demo_pjangroup',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),note:notes.join(' ')},cohorts});
+ const provisional=flags.has('p'),seriesBreak=flags.has('b'),qualityWarnings=[];
+ if(seriesBreak)qualityWarnings.push('Eurostat marca una ruptura de serie en '+year+'. Conviene revisar la comparabilidad con los años anteriores.');
+ if(provisional)qualityWarnings.push('Eurostat marca datos provisionales en '+year+'. Las cifras pueden revisarse.');
+ if(flags.has('e'))qualityWarnings.push('Eurostat marca datos estimados en '+year+'.');
+ // Un mismo desplazamiento temporal conserva las demás coordenadas de cada observación.
+ const timeDimension=json.id.indexOf('time'),timeStride=strides[timeDimension],timeIndex=indices.time[year];
+ const seriesBreakYears=json.status?Object.entries(indices.time).filter(([,index])=>{
+  if(!Number.isInteger(index)||index<0||index>=json.size[timeDimension])return false;
+  const offset=(index-timeIndex)*timeStride;
+  return positions.some(pos=>flagsAt(pos+offset).includes('b')&&safe(json.value?.[pos+offset]));
+ }).map(([period])=>Number(period)).filter(Number.isInteger).sort((a,b)=>a-b):[];
+ return check({meta:{provider:'Eurostat',kind:'oficial',table:'demo_pjangroup',unit:'personas',place:COUNTRIES[geo]||geo,year,referenceDate:year+'-01-01',
+  updatedAt:json.updated||'No indicada',sourceUrl:SOURCES.eurostat.url,apiUrl:eurostatURL(geo,year),provisional,seriesBreak,seriesBreakYears,qualityWarnings,
+  note:[...notes,...qualityWarnings].join(' ')},cohorts});
 }
 function ineTable(code,year){
  if(!Object.hasOwn(INE_TERRITORIES,code))fail('Territorio del INE no permitido.');
@@ -207,18 +228,22 @@ function parseINEAgeSeries(json,code,year){
     : typeof record.Fecha==='string'&&record.Fecha.split('T')[0]===referenceDate;
    if(!matches)continue;
    if(rows[sex].has(key))fail('Serie INE duplicada para '+terr.title+', '+key+' ('+sexLabels[sex]+').');
-   rows[sex].set(key,record.Valor);
-   if(strip(record.T3_TipoDato)==='provisional')provisional=true;
+   rows[sex].set(key,record);
   }
  }
+ const observed=(sex,key)=>{
+  const record=rows[sex].get(key);
+  if(strip(record?.T3_TipoDato)==='provisional')provisional=true;
+  return record?.Valor;
+ };
  const required=(sex,age)=>{
-  const value=rows[sex].get(String(age));
+  const value=observed(sex,String(age));
   if(value===undefined)fail('En el INE falta edad '+age+' ('+sexLabels[sex]+') para '+terr.title+' '+year+'.');
   return value;
  };
  const sumBand=(sex,band)=>{
   const open=band.end===null;
-  if(open&&rows[sex].has('85+'))return rows[sex].get('85+');
+  if(open&&rows[sex].has('85+'))return required(sex,'85+');
   let sum=open?required(sex,'100+'):0;
   for(let age=band.start;age<=(band.end??99);age++)sum+=required(sex,age);
   return sum;
@@ -226,8 +251,8 @@ function parseINEAgeSeries(json,code,year){
  const cohorts=BANDS.map(b=>({...b,m:sumBand('m',b),f:sumBand('f',b)}));
  const men=cohorts.reduce((sum,b)=>sum+b.m,0),women=cohorts.reduce((sum,b)=>sum+b.f,0);
  const total=men+women;
- const publishedMen=rows.m.get('total'),publishedWomen=rows.f.get('total');
- const publishedTotal=rows.total.get('total')??
+ const publishedMen=observed('m','total'),publishedWomen=observed('f','total');
+ const publishedTotal=observed('total','total')??
   (publishedMen!==undefined&&publishedWomen!==undefined?publishedMen+publishedWomen:undefined);
  if(publishedTotal===undefined)fail('Falta el total publicado por el INE para comprobar la serie.');
  const totals=[[men,publishedMen,'hombres'],[women,publishedWomen,'mujeres'],[total,publishedTotal,'ambos sexos']];
@@ -240,12 +265,13 @@ function parseINEAgeSeries(json,code,year){
   if(delta!==0)differences.push(label+' '+(delta>0?'+':'')+delta);
  }
  const notes=['Estadística Continua de Población, '+terr.level+', a 1 de enero.'];
- if(provisional)notes.push('Cifras provisionales del INE, sujetas a revisión.');
+ const qualityWarnings=provisional?['Cifras provisionales del INE, sujetas a revisión.']:[];
+ notes.push(...qualityWarnings);
  if(rows.m.has('85+')&&rows.f.has('85+'))notes.push('Grupo de 85 años y más publicado directamente por el INE.');
  if(differences.length)notes.push('Total de referencia del INE de '+publishedTotal.toLocaleString('es-ES')+' personas. Diferencias al sumar las edades ('+differences.join(', ')+'). Los porcentajes usan la suma de los grupos representados.');
  return check({cohorts,meta:{provider:'INE',kind:'oficial',unit:'personas',table,place:terr.title,year,referenceDate,
   updatedAt:'Consultar ficha INE',sourceUrl:'https://www.ine.es/jaxiT3/Tabla.htm?t='+table,apiUrl:ineTerritoryURL(code,year),
-  publishedTotal,provisional,note:notes.join(' ')}});
+  publishedTotal,provisional,qualityWarnings,note:notes.join(' ')}});
 }
 
 
@@ -260,7 +286,7 @@ export function parseIdescatSnapshot(json,code,year){
  const data=check({cohorts:source.cohorts.map((v,i)=>({...BANDS[i],m:v.m,f:v.f,label:v.label})),
   meta:{provider:'Idescat',kind:'oficial',unit:'personas',table:'censph_539_mun_2025_pc',
    place:IDESCAT_TERRITORIES[code],year,referenceDate:'2025-01-01',
-   updatedAt:'Publicado por Idescat en 2025',sourceUrl:json.sourceUrl,
+   updatedAt:'Publicado por Idescat en 2025',sourceUrl:json.sourceUrl,qualityWarnings:[],
    note:'Instantánea local de datos oficiales municipales publicada por Idescat; no consulta de API en tiempo real. Agrupación de los intervalos 85–89, 90–94, 95–99 y 100+ en 85+. Origen: Censo anual del INE difundido por Idescat.'}});
  if(data.total!==source.total)fail('Idescat: el total no concilia con la suma de cohortes.');
  return data;
