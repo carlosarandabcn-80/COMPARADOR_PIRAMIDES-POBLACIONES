@@ -179,11 +179,11 @@ function comparisonReadout(){
 function showComparison(){
  const data=comparisonReadout();if(!data)return;
  const {numerical,academic,sections}=data;
- const table='<div class="scroll"><table class="comparison-table"><caption>Indicadores A menos B · diferencia expresada en unidades indicadas</caption><thead><tr><th scope="col">Indicador</th><th scope="col">A</th><th scope="col">B</th><th scope="col">Diferencia</th></tr></thead><tbody>'+
+ const table='<div class="scroll" tabindex="0" role="region" aria-label="Indicadores comparados"><table class="comparison-table"><caption>Indicadores A menos B · diferencia expresada en unidades indicadas</caption><thead><tr><th scope="col">Indicador</th><th scope="col">A</th><th scope="col">B</th><th scope="col">Diferencia</th></tr></thead><tbody>'+
  numerical.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+' <small>'+esc(row.unit)+'</small></td></tr>').join('')+'</tbody></table></div>';
  const reading='<div class="academic-head"><h4>Comentario comparado fundamentado</h4><span class="academic-length">'+academic.wordCount+' palabras en el informe íntegro · '+(data.summary?'síntesis':'lectura detallada')+'</span></div>'+
  '<div class="academic-reading">'+sections.map(s=>'<section class="academic-section" aria-labelledby="reading-'+s.id+'"><h5 id="reading-'+s.id+'">'+esc(s.title)+'</h5><p>'+esc(s.text)+'</p></section>').join('')+'</div>';
- const c=academic.cohorts,detail='<details class="cohorts-detail"><summary>Contrastar todos los intervalos de edad (17 quinquenales y 85+ abierto)</summary><div class="scroll">'+
+ const c=academic.cohorts,detail='<details class="cohorts-detail"><summary>Contrastar todos los intervalos de edad (17 quinquenales y 85+ abierto)</summary><div class="scroll" tabindex="0" role="region" aria-label="Comparación por intervalos de edad">'+
  '<table class="comparison-table"><caption>Peso por grupo de edad (85+ es intervalo abierto)</caption><thead><tr><th scope="col">Edad</th><th scope="col">A (%)</th><th scope="col">B (%)</th><th scope="col">A−B (pp)</th></tr></thead><tbody>'+
  c.rows.map(row=>'<tr><th scope="row">'+esc(row.label)+'</th><td>'+n(row.a)+'</td><td>'+n(row.b)+'</td><td>'+(row.delta>0?'+':'')+n(row.delta)+'</td></tr>').join('')+
  '</tbody></table></div></details>';

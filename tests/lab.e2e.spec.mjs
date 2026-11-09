@@ -136,6 +136,8 @@ test('exportaciones de la comparación real incluyen procedencia y series comple
  expect(body.split('\n').filter(row=>row.startsWith('A;')).length).toBe(18);
  expect(body.split('\n').filter(row=>row.startsWith('B;')).length).toBe(18);
  await page.locator('#tableA').locator('..').locator('summary').click();
+ await page.keyboard.press('Tab');
+ await expect(page.locator('#tableA')).toBeFocused();
  const print=await page.evaluate(()=>{
   let visibleRows;
   window.print=()=>{

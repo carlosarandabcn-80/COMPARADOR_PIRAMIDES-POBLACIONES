@@ -25,6 +25,7 @@
 .model-kind{display:inline-block;font-size:.76rem!important;text-transform:uppercase;letter-spacing:.08em;font-weight:750;color:#236c68!important;margin-bottom:6px!important}
 .type-card:focus-within{outline:3px solid var(--focus);outline-offset:3px}
 @media print{#tipos{display:none}.reading-notes{break-inside:avoid}}
+.scroll:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 @media print{
  #comparador .scroll{max-height:none;overflow:visible}
  #comparador .data-table thead{position:static}
